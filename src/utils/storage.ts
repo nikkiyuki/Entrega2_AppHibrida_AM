@@ -8,18 +8,30 @@ export interface Movimiento {
   fechaISO: string
 }
 
+export interface MetaAhorro {
+  id: string
+  categoria: string
+  nombre: string
+  meta: number
+  acumulado: number
+  fechaISO: string
+}
+
 export interface SavyState {
   dineroDisponible: number
   ahorroTotal: number
   movimientos: Movimiento[]
+  ahorros: MetaAhorro[]
 }
 
 export const SAVY_STORAGE_KEY = 'savy_state'
+export const SAVY_STATE_EVENT = 'savy-state-change'
 
 const defaultState: SavyState = {
   dineroDisponible: 0,
   ahorroTotal: 0,
   movimientos: [],
+  ahorros: [],
 }
 
 export function loadState(): SavyState {
@@ -39,6 +51,7 @@ export function loadState(): SavyState {
       movimientos: Array.isArray(parsedState.movimientos)
         ? parsedState.movimientos
         : [],
+      ahorros: Array.isArray(parsedState.ahorros) ? parsedState.ahorros : [],
     }
   } catch {
     saveState(defaultState)
@@ -48,6 +61,7 @@ export function loadState(): SavyState {
 
 export function saveState(state: SavyState) {
   window.localStorage.setItem(SAVY_STORAGE_KEY, JSON.stringify(state))
+  window.dispatchEvent(new CustomEvent(SAVY_STATE_EVENT))
 }
 
 export function getMonthlyTotals(movimientos: Movimiento[]) {
@@ -91,4 +105,65 @@ export function getLastMovementDate(movimientos: Movimiento[]) {
         new Date(next.fechaISO).getTime() - new Date(current.fechaISO).getTime(),
     )[0]
     .fechaISO
+}
+
+interface AddAhorroInput {
+  categoria: string
+  nombre: string
+  meta: number
+  monto: number
+}
+
+export function addAhorro(input: AddAhorroInput) {
+  const currentState = loadState()
+  const nowISO = new Date().toISOString()
+  const ahorroName = input.nombre.trim() || input.categoria
+  const existingAhorro = currentState.ahorros.find(
+    (ahorro) =>
+      ahorro.nombre.toLowerCase() === ahorroName.toLowerCase() &&
+      ahorro.categoria.toLowerCase() === input.categoria.toLowerCase(),
+  )
+
+  const nextAhorros = existingAhorro
+    ? currentState.ahorros.map((ahorro) =>
+        ahorro.id === existingAhorro.id
+          ? {
+              ...ahorro,
+              meta: input.meta || ahorro.meta,
+              acumulado: ahorro.acumulado + input.monto,
+              fechaISO: nowISO,
+            }
+          : ahorro,
+      )
+    : [
+        ...currentState.ahorros,
+        {
+          id: `ahorro-${Date.now()}`,
+          categoria: input.categoria,
+          nombre: ahorroName,
+          meta: input.meta,
+          acumulado: input.monto,
+          fechaISO: nowISO,
+        },
+      ]
+
+  const nextState: SavyState = {
+    ...currentState,
+    dineroDisponible: currentState.dineroDisponible - input.monto,
+    ahorroTotal: currentState.ahorroTotal + input.monto,
+    movimientos: [
+      {
+        id: `mov-${Date.now()}`,
+        tipo: 'Ahorro',
+        monto: input.monto,
+        categoria: ahorroName,
+        fechaISO: nowISO,
+      },
+      ...currentState.movimientos,
+    ],
+    ahorros: nextAhorros,
+  }
+
+  saveState(nextState)
+  return nextState
 }

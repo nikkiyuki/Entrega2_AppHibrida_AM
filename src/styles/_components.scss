@@ -309,6 +309,18 @@
   background: rgba(255, 255, 255, 0.72);
 }
 
+.saving-message--error {
+  border-style: solid;
+  border-color: #b44b4b;
+  background: rgba(180, 75, 75, 0.08);
+}
+
+.saving-message--success {
+  border-style: solid;
+  border-color: #4f7d54;
+  background: rgba(79, 125, 84, 0.1);
+}
+
 .saving-message__title {
   margin: 0 0 $space-1;
   font-size: 0.9rem;

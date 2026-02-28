@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { formatCurrencyCOP, formatDate } from '../../utils/format'
-import { getLastMovementDate, loadState, type SavyState } from '../../utils/storage'
+import {
+  SAVY_STATE_EVENT,
+  getLastMovementDate,
+  loadState,
+  type SavyState,
+} from '../../utils/storage'
 
 interface HomeProps {
   onNavigateToIncome: () => void
@@ -23,9 +28,11 @@ export default function Home({
     }
 
     window.addEventListener('storage', syncState)
+    window.addEventListener(SAVY_STATE_EVENT, syncState)
 
     return () => {
       window.removeEventListener('storage', syncState)
+      window.removeEventListener(SAVY_STATE_EVENT, syncState)
     }
   }, [])
 

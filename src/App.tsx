@@ -51,7 +51,7 @@ function App() {
   if (currentView === 'saving') {
     return (
       <Suspense fallback={null}>
-        <Saving />
+        <Saving onBack={() => setCurrentView('home')} />
       </Suspense>
     )
   }
