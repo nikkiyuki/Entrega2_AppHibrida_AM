@@ -319,6 +319,25 @@
   gap: $space-3;
 }
 
+.saving-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-2;
+}
+
+.saving-tab {
+  min-height: 2.9rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.saving-tab--active {
+  background: $color-primary-strong;
+  color: #ffffff;
+}
+
 .saving-header {
   display: flex;
   flex-direction: column;
@@ -399,6 +418,61 @@
 
 .saving-actions .button--primary {
   order: 2;
+}
+
+.saving-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.saving-item {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-3;
+  border-radius: $radius-lg;
+  background: $color-surface-soft;
+}
+
+.saving-item__header {
+  display: flex;
+  justify-content: space-between;
+  gap: $space-2;
+}
+
+.saving-item__name {
+  font-size: 1rem;
+}
+
+.saving-item__category,
+.saving-item__amounts {
+  color: $color-text-muted;
+}
+
+.saving-item__amounts {
+  font-size: 0.95rem;
+}
+
+.saving-progress {
+  width: 100%;
+  height: 0.8rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(47, 47, 42, 0.18);
+}
+
+.saving-progress__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: $color-primary-strong;
+}
+
+.saving-empty {
+  padding: $space-3;
+  border: 1px dashed $color-border;
+  border-radius: $radius-lg;
 }
 
 .screen--modal-open {

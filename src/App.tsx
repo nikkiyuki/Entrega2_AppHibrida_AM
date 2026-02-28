@@ -31,6 +31,7 @@ function App() {
   const [currentView, setCurrentView] = useState<
     'home' | 'income' | 'expense' | 'saving' | 'movements'
   >('home')
+  const [savingInitialTab, setSavingInitialTab] = useState<'list' | 'new'>('list')
 
   if (currentView === 'income') {
     return (
@@ -51,7 +52,10 @@ function App() {
   if (currentView === 'saving') {
     return (
       <Suspense fallback={null}>
-        <Saving onBack={() => setCurrentView('home')} />
+        <Saving
+          initialTab={savingInitialTab}
+          onBack={() => setCurrentView('home')}
+        />
       </Suspense>
     )
   }
@@ -68,7 +72,10 @@ function App() {
     <Home
       onNavigateToIncome={() => setCurrentView('income')}
       onNavigateToExpense={() => setCurrentView('expense')}
-      onNavigateToSaving={() => setCurrentView('saving')}
+      onNavigateToSaving={() => {
+        setSavingInitialTab('list')
+        setCurrentView('saving')
+      }}
       onNavigateToMovements={() => setCurrentView('movements')}
     />
   )

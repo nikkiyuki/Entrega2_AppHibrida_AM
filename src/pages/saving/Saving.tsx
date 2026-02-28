@@ -1,6 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatCurrencyCOP } from '../../utils/format'
-import { addAhorro, loadState } from '../../utils/storage'
+import {
+  SAVY_STATE_EVENT,
+  addAhorro,
+  loadState,
+  type SavyState,
+} from '../../utils/storage'
 
 const savingCategories = [
   'Viaje',
@@ -20,10 +25,12 @@ const motivationalMessages = [
 ]
 
 interface SavingProps {
+  initialTab: 'list' | 'new'
   onBack: () => void
 }
 
-export default function Saving({ onBack }: SavingProps) {
+export default function Saving({ initialTab, onBack }: SavingProps) {
+  const [activeTab, setActiveTab] = useState<'list' | 'new'>(initialTab)
   const [monto, setMonto] = useState('')
   const [nombreAhorro, setNombreAhorro] = useState('')
   const [metaAhorro, setMetaAhorro] = useState('')
@@ -36,9 +43,28 @@ export default function Saving({ onBack }: SavingProps) {
         Math.floor(Math.random() * motivationalMessages.length)
       ],
   )
-  const savingState = loadState()
+
+  const [savingState, setSavingState] = useState<SavyState>(() => loadState())
   const formattedMonto = monto ? Number(monto).toLocaleString('es-CO') : ''
   const formattedMeta = metaAhorro ? Number(metaAhorro).toLocaleString('es-CO') : ''
+
+  useEffect(() => {
+    setActiveTab(initialTab)
+  }, [initialTab])
+
+  useEffect(() => {
+    const syncState = () => {
+      setSavingState(loadState())
+    }
+
+    window.addEventListener('storage', syncState)
+    window.addEventListener(SAVY_STATE_EVENT, syncState)
+
+    return () => {
+      window.removeEventListener('storage', syncState)
+      window.removeEventListener(SAVY_STATE_EVENT, syncState)
+    }
+  }, [])
 
   const handleMontoChange = (value: string) => {
     const numericValue = value.replace(/\D/g, '')
@@ -65,7 +91,7 @@ export default function Saving({ onBack }: SavingProps) {
     setFeedbackType('')
 
     if (isSuccess) {
-      onBack()
+      setActiveTab('list')
     }
   }
 
@@ -103,6 +129,18 @@ export default function Saving({ onBack }: SavingProps) {
     setMonto('')
     setMetaAhorro('')
     setNombreAhorro('')
+    setSavingState(loadState())
+  }
+
+  const handleTopBack = () => {
+    if (activeTab === 'new') {
+      setActiveTab('list')
+      setFeedback('')
+      setFeedbackType('')
+      return
+    }
+
+    onBack()
   }
 
   return (
@@ -119,13 +157,87 @@ export default function Saving({ onBack }: SavingProps) {
           <button
             className="button button--secondary topbar__action"
             type="button"
-            onClick={onBack}
+            onClick={handleTopBack}
           >
             Volver
           </button>
         </header>
 
-        <article className="panel stack saving-panel">
+        <div className="saving-tabs" role="tablist" aria-label="Pestanas de ahorro">
+          <button
+            className={`saving-tab ${activeTab === 'list' ? 'saving-tab--active' : ''}`}
+            type="button"
+            onClick={() => setActiveTab('list')}
+          >
+            Mis ahorros
+          </button>
+          <button
+            className={`saving-tab ${activeTab === 'new' ? 'saving-tab--active' : ''}`}
+            type="button"
+            onClick={() => setActiveTab('new')}
+          >
+            Nuevo ahorro
+          </button>
+        </div>
+
+        {activeTab === 'list' ? (
+          <article className="panel stack saving-panel">
+            <div className="saving-header">
+              <p className="eyebrow">Tus metas guardadas</p>
+              <div className="saving-divider" aria-hidden="true" />
+            </div>
+
+            <div className="saving-available">
+              <span className="saving-available__label">Ahorro total</span>
+              <strong className="saving-available__value">
+                {formatCurrencyCOP(savingState.ahorroTotal)}
+              </strong>
+            </div>
+
+            {savingState.ahorros.length > 0 ? (
+              <div className="saving-list">
+                {savingState.ahorros.map((ahorro) => (
+                  <article key={ahorro.id} className="saving-item">
+                    <div className="saving-item__header">
+                      <strong className="saving-item__name">{ahorro.nombre}</strong>
+                      <span className="saving-item__category">{ahorro.categoria}</span>
+                    </div>
+                    <div className="saving-item__amounts">
+                      <span>{formatCurrencyCOP(ahorro.acumulado)}</span>
+                      <span>/ {formatCurrencyCOP(ahorro.meta)}</span>
+                    </div>
+                    <div className="saving-progress" aria-hidden="true">
+                      <span
+                        className="saving-progress__fill"
+                        style={{
+                          width: `${Math.min(
+                            100,
+                            ahorro.meta ? (ahorro.acumulado / ahorro.meta) * 100 : 0,
+                          )}%`,
+                        }}
+                      />
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="saving-empty">
+                <p className="text-muted">
+                  Todavia no tienes metas guardadas. Crea tu primer ahorro.
+                </p>
+              </div>
+            )}
+
+            <button
+              className="button button--primary"
+              type="button"
+              onClick={() => setActiveTab('new')}
+            >
+              Nuevo ahorro
+            </button>
+          </article>
+        ) : (
+          <article className="panel stack saving-panel">
           <div className="saving-header">
             <p className="eyebrow">Selecciona tu categoria de ahorro</p>
             <div className="saving-divider" aria-hidden="true" />
@@ -200,9 +312,7 @@ export default function Saving({ onBack }: SavingProps) {
 
           <div className="saving-message">
             <p className="saving-message__title">Mensaje de motivacion</p>
-            <p className="text-muted">
-              {motivationalMessage}
-            </p>
+            <p className="text-muted">{motivationalMessage}</p>
           </div>
 
           <div className="dashboard-actions saving-actions" aria-label="Acciones de ahorro">
@@ -214,6 +324,7 @@ export default function Saving({ onBack }: SavingProps) {
             </button>
           </div>
         </article>
+        )}
 
         {feedbackType ? (
           <div className="feedback-modal-backdrop" role="presentation">
@@ -225,7 +336,7 @@ export default function Saving({ onBack }: SavingProps) {
             >
               <p id="saving-feedback-title" className="feedback-modal__title">
                 {feedbackType === 'success'
-                  ? 'LET´S GO POR ESA META!!'
+                  ? 'VAMOS POR ESA META'
                   : 'REVISA TU INFORMACION'}
               </p>
               <p className="feedback-modal__text">
