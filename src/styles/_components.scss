@@ -299,6 +299,10 @@
 }
 
 .saving-category {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   min-height: 6rem;
   padding: $space-2;
   border: 1px solid transparent;
@@ -306,6 +310,23 @@
   background: $color-surface-soft;
   text-transform: uppercase;
   font-size: 0.95rem;
+}
+
+.saving-category__label {
+  text-align: center;
+}
+
+.saving-category__icon-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 2.4rem;
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  border-radius: $radius-md;
+  font-size: 0.7rem;
+  text-transform: none;
+  color: $color-text-muted;
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .saving-category--active {

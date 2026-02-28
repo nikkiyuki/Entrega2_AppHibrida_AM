@@ -6,7 +6,7 @@ const savingCategories = [
   'Viaje',
   'Estudio',
   'Celular',
-  'Regalo mamá',
+  'Regalo mama',
   'Gimnasio',
   'Otro',
 ]
@@ -62,7 +62,10 @@ export default function Saving() {
                 type="button"
                 onClick={() => setSelectedCategory(category)}
               >
-                {category}
+                <span className="saving-category__label">{category}</span>
+                <span className="saving-category__icon-placeholder">
+                  Espacio para icono
+                </span>
               </button>
             ))}
           </div>
@@ -73,7 +76,7 @@ export default function Saving() {
               id="saving-name"
               className="field__control"
               type="text"
-              placeholder="Ejemplo: Viaje de fin de año"
+              placeholder="Ejemplo: Viaje de fin de ano"
               value={nombreAhorro}
               onChange={(event) => setNombreAhorro(event.target.value)}
             />
