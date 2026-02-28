@@ -7,7 +7,19 @@ import {
   type SavyState,
 } from '../../utils/storage'
 
-export default function Home() {
+interface HomeProps {
+  onNavigateToIncome: () => void
+  onNavigateToExpense: () => void
+  onNavigateToSaving: () => void
+  onNavigateToMovements: () => void
+}
+
+export default function Home({
+  onNavigateToIncome,
+  onNavigateToExpense,
+  onNavigateToSaving,
+  onNavigateToMovements,
+}: HomeProps) {
   const [dashboardState, setDashboardState] = useState<SavyState>(() => loadState())
 
   useEffect(() => {
@@ -27,10 +39,6 @@ export default function Home() {
   const lastUpdateText = lastMovementDate
     ? `Actualizado ${formatDate(lastMovementDate)}`
     : 'Sin movimientos aun'
-
-  const handleAction = (actionName: string) => {
-    console.log(`Accion pendiente: ${actionName}`)
-  }
 
   return (
     <main className="app-shell">
@@ -104,28 +112,28 @@ export default function Home() {
           <button
             className="button button--secondary"
             type="button"
-            onClick={() => handleAction('Registrar ingreso')}
+            onClick={onNavigateToIncome}
           >
             Registrar ingreso
           </button>
           <button
             className="button button--secondary"
             type="button"
-            onClick={() => handleAction('Registrar gasto')}
+            onClick={onNavigateToExpense}
           >
             Registrar gasto
           </button>
           <button
             className="button button--secondary"
             type="button"
-            onClick={() => handleAction('Ahorrar')}
+            onClick={onNavigateToSaving}
           >
             Ahorrar
           </button>
           <button
             className="button button--primary"
             type="button"
-            onClick={() => handleAction('Ver resumen')}
+            onClick={onNavigateToMovements}
           >
             Ver resumen
           </button>
