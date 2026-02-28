@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react'
 import { formatCurrencyCOP, formatDate } from '../../utils/format'
-import {
-  getLastMovementDate,
-  getMonthlyTotals,
-  loadState,
-  type SavyState,
-} from '../../utils/storage'
+import { getLastMovementDate, loadState, type SavyState } from '../../utils/storage'
 
 interface HomeProps {
   onNavigateToIncome: () => void
@@ -34,7 +29,6 @@ export default function Home({
     }
   }, [])
 
-  const monthlyTotals = getMonthlyTotals(dashboardState.movimientos)
   const lastMovementDate = getLastMovementDate(dashboardState.movimientos)
   const lastUpdateText = lastMovementDate
     ? `Actualizado ${formatDate(lastMovementDate)}`
@@ -43,32 +37,26 @@ export default function Home({
   return (
     <main className="app-shell">
       <section className="screen stack">
-        <header className="topbar">
-          <div className="brand-badge">S</div>
-          <div>
-            <p className="eyebrow">SAVY</p>
-            <h1 className="title">Tu dashboard</h1>
-          </div>
-        </header>
-
-        <article className="hero-card stack">
-          <p className="eyebrow">Bienvenido</p>
-          <div className="logo-placeholder logo-placeholder--image">
+        <article className="dashboard-hero stack">
+          <div className="dashboard-logo-box">
             <img
-              className="logo-image"
+              className="dashboard-logo-image"
               src="/assets/logo-savy.png"
               alt="Logo de SAVY"
             />
           </div>
-          <p className="text-muted">
-            Revisa tu dinero disponible, controla tus gastos y aparta un poco
-            para tus metas de ahorro.
-          </p>
+
+          <div className="dashboard-welcome">
+            <p className="dashboard-welcome__text">
+              Cada paso cuenta: registra tus ingresos, controla tus gastos y haz crecer tus ahorros.
+            </p>
+            <div className="dashboard-welcome__divider" aria-hidden="true" />
+          </div>
         </article>
 
-        <section className="balance-grid" aria-label="Resumen financiero">
+        <section className="dashboard-stack" aria-label="Resumen financiero">
           <article className="stat-card stat-card--highlight">
-            <span className="stat-card__label">Dinero disponible</span>
+            <span className="stat-card__label">Total disponible</span>
             <strong className="stat-card__value">
               {formatCurrencyCOP(dashboardState.dineroDisponible)}
             </strong>
@@ -76,7 +64,7 @@ export default function Home({
           </article>
 
           <article className="stat-card">
-            <span className="stat-card__label">Ahorro total</span>
+            <span className="stat-card__label">Total en ahorros</span>
             <strong className="stat-card__value">
               {formatCurrencyCOP(dashboardState.ahorroTotal)}
             </strong>
@@ -84,58 +72,34 @@ export default function Home({
           </article>
         </section>
 
-        <section className="panel stack" aria-label="Resumen del mes">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">Resumen</p>
-              <h2 className="section-title">Resumen del mes</h2>
-            </div>
-          </div>
-
-          <div className="mini-summary-grid">
-            <article className="mini-summary">
-              <span className="mini-summary__label">Ingresos del mes</span>
-              <strong className="mini-summary__value">
-                {formatCurrencyCOP(monthlyTotals.ingresos)}
-              </strong>
-            </article>
-            <article className="mini-summary">
-              <span className="mini-summary__label">Gastos del mes</span>
-              <strong className="mini-summary__value">
-                {formatCurrencyCOP(monthlyTotals.gastos)}
-              </strong>
-            </article>
-          </div>
-        </section>
-
         <section className="dashboard-actions" aria-label="Acciones principales">
           <button
-            className="button button--secondary"
+            className="button button--dashboard button--primary"
             type="button"
             onClick={onNavigateToIncome}
           >
             Registrar ingreso
           </button>
           <button
-            className="button button--secondary"
+            className="button button--dashboard button--secondary"
             type="button"
             onClick={onNavigateToExpense}
           >
             Registrar gasto
           </button>
           <button
-            className="button button--secondary"
+            className="button button--dashboard button--secondary"
             type="button"
             onClick={onNavigateToSaving}
           >
-            Ahorrar
+            Registrar ahorro
           </button>
           <button
-            className="button button--primary"
+            className="button button--dashboard button--secondary"
             type="button"
             onClick={onNavigateToMovements}
           >
-            Ver resumen
+            Resumen o movimientos
           </button>
         </section>
       </section>
