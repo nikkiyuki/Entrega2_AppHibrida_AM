@@ -58,6 +58,9 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const [savingState, setSavingState] = useState<SavyState>(() => loadState())
   const formattedMonto = monto ? Number(monto).toLocaleString('es-CO') : ''
   const formattedMeta = metaAhorro ? Number(metaAhorro).toLocaleString('es-CO') : ''
+  const ahorroDisponible = selectedAhorro
+    ? Math.max(0, selectedAhorro.meta - selectedAhorro.acumulado)
+    : 0
 
   useEffect(() => {
     setActiveTab(initialTab)
@@ -363,21 +366,40 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                         </p>
 
                         {(manageMode === 'add' || manageMode === 'withdraw') && (
-                          <label className="field" htmlFor="manage-amount">
-                            <span className="field__label">Monto</span>
-                            <div className="currency-field currency-field--soft">
-                              <span className="currency-field__symbol">$</span>
-                              <input
-                                id="manage-amount"
-                                className="field__control field__control--currency"
-                                type="text"
-                                inputMode="numeric"
-                                placeholder="20.000"
-                                value={manageAmount ? Number(manageAmount).toLocaleString('es-CO') : ''}
-                                onChange={(event) => handleManageAmountChange(event.target.value)}
-                              />
+                          <>
+                            <div className="saving-manage__summary">
+                              {manageMode === 'add' ? (
+                                <>
+                                  <span>
+                                    Disponible: {formatCurrencyCOP(savingState.dineroDisponible)}
+                                  </span>
+                                  <span>
+                                    Falta para la meta: {formatCurrencyCOP(ahorroDisponible)}
+                                  </span>
+                                </>
+                              ) : (
+                                <span>
+                                  Ahorrado actualmente: {formatCurrencyCOP(selectedAhorro.acumulado)}
+                                </span>
+                              )}
                             </div>
-                          </label>
+
+                            <label className="field" htmlFor="manage-amount">
+                              <span className="field__label">Monto</span>
+                              <div className="currency-field currency-field--soft">
+                                <span className="currency-field__symbol">$</span>
+                                <input
+                                  id="manage-amount"
+                                  className="field__control field__control--currency"
+                                  type="text"
+                                  inputMode="numeric"
+                                  placeholder="20.000"
+                                  value={manageAmount ? Number(manageAmount).toLocaleString('es-CO') : ''}
+                                  onChange={(event) => handleManageAmountChange(event.target.value)}
+                                />
+                              </div>
+                            </label>
+                          </>
                         )}
 
                         {manageMode === 'edit' && (

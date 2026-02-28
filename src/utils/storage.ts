@@ -205,6 +205,12 @@ export function agregarDineroAhorro(input: AgregarDineroAhorroInput) {
     throw new Error('No tienes suficiente dinero disponible.')
   }
 
+  const restanteMeta = Math.max(0, ahorro.meta - ahorro.acumulado)
+
+  if (input.monto > restanteMeta) {
+    throw new Error('No puedes agregar mas dinero del necesario para completar esta meta.')
+  }
+
   const nowISO = new Date().toISOString()
   const nextState: SavyState = {
     ...currentState,

@@ -541,6 +541,17 @@
   font-size: 0.95rem;
 }
 
+.saving-manage__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.9rem;
+  background: rgba(47, 47, 42, 0.06);
+  color: $color-text-muted;
+  font-size: 0.88rem;
+}
+
 .saving-manage__actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
