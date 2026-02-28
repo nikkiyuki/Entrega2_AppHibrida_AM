@@ -431,18 +431,35 @@
   flex-direction: column;
   gap: $space-2;
   padding: $space-3;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: $radius-lg;
-  background: $color-surface-soft;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(240, 240, 236, 0.96) 100%);
+  box-shadow: 0 10px 22px rgba(18, 18, 18, 0.06);
 }
 
 .saving-item__header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: $space-2;
+}
+
+.saving-item__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
 .saving-item__name {
   font-size: 1rem;
+}
+
+.saving-item__badge {
+  padding: 0.32rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(47, 47, 42, 0.08);
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
 .saving-item__category,
@@ -451,7 +468,38 @@
 }
 
 .saving-item__amounts {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15rem;
   font-size: 0.95rem;
+}
+
+.saving-item__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-2;
+}
+
+.saving-item__action-button {
+  min-height: 2.6rem;
+  border: 1px solid $color-border;
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.86);
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.saving-item__action-button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 1);
+}
+
+.saving-item__action-button--danger {
+  color: #7d2f2f;
 }
 
 .saving-progress {
@@ -473,6 +521,30 @@
   padding: $space-3;
   border: 1px dashed $color-border;
   border-radius: $radius-lg;
+}
+
+.saving-manage {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  padding: $space-3;
+  margin-top: $space-1;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 1.1rem;
+  background: rgba(249, 249, 246, 0.98);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.saving-manage__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.saving-manage__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-2;
 }
 
 .screen--modal-open {

@@ -1,31 +1,22 @@
 import { lazy, Suspense, useState } from 'react'
 import Home from './pages/home/Home'
+import Saving from './pages/saving/Saving'
 
 const EmptyView = () => null
 
-const Income = lazy(() =>
-  import('./pages/income/Income').then((module) => ({
-    default: module.default ?? EmptyView,
-  })),
-)
+const loadOptionalView = async (importView: () => Promise<unknown>) => {
+  const module = (await importView()) as { default?: typeof EmptyView }
 
-const Expense = lazy(() =>
-  import('./pages/expense/Expense').then((module) => ({
+  return {
     default: module.default ?? EmptyView,
-  })),
-)
+  }
+}
 
-const Saving = lazy(() =>
-  import('./pages/saving/Saving').then((module) => ({
-    default: module.default ?? EmptyView,
-  })),
-)
+const Income = lazy(() => loadOptionalView(() => import('./pages/income/Income')))
 
-const Movements = lazy(() =>
-  import('./pages/movements/Movements').then((module) => ({
-    default: module.default ?? EmptyView,
-  })),
-)
+const Expense = lazy(() => loadOptionalView(() => import('./pages/expense/Expense')))
+
+const Movements = lazy(() => loadOptionalView(() => import('./pages/movements/Movements')))
 
 function App() {
   const [currentView, setCurrentView] = useState<

@@ -114,6 +114,11 @@ interface AddAhorroInput {
   monto: number
 }
 
+interface AgregarDineroAhorroInput {
+  ahorroId: string
+  monto: number
+}
+
 interface RetirarDeAhorroInput {
   ahorroId: string
   monto: number
@@ -121,6 +126,13 @@ interface RetirarDeAhorroInput {
 
 interface EliminarAhorroInput {
   ahorroId: string
+}
+
+interface ActualizarAhorroInput {
+  ahorroId: string
+  categoria: string
+  nombre: string
+  meta: number
 }
 
 export function addAhorro(input: AddAhorroInput) {
@@ -171,6 +183,52 @@ export function addAhorro(input: AddAhorroInput) {
       ...currentState.movimientos,
     ],
     ahorros: nextAhorros,
+  }
+
+  saveState(nextState)
+  return nextState
+}
+
+export function agregarDineroAhorro(input: AgregarDineroAhorroInput) {
+  const currentState = loadState()
+  const ahorro = currentState.ahorros.find((item) => item.id === input.ahorroId)
+
+  if (!ahorro) {
+    throw new Error('No se encontro el ahorro seleccionado.')
+  }
+
+  if (!input.monto || input.monto <= 0) {
+    throw new Error('El monto debe ser mayor a cero.')
+  }
+
+  if (input.monto > currentState.dineroDisponible) {
+    throw new Error('No tienes suficiente dinero disponible.')
+  }
+
+  const nowISO = new Date().toISOString()
+  const nextState: SavyState = {
+    ...currentState,
+    dineroDisponible: currentState.dineroDisponible - input.monto,
+    ahorroTotal: currentState.ahorroTotal + input.monto,
+    movimientos: [
+      {
+        id: `mov-${Date.now()}`,
+        tipo: 'Ahorro',
+        monto: input.monto,
+        categoria: ahorro.nombre,
+        fechaISO: nowISO,
+      },
+      ...currentState.movimientos,
+    ],
+    ahorros: currentState.ahorros.map((item) =>
+      item.id === ahorro.id
+        ? {
+            ...item,
+            acumulado: item.acumulado + input.monto,
+            fechaISO: nowISO,
+          }
+        : item,
+    ),
   }
 
   saveState(nextState)
@@ -253,6 +311,32 @@ export function eliminarAhorro(input: EliminarAhorroInput) {
         ]
       : currentState.movimientos,
     ahorros: currentState.ahorros.filter((item) => item.id !== input.ahorroId),
+  }
+
+  saveState(nextState)
+  return nextState
+}
+
+export function actualizarAhorro(input: ActualizarAhorroInput) {
+  const currentState = loadState()
+  const ahorro = currentState.ahorros.find((item) => item.id === input.ahorroId)
+
+  if (!ahorro) {
+    throw new Error('No se encontro el ahorro que deseas editar.')
+  }
+
+  const nextState: SavyState = {
+    ...currentState,
+    ahorros: currentState.ahorros.map((item) =>
+      item.id === ahorro.id
+        ? {
+            ...item,
+            categoria: input.categoria,
+            nombre: input.nombre.trim() || input.categoria,
+            meta: input.meta,
+          }
+        : item,
+    ),
   }
 
   saveState(nextState)

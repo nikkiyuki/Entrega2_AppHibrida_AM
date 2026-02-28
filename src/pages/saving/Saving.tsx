@@ -3,7 +3,12 @@ import { formatCurrencyCOP } from '../../utils/format'
 import {
   SAVY_STATE_EVENT,
   addAhorro,
+  agregarDineroAhorro,
+  actualizarAhorro,
+  eliminarAhorro,
   loadState,
+  retirarDeAhorro,
+  type MetaAhorro,
   type SavyState,
 } from '../../utils/storage'
 
@@ -31,10 +36,16 @@ interface SavingProps {
 
 export default function Saving({ initialTab, onBack }: SavingProps) {
   const [activeTab, setActiveTab] = useState<'list' | 'new'>(initialTab)
+  const [manageMode, setManageMode] = useState<'add' | 'withdraw' | 'edit' | 'delete' | null>(null)
+  const [selectedAhorro, setSelectedAhorro] = useState<MetaAhorro | null>(null)
   const [monto, setMonto] = useState('')
   const [nombreAhorro, setNombreAhorro] = useState('')
   const [metaAhorro, setMetaAhorro] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Viaje')
+  const [manageAmount, setManageAmount] = useState('')
+  const [manageName, setManageName] = useState('')
+  const [manageMeta, setManageMeta] = useState('')
+  const [manageCategory, setManageCategory] = useState('Viaje')
   const [feedback, setFeedback] = useState('')
   const [feedbackType, setFeedbackType] = useState<'error' | 'success' | ''>('')
   const [motivationalMessage] = useState(
@@ -76,6 +87,25 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     setMetaAhorro(numericValue)
   }
 
+  const handleManageAmountChange = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+    setManageAmount(numericValue)
+  }
+
+  const handleManageMetaChange = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+    setManageMeta(numericValue)
+  }
+
+  const resetManagePanel = () => {
+    setManageMode(null)
+    setSelectedAhorro(null)
+    setManageAmount('')
+    setManageName('')
+    setManageMeta('')
+    setManageCategory('Viaje')
+  }
+
   const handleResetForm = () => {
     setMonto('')
     setNombreAhorro('')
@@ -92,6 +122,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
 
     if (isSuccess) {
       setActiveTab('list')
+      resetManagePanel()
     }
   }
 
@@ -141,6 +172,69 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     }
 
     onBack()
+  }
+
+  const openManagePanel = (
+    mode: 'add' | 'withdraw' | 'edit' | 'delete',
+    ahorro: MetaAhorro,
+  ) => {
+    setSelectedAhorro(ahorro)
+    setManageMode(mode)
+    setManageAmount('')
+    setManageName(ahorro.nombre)
+    setManageMeta(String(ahorro.meta))
+    setManageCategory(ahorro.categoria)
+  }
+
+  const handleManageAction = () => {
+    if (!selectedAhorro || !manageMode) {
+      return
+    }
+
+    try {
+      if (manageMode === 'add') {
+        agregarDineroAhorro({
+          ahorroId: selectedAhorro.id,
+          monto: Number(manageAmount),
+        })
+        setFeedback('Se agrego dinero al ahorro correctamente.')
+      }
+
+      if (manageMode === 'withdraw') {
+        retirarDeAhorro({
+          ahorroId: selectedAhorro.id,
+          monto: Number(manageAmount),
+        })
+        setFeedback('El retiro del ahorro se registro correctamente.')
+      }
+
+      if (manageMode === 'edit') {
+        if (!Number(manageMeta) || Number(manageMeta) <= 0) {
+          throw new Error('Ingresa una meta valida para actualizar el ahorro.')
+        }
+
+        actualizarAhorro({
+          ahorroId: selectedAhorro.id,
+          nombre: manageName,
+          categoria: manageCategory,
+          meta: Number(manageMeta),
+        })
+        setFeedback('Los datos del ahorro fueron actualizados.')
+      }
+
+      if (manageMode === 'delete') {
+        eliminarAhorro({
+          ahorroId: selectedAhorro.id,
+        })
+        setFeedback('El ahorro fue eliminado correctamente.')
+      }
+
+      setFeedbackType('success')
+      setSavingState(loadState())
+    } catch (error) {
+      setFeedback(error instanceof Error ? error.message : 'Ocurrio un error inesperado.')
+      setFeedbackType('error')
+    }
   }
 
   return (
@@ -199,8 +293,19 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                 {savingState.ahorros.map((ahorro) => (
                   <article key={ahorro.id} className="saving-item">
                     <div className="saving-item__header">
-                      <strong className="saving-item__name">{ahorro.nombre}</strong>
-                      <span className="saving-item__category">{ahorro.categoria}</span>
+                      <div className="saving-item__identity">
+                        <strong className="saving-item__name">{ahorro.nombre}</strong>
+                        <span className="saving-item__category">{ahorro.categoria}</span>
+                      </div>
+                      <span className="saving-item__badge">
+                        {Math.min(
+                          100,
+                          Math.round(
+                            ahorro.meta ? (ahorro.acumulado / ahorro.meta) * 100 : 0,
+                          ),
+                        )}
+                        %
+                      </span>
                     </div>
                     <div className="saving-item__amounts">
                       <span>{formatCurrencyCOP(ahorro.acumulado)}</span>
@@ -217,6 +322,128 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                         }}
                       />
                     </div>
+                    <div className="saving-item__actions">
+                      <button
+                        type="button"
+                        className="saving-item__action-button"
+                        onClick={() => openManagePanel('add', ahorro)}
+                      >
+                        Agregar dinero
+                      </button>
+                      <button
+                        type="button"
+                        className="saving-item__action-button"
+                        onClick={() => openManagePanel('withdraw', ahorro)}
+                      >
+                        Retirar
+                      </button>
+                      <button
+                        type="button"
+                        className="saving-item__action-button"
+                        onClick={() => openManagePanel('edit', ahorro)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        type="button"
+                        className="saving-item__action-button saving-item__action-button--danger"
+                        onClick={() => openManagePanel('delete', ahorro)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+
+                    {selectedAhorro?.id === ahorro.id && manageMode ? (
+                      <div className="saving-manage">
+                        <p className="saving-manage__title">
+                          {manageMode === 'add' && `Agregar dinero a ${selectedAhorro.nombre}`}
+                          {manageMode === 'withdraw' && `Retirar dinero de ${selectedAhorro.nombre}`}
+                          {manageMode === 'edit' && `Editar ${selectedAhorro.nombre}`}
+                          {manageMode === 'delete' && `Eliminar ${selectedAhorro.nombre}`}
+                        </p>
+
+                        {(manageMode === 'add' || manageMode === 'withdraw') && (
+                          <label className="field" htmlFor="manage-amount">
+                            <span className="field__label">Monto</span>
+                            <div className="currency-field currency-field--soft">
+                              <span className="currency-field__symbol">$</span>
+                              <input
+                                id="manage-amount"
+                                className="field__control field__control--currency"
+                                type="text"
+                                inputMode="numeric"
+                                placeholder="20.000"
+                                value={manageAmount ? Number(manageAmount).toLocaleString('es-CO') : ''}
+                                onChange={(event) => handleManageAmountChange(event.target.value)}
+                              />
+                            </div>
+                          </label>
+                        )}
+
+                        {manageMode === 'edit' && (
+                          <>
+                            <label className="field" htmlFor="manage-name">
+                              <span className="field__label">Nombre</span>
+                              <input
+                                id="manage-name"
+                                className="field__control"
+                                type="text"
+                                value={manageName}
+                                onChange={(event) => setManageName(event.target.value)}
+                              />
+                            </label>
+
+                            <label className="field" htmlFor="manage-meta">
+                              <span className="field__label">Meta</span>
+                              <div className="currency-field currency-field--soft">
+                                <span className="currency-field__symbol">$</span>
+                                <input
+                                  id="manage-meta"
+                                  className="field__control field__control--currency"
+                                  type="text"
+                                  inputMode="numeric"
+                                  value={manageMeta ? Number(manageMeta).toLocaleString('es-CO') : ''}
+                                  onChange={(event) => handleManageMetaChange(event.target.value)}
+                                />
+                              </div>
+                            </label>
+
+                            <div className="saving-category-grid" aria-label="Editar categoria">
+                              {savingCategories.map((category) => (
+                                <button
+                                  key={`manage-${category}`}
+                                  className={`saving-category ${
+                                    manageCategory === category ? 'saving-category--active' : ''
+                                  }`}
+                                  type="button"
+                                  onClick={() => setManageCategory(category)}
+                                >
+                                  <span className="saving-category__label">{category}</span>
+                                  <span className="saving-category__icon-placeholder">
+                                    Espacio para icono
+                                  </span>
+                                </button>
+                              ))}
+                            </div>
+                          </>
+                        )}
+
+                        {manageMode === 'delete' && (
+                          <p className="text-muted">
+                            Se devolvera al disponible el dinero acumulado de este ahorro.
+                          </p>
+                        )}
+
+                        <div className="saving-manage__actions">
+                          <button className="button button--secondary" type="button" onClick={resetManagePanel}>
+                            Cerrar
+                          </button>
+                          <button className="button button--primary" type="button" onClick={handleManageAction}>
+                            Confirmar
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
                   </article>
                 ))}
               </div>
