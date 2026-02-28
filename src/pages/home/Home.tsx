@@ -1,9 +1,30 @@
-import "./Home.css";
 export default function Home() {
   return (
-   <section className="flex flex-col items-center justify-center h-screen">
-     <h1 className="text-4xl font-bold mb-4">Welcome to the Home Page</h1>
-     <p className="text-lg text-gray-600">This is the main landing page of the application.</p>
-   </section>
-  );
+    <main className="app-shell">
+      <section className="screen stack">
+        <header className="topbar">
+          <div className="brand-badge">S</div>
+          <div>
+            <p className="eyebrow">SAVY</p>
+            <h1 className="title">Base visual del proyecto</h1>
+          </div>
+        </header>
+
+        <article className="panel stack">
+          <p className="text-muted">
+            SASS ya esta conectado al proyecto. Desde aqui podemos empezar a
+            construir las pantallas del app sin trabajar sobre estilos sueltos.
+          </p>
+          <div className="actions-grid">
+            <button className="button button--primary" type="button">
+              Accion principal
+            </button>
+            <button className="button button--secondary" type="button">
+              Accion secundaria
+            </button>
+          </div>
+        </article>
+      </section>
+    </main>
+  )
 }

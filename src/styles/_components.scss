@@ -1,0 +1,72 @@
+@use './variables' as *;
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.brand-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 1rem;
+  background: $color-primary-strong;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $color-text-muted;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+
+.text-muted {
+  margin: 0;
+  color: $color-text-muted;
+}
+
+.panel {
+  padding: $space-4;
+  border: 1px solid $color-border;
+  border-radius: $radius-xl;
+  background: $color-surface;
+  box-shadow: 0 12px 28px rgba(24, 24, 20, 0.05);
+}
+
+.button {
+  min-height: 3.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button--primary {
+  background: $color-primary-strong;
+  color: #ffffff;
+}
+
+.button--secondary {
+  background: $color-surface-soft;
+  color: $color-text;
+}
