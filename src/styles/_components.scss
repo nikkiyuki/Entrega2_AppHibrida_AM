@@ -3,7 +3,19 @@
 .topbar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: $space-3;
+}
+
+.topbar__content {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.topbar__action {
+  min-height: auto;
+  padding: 0.7rem 1rem;
 }
 
 .brand-badge {
@@ -173,4 +185,158 @@
   display: block;
   font-size: 1.5rem;
   word-break: break-word;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.field__label {
+  font-size: 0.95rem;
+  color: $color-text-muted;
+}
+
+.field__control {
+  width: 100%;
+  min-height: 3.3rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 1rem;
+}
+
+.field__control--currency {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  min-height: auto;
+}
+
+.field__control--currency:focus {
+  outline: none;
+}
+
+.currency-field {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  min-height: 3.3rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.currency-field--soft {
+  background: $color-surface-soft;
+}
+
+.currency-field--featured {
+  min-height: 4.6rem;
+  padding: 1.1rem 1rem;
+}
+
+.currency-field__symbol {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.saving-available {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  padding: $space-3;
+  border-radius: $radius-lg;
+  background: $color-surface-soft;
+}
+
+.saving-available__label {
+  font-size: 0.85rem;
+  color: $color-text-muted;
+}
+
+.saving-available__value {
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+.saving-message {
+  padding: $space-3;
+  border: 1px dashed $color-border;
+  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.saving-message__title {
+  margin: 0 0 $space-1;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.saving-panel {
+  gap: $space-3;
+}
+
+.saving-header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.saving-divider {
+  width: 100%;
+  height: 1px;
+  background: $color-primary;
+}
+
+.saving-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-2;
+}
+
+.saving-category {
+  min-height: 6rem;
+  padding: $space-2;
+  border: 1px solid transparent;
+  border-radius: $radius-lg;
+  background: $color-surface-soft;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+}
+
+.saving-category--active {
+  border-color: $color-primary-strong;
+  background: rgba(47, 47, 42, 0.12);
+}
+
+.saving-amount-block {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-3;
+  border-radius: $radius-lg;
+  background: $color-surface-soft;
+}
+
+.saving-amount-block__label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.saving-amount-block__available {
+  font-size: 0.85rem;
+  color: $color-text-muted;
+}
+
+.saving-actions .button--secondary {
+  order: 1;
+}
+
+.saving-actions .button--primary {
+  order: 2;
 }
