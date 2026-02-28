@@ -11,6 +11,14 @@ const savingCategories = [
   'Otro',
 ]
 
+const motivationalMessages = [
+  'Ahorrar poco a poco tambien cuenta. Cada aporte te acerca a tu meta.',
+  'Cada peso que guardas hoy te da mas tranquilidad manana.',
+  'Tus metas crecen cuando eres constante con tus ahorros.',
+  'No necesitas ahorrar mucho de una vez, lo importante es empezar.',
+  'Cada ahorro es una decision inteligente para tu futuro.',
+]
+
 interface SavingProps {
   onBack: () => void
 }
@@ -22,6 +30,12 @@ export default function Saving({ onBack }: SavingProps) {
   const [selectedCategory, setSelectedCategory] = useState('Viaje')
   const [feedback, setFeedback] = useState('')
   const [feedbackType, setFeedbackType] = useState<'error' | 'success' | ''>('')
+  const [motivationalMessage] = useState(
+    () =>
+      motivationalMessages[
+        Math.floor(Math.random() * motivationalMessages.length)
+      ],
+  )
   const savingState = loadState()
   const formattedMonto = monto ? Number(monto).toLocaleString('es-CO') : ''
   const formattedMeta = metaAhorro ? Number(metaAhorro).toLocaleString('es-CO') : ''
@@ -182,8 +196,7 @@ export default function Saving({ onBack }: SavingProps) {
           <div className={`saving-message ${feedbackType ? `saving-message--${feedbackType}` : ''}`}>
             <p className="saving-message__title">Mensaje de motivacion</p>
             <p className="text-muted">
-              {feedback ||
-                'Ahorrar poco a poco tambien cuenta. Cada aporte te acerca a tu meta.'}
+              {feedback || motivationalMessage}
             </p>
           </div>
 
