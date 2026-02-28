@@ -74,8 +74,19 @@ textarea {
   gap: $space-3;
 }
 
+.balance-grid,
+.mini-summary-grid,
+.dashboard-actions {
+  display: grid;
+  gap: $space-3;
+}
+
 @media (min-width: 768px) {
   .screen {
     min-height: 46rem;
+  }
+
+  .mini-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
