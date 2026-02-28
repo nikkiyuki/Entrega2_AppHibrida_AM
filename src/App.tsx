@@ -1,36 +1,76 @@
-import { useState } from "react";
-import Income from "./pages/income/Income";
-import Expense from "./pages/expense/Expense";
-import "./App.css";
 
-type View = "home" | "income" | "expense";
+import { lazy, Suspense, useState } from 'react'
+import Home from './pages/home/Home'
+import Saving from './pages/saving/Saving'
 
-export default function App() {
-  const [view, setView] = useState<View>("home");
+const EmptyView = () => null
+
+const loadOptionalView = async (importView: () => Promise<unknown>) => {
+  const module = (await importView()) as { default?: typeof EmptyView }
+
+  return {
+    default: module.default ?? EmptyView,
+  }
+}
+
+const Income = lazy(() => loadOptionalView(() => import('./pages/income/Income')))
+
+const Expense = lazy(() => loadOptionalView(() => import('./pages/expense/Expense')))
+
+const Movements = lazy(() => loadOptionalView(() => import('./pages/movements/Movements')))
+
+function App() {
+  const [currentView, setCurrentView] = useState<
+    'home' | 'income' | 'expense' | 'saving' | 'movements'
+  >('home')
+  const [savingInitialTab, setSavingInitialTab] = useState<'list' | 'new'>('list')
+
+  if (currentView === 'income') {
+    return (
+      <Suspense fallback={null}>
+        <Income />
+      </Suspense>
+    )
+  }
+
+  if (currentView === 'expense') {
+    return (
+      <Suspense fallback={null}>
+        <Expense />
+      </Suspense>
+    )
+  }
+
+  if (currentView === 'saving') {
+    return (
+      <Suspense fallback={null}>
+        <Saving
+          initialTab={savingInitialTab}
+          onBack={() => setCurrentView('home')}
+        />
+      </Suspense>
+    )
+  }
+
+  if (currentView === 'movements') {
+    return (
+      <Suspense fallback={null}>
+        <Movements />
+      </Suspense>
+    )
+  }
 
   return (
-    <>
-      {view === "home" && (
-        <div className="home-page">
-          <h1 className="home-title">Home</h1>
-
-          <div className="home-card">
-            <p className="home-subtitle">¿Qué quieres registrar hoy?</p>
-
-            <div className="home-actions">
-              <button className="home-btn" onClick={() => setView("income")}>
-                Registrar ingreso
-              </button>
-              <button className="home-btn" onClick={() => setView("expense")}>
-                Registrar gasto
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {view === "income" && <Income onClose={() => setView("home")} />}
-      {view === "expense" && <Expense onClose={() => setView("home")} />}
-    </>
-  );
+    <Home
+      onNavigateToIncome={() => setCurrentView('income')}
+      onNavigateToExpense={() => setCurrentView('expense')}
+      onNavigateToSaving={() => {
+        setSavingInitialTab('list')
+        setCurrentView('saving')
+      }}
+      onNavigateToMovements={() => setCurrentView('movements')}
+    />
+  )
 }
+
+export default App
