@@ -50,14 +50,13 @@ export default function Saving({ onBack }: SavingProps) {
     setMetaAhorro(numericValue)
   }
 
-  const handleCancel = () => {
+  const handleResetForm = () => {
     setMonto('')
     setNombreAhorro('')
     setMetaAhorro('')
     setSelectedCategory('Viaje')
     setFeedback('')
     setFeedbackType('')
-    onBack()
   }
 
   const handleCloseFeedback = () => {
@@ -207,8 +206,8 @@ export default function Saving({ onBack }: SavingProps) {
           </div>
 
           <div className="dashboard-actions saving-actions" aria-label="Acciones de ahorro">
-            <button className="button button--secondary" type="button" onClick={handleCancel}>
-              Cancelar
+            <button className="button button--secondary" type="button" onClick={handleResetForm}>
+              Borrar
             </button>
             <button className="button button--primary" type="button" onClick={handleConfirmSaving}>
               Confirmar
