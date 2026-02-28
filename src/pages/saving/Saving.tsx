@@ -60,6 +60,16 @@ export default function Saving({ onBack }: SavingProps) {
     onBack()
   }
 
+  const handleCloseFeedback = () => {
+    const isSuccess = feedbackType === 'success'
+    setFeedback('')
+    setFeedbackType('')
+
+    if (isSuccess) {
+      onBack()
+    }
+  }
+
   const handleConfirmSaving = () => {
     const montoNumber = Number(monto)
     const metaNumber = Number(metaAhorro)
@@ -94,15 +104,11 @@ export default function Saving({ onBack }: SavingProps) {
     setMonto('')
     setMetaAhorro('')
     setNombreAhorro('')
-
-    window.setTimeout(() => {
-      onBack()
-    }, 900)
   }
 
   return (
     <main className="app-shell">
-      <section className="screen stack">
+      <section className={`screen stack ${feedbackType ? 'screen--modal-open' : ''}`}>
         <header className="topbar">
           <div className="topbar__content">
             <div className="brand-badge">S</div>
@@ -193,10 +199,10 @@ export default function Saving({ onBack }: SavingProps) {
             </label>
           </div>
 
-          <div className={`saving-message ${feedbackType ? `saving-message--${feedbackType}` : ''}`}>
+          <div className="saving-message">
             <p className="saving-message__title">Mensaje de motivacion</p>
             <p className="text-muted">
-              {feedback || motivationalMessage}
+              {motivationalMessage}
             </p>
           </div>
 
@@ -209,6 +215,37 @@ export default function Saving({ onBack }: SavingProps) {
             </button>
           </div>
         </article>
+
+        {feedbackType ? (
+          <div className="feedback-modal-backdrop" role="presentation">
+            <div
+              className={`feedback-modal feedback-modal--${feedbackType}`}
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="saving-feedback-title"
+            >
+              <p id="saving-feedback-title" className="feedback-modal__title">
+                {feedbackType === 'success'
+                  ? 'LET´S GO POR ESA META!!'
+                  : 'REVISA TU INFORMACION'}
+              </p>
+              <p className="feedback-modal__text">
+                {feedbackType === 'success'
+                  ? 'TU AHORRO HA SIDO REGISTRADO CON EXITO'
+                  : feedback}
+              </p>
+              <div className="feedback-modal__actions">
+                <button
+                  className="feedback-modal__button"
+                  type="button"
+                  onClick={handleCloseFeedback}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </section>
     </main>
   )

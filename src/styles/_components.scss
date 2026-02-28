@@ -309,18 +309,6 @@
   background: rgba(255, 255, 255, 0.72);
 }
 
-.saving-message--error {
-  border-style: solid;
-  border-color: #b44b4b;
-  background: rgba(180, 75, 75, 0.08);
-}
-
-.saving-message--success {
-  border-style: solid;
-  border-color: #4f7d54;
-  background: rgba(79, 125, 84, 0.1);
-}
-
 .saving-message__title {
   margin: 0 0 $space-1;
   font-size: 0.9rem;
@@ -411,4 +399,52 @@
 
 .saving-actions .button--primary {
   order: 2;
+}
+
+.screen--modal-open {
+  position: relative;
+}
+
+.feedback-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-4;
+  background: rgba(50, 50, 46, 0.34);
+}
+
+.feedback-modal {
+  width: min(100%, 15.5rem);
+  padding: $space-4;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(18, 18, 18, 0.16);
+}
+
+.feedback-modal__title {
+  margin: 0 0 $space-3;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.feedback-modal__text {
+  margin: 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+}
+
+.feedback-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: $space-4;
+}
+
+.feedback-modal__button {
+  min-width: 3.2rem;
+  min-height: 2rem;
+  border: 0;
+  background: #d9d9d4;
+  cursor: pointer;
 }
