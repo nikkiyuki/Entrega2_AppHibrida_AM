@@ -1,4 +1,4 @@
-export type TipoMovimiento = 'Ingreso' | 'Gasto' | 'Ahorro'
+export type TipoMovimiento = 'Ingreso' | 'Gasto' | 'Ahorro' | 'RetiroAhorro'
 
 export interface Movimiento {
   id: string
@@ -114,6 +114,15 @@ interface AddAhorroInput {
   monto: number
 }
 
+interface RetirarDeAhorroInput {
+  ahorroId: string
+  monto: number
+}
+
+interface EliminarAhorroInput {
+  ahorroId: string
+}
+
 export function addAhorro(input: AddAhorroInput) {
   const currentState = loadState()
   const nowISO = new Date().toISOString()
@@ -162,6 +171,88 @@ export function addAhorro(input: AddAhorroInput) {
       ...currentState.movimientos,
     ],
     ahorros: nextAhorros,
+  }
+
+  saveState(nextState)
+  return nextState
+}
+
+export function retirarDeAhorro(input: RetirarDeAhorroInput) {
+  const currentState = loadState()
+  const ahorro = currentState.ahorros.find((item) => item.id === input.ahorroId)
+
+  if (!ahorro) {
+    throw new Error('No se encontro el ahorro seleccionado.')
+  }
+
+  if (!input.monto || input.monto <= 0) {
+    throw new Error('El monto a retirar debe ser mayor a cero.')
+  }
+
+  if (input.monto > ahorro.acumulado) {
+    throw new Error('No puedes retirar mas dinero del que tienes ahorrado.')
+  }
+
+  const nowISO = new Date().toISOString()
+  const nextAhorros = currentState.ahorros
+    .map((item) =>
+      item.id === ahorro.id
+        ? {
+            ...item,
+            acumulado: item.acumulado - input.monto,
+            fechaISO: nowISO,
+          }
+        : item,
+    )
+    .filter((item) => item.acumulado > 0)
+
+  const nextState: SavyState = {
+    ...currentState,
+    dineroDisponible: currentState.dineroDisponible + input.monto,
+    ahorroTotal: Math.max(0, currentState.ahorroTotal - input.monto),
+    movimientos: [
+      {
+        id: `mov-${Date.now()}`,
+        tipo: 'RetiroAhorro',
+        monto: input.monto,
+        categoria: ahorro.nombre,
+        fechaISO: nowISO,
+      },
+      ...currentState.movimientos,
+    ],
+    ahorros: nextAhorros,
+  }
+
+  saveState(nextState)
+  return nextState
+}
+
+export function eliminarAhorro(input: EliminarAhorroInput) {
+  const currentState = loadState()
+  const ahorro = currentState.ahorros.find((item) => item.id === input.ahorroId)
+
+  if (!ahorro) {
+    throw new Error('No se encontro el ahorro que deseas eliminar.')
+  }
+
+  const nowISO = new Date().toISOString()
+  const nextState: SavyState = {
+    ...currentState,
+    dineroDisponible: currentState.dineroDisponible + ahorro.acumulado,
+    ahorroTotal: Math.max(0, currentState.ahorroTotal - ahorro.acumulado),
+    movimientos: ahorro.acumulado
+      ? [
+          {
+            id: `mov-${Date.now()}`,
+            tipo: 'RetiroAhorro',
+            monto: ahorro.acumulado,
+            categoria: ahorro.nombre,
+            fechaISO: nowISO,
+          },
+          ...currentState.movimientos,
+        ]
+      : currentState.movimientos,
+    ahorros: currentState.ahorros.filter((item) => item.id !== input.ahorroId),
   }
 
   saveState(nextState)
