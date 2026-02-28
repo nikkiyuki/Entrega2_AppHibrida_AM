@@ -1,23 +1,5 @@
 @use './variables' as *;
 
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: $space-3;
-}
-
-.brand-badge {
-  display: inline-grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 1rem;
-  background: $color-primary-strong;
-  color: #ffffff;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-}
-
 .eyebrow {
   margin: 0 0 0.25rem;
   font-size: 0.75rem;
@@ -104,14 +86,53 @@
   object-fit: contain;
 }
 
+.dashboard-hero {
+  align-items: center;
+  gap: $space-4;
+}
+
+.dashboard-logo-box {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 8.8rem;
+  padding: $space-3;
+  background: #d4d4d0;
+}
+
+.dashboard-logo-image {
+  width: 100%;
+  max-width: 13rem;
+  height: auto;
+  object-fit: contain;
+}
+
+.dashboard-welcome {
+  width: 100%;
+  text-align: center;
+}
+
+.dashboard-welcome__text {
+  margin: 0 0 $space-2;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.dashboard-welcome__divider {
+  width: 62%;
+  height: 1px;
+  margin: 0 auto;
+  background: $color-primary;
+}
+
 .stat-card {
   display: flex;
   flex-direction: column;
   gap: $space-1;
   padding: $space-4;
-  border: 1px solid $color-border;
-  border-radius: $radius-xl;
-  background: $color-surface;
+  border: 0;
+  border-radius: 0;
+  background: #b0b0ad;
 }
 
 .stat-card--highlight {
@@ -152,25 +173,12 @@
   font-size: 1.25rem;
 }
 
-.mini-summary {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: $space-2;
+.button--dashboard {
   min-height: 7rem;
   padding: $space-3;
-  border-radius: $radius-lg;
-  background: $color-surface-soft;
-  border: 1px solid rgba(0, 0, 0, 0.03);
-}
-
-.mini-summary__label {
-  display: block;
-  line-height: 1.35;
-}
-
-.mini-summary__value {
-  display: block;
-  font-size: 1.5rem;
-  word-break: break-word;
+  text-transform: uppercase;
+  text-align: left;
+  border-radius: 1.6rem;
+  white-space: normal;
+  line-height: 1.15;
 }
