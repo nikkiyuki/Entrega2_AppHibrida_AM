@@ -1,6 +1,7 @@
 
 import { lazy, Suspense, useState } from 'react'
 import Home from './pages/home/Home'
+import Income from './pages/income/Income'
 import Movements from './pages/movements/Movements'
 import Saving from './pages/saving/Saving'
 
@@ -14,8 +15,6 @@ const loadOptionalView = async (importView: () => Promise<unknown>) => {
   }
 }
 
-const Income = lazy(() => loadOptionalView(() => import('./pages/income/Income')))
-
 const Expense = lazy(() => loadOptionalView(() => import('./pages/expense/Expense')))
 
 function App() {
@@ -27,7 +26,7 @@ function App() {
   if (currentView === 'income') {
     return (
       <Suspense fallback={null}>
-        <Income />
+        <Income onClose={() => setCurrentView('home')} />
       </Suspense>
     )
   }
