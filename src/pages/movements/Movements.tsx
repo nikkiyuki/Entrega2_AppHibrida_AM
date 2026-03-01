@@ -78,23 +78,25 @@ export default function Movements({ onBack }: MovementsProps) {
         </article>
 
         <section className="dashboard-summary" aria-label="Resumen de movimientos">
-          <article className="stat-card">
-            <span className="stat-card__label">Total de ingresos en el mes</span>
-            <strong className="stat-card__value">
-              {formatCurrencyCOP(totalIncome)}
-            </strong>
-          </article>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <article className="stat-card">
+              <span className="stat-card__label">Total de ingresos en el mes</span>
+              <strong className="stat-card__value">
+                {formatCurrencyCOP(totalIncome)}
+              </strong>
+            </article>
 
-          <article className="stat-card">
-            <span className="stat-card__label">Total de gastos al mes</span>
-            <strong className="stat-card__value">
-              {formatCurrencyCOP(totalExpense)}
-            </strong>
-          </article>
+            <article className="stat-card">
+              <span className="stat-card__label">Total de gastos al mes</span>
+              <strong className="stat-card__value">
+                {formatCurrencyCOP(totalExpense)}
+              </strong>
+            </article>
+          </div>
         </section>
 
         <section className="additional-section" aria-label="Sección adicional">
-          <h2 className="additional-section__title">Nueva Sección</h2>
+          <h2 className="additional-section__title">Ahorros</h2>
           <p className="additional-section__content">Contenido de la nueva sección basado en el wireframe.</p>
         </section>
       </section>
