@@ -1,5 +1,6 @@
 import { lazy, Suspense, useState } from 'react'
 import Home from './pages/home/Home'
+import Movements from './pages/movements/Movements'
 import Saving from './pages/saving/Saving'
 
 const EmptyView = () => null
@@ -15,8 +16,6 @@ const loadOptionalView = async (importView: () => Promise<unknown>) => {
 const Income = lazy(() => loadOptionalView(() => import('./pages/income/Income')))
 
 const Expense = lazy(() => loadOptionalView(() => import('./pages/expense/Expense')))
-
-const Movements = lazy(() => loadOptionalView(() => import('./pages/movements/Movements')))
 
 function App() {
   const [currentView, setCurrentView] = useState<
@@ -54,7 +53,7 @@ function App() {
   if (currentView === 'movements') {
     return (
       <Suspense fallback={null}>
-        <Movements />
+        <Movements onBack={() => setCurrentView('home')} />
       </Suspense>
     )
   }
