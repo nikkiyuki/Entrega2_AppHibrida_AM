@@ -1,94 +1,81 @@
-import { useMemo, useState } from "react";
-import "./Income.css";
+import { useMemo, useState } from 'react'
+import './Income.css'
+import { addIngreso } from '../../utils/storage'
 
-type Props = { onClose: () => void };
+type Props = { onClose: () => void }
 
 type IncomeCategory =
-  | "Salario"
-  | "Venta"
-  | "Regalo"
-  | "Beca"
-  | "Freelance"
-  | "Propina"
-  | "Otro";
-
-type Movement = {
-  id: string;
-  type: "income" | "expense";
-  amount: number;
-  category: string;
-  note?: string;
-  dateISO: string;
-};
+  | 'Mesada'
+  | 'Regalo'
+  | 'Trabajo'
+  | 'Apoyo familiar'
+  | 'Emprendimiento'
+  | 'Premio'
+  | 'Otros'
 
 const INCOME_CATEGORIES: IncomeCategory[] = [
-  "Salario",
-  "Venta",
-  "Regalo",
-  "Beca",
-  "Freelance",
-  "Propina",
-  "Otro",
-];
-
-function saveMovement(m: Movement) {
-  const key = "movements";
-  const raw = localStorage.getItem(key);
-  const list: Movement[] = raw ? JSON.parse(raw) : [];
-  list.unshift(m);
-  localStorage.setItem(key, JSON.stringify(list));
-}
+  'Mesada',
+  'Regalo',
+  'Trabajo',
+  'Apoyo familiar',
+  'Emprendimiento',
+  'Premio',
+  'Otros',
+]
 
 function formatCOPDigits(digits: string) {
-  const n = Number(digits || 0);
-  return n.toLocaleString("es-CO");
+  const n = Number(digits || 0)
+  return n.toLocaleString('es-CO')
 }
 
 export default function Income({ onClose }: Props) {
-  const [amountDigits, setAmountDigits] = useState<string>("");
-  const [category, setCategory] = useState<IncomeCategory>("Salario");
-  const [note, setNote] = useState("");
+  const [amountDigits, setAmountDigits] = useState('')
+  const [category, setCategory] = useState<IncomeCategory>('Mesada')
+  const [error, setError] = useState('')
 
   const motivational = useMemo(() => {
-    const a = Number(amountDigits || 0);
-    if (!a) return "Tip: registra todo, así sea poquito.";
-    if (a < 10000) return "Cada peso cuenta. Buen hábito.";
-    if (a < 50000) return "Bien. Considera guardar una parte.";
-    return "Excelente. Define una meta de ahorro.";
-  }, [amountDigits]);
+    const amount = Number(amountDigits || 0)
 
-  const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits]);
+    if (!amount) return 'Tip: registra cada ingreso, incluso si es pequeno.'
+    if (amount < 10000) return 'Cada peso cuenta. Mantener el registro ya es un avance.'
+    if (amount < 50000) return 'Buen ingreso. Puedes apartar una parte para una meta.'
+    return 'Muy bien. Este ingreso puede ayudarte a crecer tu ahorro.'
+  }, [amountDigits])
 
-  const handleCancel = () => onClose();
+  const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits])
+
+  const handleCancel = () => onClose()
 
   const handleSubmit = () => {
-    if (!canSubmit) return;
+    if (!canSubmit) {
+      setError('Ingresa un monto valido.')
+      return
+    }
 
-    const movement: Movement = {
-      id: crypto.randomUUID(),
-      type: "income",
-      amount: Number(amountDigits),
-      category,
-      note: note.trim() ? note.trim() : undefined,
-      dateISO: new Date().toISOString(),
-    };
-
-    saveMovement(movement);
-    onClose();
-  };
+    try {
+      addIngreso({
+        categoria: category,
+        monto: Number(amountDigits),
+      })
+      onClose()
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : 'No se pudo registrar el ingreso.',
+      )
+    }
+  }
 
   return (
     <div className="wf-page">
-      <h1 className="wf-title">Registrar Ingresos</h1>
+      <h1 className="wf-title">Registrar ingresos</h1>
 
       <section className="wf-card">
-        {/* Banner grande superior */}
         <div className="wf-banner" role="group" aria-label="Monto a registrar">
           <div className="wf-banner-top">
             <span className="wf-banner-label">Monto a registrar</span>
-            <span className="wf-banner-amount">
-              $ {formatCOPDigits(amountDigits)}
-            </span>
+            <span className="wf-banner-amount">$ {formatCOPDigits(amountDigits)}</span>
           </div>
 
           <input
@@ -96,49 +83,39 @@ export default function Income({ onClose }: Props) {
             inputMode="numeric"
             placeholder="Escribe el monto..."
             value={amountDigits}
-            onChange={(e) => {
-              const v = e.target.value.replace(/[^\d]/g, "");
-              setAmountDigits(v);
+            onChange={(event) => {
+              const value = event.target.value.replace(/[^\d]/g, '')
+              setAmountDigits(value)
+              setError('')
             }}
           />
-          <div className="wf-hint">Solo números</div>
+          <div className="wf-hint">Solo numeros</div>
         </div>
 
         <div className="wf-section-header">
-          <h2 className="wf-section-title">Categorías</h2>
+          <h2 className="wf-section-title">Categorias</h2>
           <span className="wf-pill">{category}</span>
         </div>
 
         <div className="wf-grid">
-          {INCOME_CATEGORIES.map((c) => (
+          {INCOME_CATEGORIES.map((item) => (
             <button
-              key={c}
+              key={item}
               type="button"
-              className={`wf-grid-btn ${category === c ? "active" : ""}`}
-              onClick={() => setCategory(c)}
+              className={`wf-grid-btn ${category === item ? 'active' : ''}`}
+              onClick={() => setCategory(item)}
             >
-              {c}
+              {item}
             </button>
           ))}
         </div>
 
-        <div className="wf-field">
-          <label className="wf-label" htmlFor="note-income">
-            Nota (opcional)
-          </label>
-          <input
-            id="note-income"
-            className="wf-input"
-            placeholder="Ej: pago del mes"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
-        </div>
-
         <div className="wf-motivation">
-          <span className="wf-motivation-title">Mensaje motivación</span>
+          <span className="wf-motivation-title">Mensaje motivacion</span>
           <p className="wf-motivation-text">{motivational}</p>
         </div>
+
+        {error ? <p className="wf-error">{error}</p> : null}
 
         <div className="wf-actions">
           <button type="button" className="wf-action secondary" onClick={handleCancel}>
@@ -150,10 +127,10 @@ export default function Income({ onClose }: Props) {
             disabled={!canSubmit}
             onClick={handleSubmit}
           >
-            Confirmar ingreso
+            Guardar ingreso
           </button>
         </div>
       </section>
     </div>
-  );
+  )
 }

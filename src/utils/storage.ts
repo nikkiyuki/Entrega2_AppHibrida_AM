@@ -114,6 +114,11 @@ interface AddAhorroInput {
   monto: number
 }
 
+interface AddIngresoInput {
+  categoria: string
+  monto: number
+}
+
 interface AgregarDineroAhorroInput {
   ahorroId: string
   monto: number
@@ -133,6 +138,33 @@ interface ActualizarAhorroInput {
   categoria: string
   nombre: string
   meta: number
+}
+
+export function addIngreso(input: AddIngresoInput) {
+  const currentState = loadState()
+
+  if (!input.monto || input.monto <= 0) {
+    throw new Error('El monto del ingreso debe ser mayor a cero.')
+  }
+
+  const nowISO = new Date().toISOString()
+  const nextState: SavyState = {
+    ...currentState,
+    dineroDisponible: currentState.dineroDisponible + input.monto,
+    movimientos: [
+      {
+        id: `mov-${Date.now()}`,
+        tipo: 'Ingreso',
+        monto: input.monto,
+        categoria: input.categoria,
+        fechaISO: nowISO,
+      },
+      ...currentState.movimientos,
+    ],
+  }
+
+  saveState(nextState)
+  return nextState
 }
 
 export function addAhorro(input: AddAhorroInput) {
