@@ -1,3 +1,4 @@
+import './Home.scss'
 import { useEffect, useState } from 'react'
 import { formatCurrencyCOP, formatDate } from '../../utils/format'
 import {

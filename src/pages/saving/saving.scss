@@ -1,0 +1,214 @@
+@use '../../styles/variables' as *;
+
+
+/* =========================
+   CONTENEDOR GENERAL
+========================= */
+
+.saving-panel {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.saving-header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.saving-divider {
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    $color-primary-electric,
+    $color-primary-pink
+  );
+}
+
+
+/* =========================
+   TABS
+========================= */
+
+.saving-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-2;
+}
+
+.saving-tab {
+  min-height: 3rem;
+  border-radius: $radius-lg;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: $color-white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 160ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &--active {
+    background: linear-gradient(
+      135deg,
+      $color-primary-electric,
+      $color-primary-purple
+    );
+    color: $color-white;
+    border: none;
+  }
+}
+
+
+/* =========================
+   GRID DE CATEGORÍAS
+========================= */
+
+.saving-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-2;
+}
+
+.saving-category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 6rem;
+  padding: $space-2;
+
+  border-radius: $radius-lg;
+  background: rgba(0,0,0,0.03);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 160ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &--active {
+    background: linear-gradient(
+      135deg,
+      $color-primary-purple,
+      $color-primary-pink
+    );
+    color: $color-white;
+  }
+}
+
+.saving-category__label {
+  text-align: center;
+}
+
+
+/* =========================
+   BLOQUE MONTO
+========================= */
+
+.saving-amount-block {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-3;
+  border-radius: $radius-lg;
+  background: rgba(0,0,0,0.03);
+}
+
+.saving-amount-block__label {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.saving-amount-block__available {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+
+/* =========================
+   LISTA DE AHORROS
+========================= */
+
+.saving-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.saving-item {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  padding: $space-3;
+  border-radius: $radius-lg;
+  background: $color-white;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+}
+
+.saving-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.saving-item__name {
+  font-weight: 600;
+}
+
+.saving-item__badge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(0,0,0,0.05);
+}
+
+
+/* =========================
+   BARRA DE PROGRESO
+========================= */
+
+.saving-progress {
+  width: 100%;
+  height: 0.8rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.08);
+}
+
+.saving-progress__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    $color-primary-electric,
+    $color-primary-pink
+  );
+}
+
+
+/* =========================
+   ESTADO VACÍO
+========================= */
+
+.saving-empty {
+  padding: $space-3;
+  border-radius: $radius-lg;
+  text-align: center;
+  background: rgba(0,0,0,0.04);
+  font-size: 0.9rem;
+}

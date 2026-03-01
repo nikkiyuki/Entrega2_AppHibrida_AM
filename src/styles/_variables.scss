@@ -1,18 +1,28 @@
-$color-bg: #efefeb;
-$color-surface: #ffffff;
-$color-surface-soft: #e2e2dc;
-$color-border: #b7b7b0;
-$color-text: #1f1f1a;
-$color-text-muted: #61615a;
-$color-primary: #53534e;
-$color-primary-strong: #2e2e2a;
-$shadow-soft: 0 18px 40px rgba(24, 24, 20, 0.08);
+// 🎨 Paleta principal
+$color-primary-electric: #2B2EF5;
+$color-primary-purple: #4B3F8F;
+$color-primary-pink: #E93A6A;
+$color-accent-strong: #FF2E63;
+
+// ⚪ Neutros
+$color-white: #FFFFFF;
+$color-dark: #111111;
+$color-text-muted: rgba(255, 255, 255, 0.7);
+
+// 🌫 Sombras
+$shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.15);
+
+// 📐 Bordes
 $radius-xl: 28px;
 $radius-lg: 20px;
 $radius-md: 16px;
+
+// 📏 Espaciado
 $space-1: 0.5rem;
 $space-2: 0.75rem;
 $space-3: 1rem;
 $space-4: 1.25rem;
 $space-5: 1.5rem;
+
+// 📱 Contenido
 $content-width: 22.5rem;

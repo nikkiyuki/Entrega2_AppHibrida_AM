@@ -1,0 +1,79 @@
+@use '../../styles/variables' as *;
+
+
+/* =========================
+   HERO
+========================= */
+
+.dashboard-hero {
+  text-align: center;
+}
+
+.dashboard-logo-box {
+  display: flex;
+  justify-content: center;
+}
+
+.dashboard-logo-image {
+  max-width: 20rem; // más grande
+  width: 100%;
+  height: auto;
+  margin-bottom: $space-3;
+}
+
+.dashboard-welcome__text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.dashboard-welcome__divider {
+  width: 50%;
+  height: 2px;
+  margin: $space-2 auto 0;
+  background: rgba(53, 52, 52, 0.6);
+}
+
+
+/* =========================
+   TARJETAS
+========================= */
+
+.dashboard-stack {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-top: $space-4;
+}
+
+/* Card neutra (ahorros más gris) */
+
+.stat-card {
+  padding: $space-3;
+  border-radius: $radius-lg;
+  background: #37373a; // gris suave
+  color: #222;
+}
+
+/* Card principal con degradado */
+
+.stat-card--highlight {
+  background: linear-gradient(
+    135deg,
+    $color-primary-purple,
+    $color-primary-pink
+  );
+  color: $color-white;
+}
+
+
+/* =========================
+   BOTONES 2x2
+========================= */
+
+.dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-3;
+  margin-top: $space-4;
+}
