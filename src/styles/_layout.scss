@@ -15,10 +15,9 @@ body,
 body {
   margin: 0;
   font-family:
+    'Poppins',
     'Segoe UI',
     Tahoma,
-    Geneva,
-    Verdana,
     sans-serif;
   color: $color-text;
   background:
@@ -64,4 +63,9 @@ img {
   display: flex;
   flex-direction: column;
   gap: $space-4;
+}
+
+.screen,
+.screen * {
+  font-weight: 400;
 }

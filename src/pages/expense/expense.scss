@@ -1,0 +1,196 @@
+@use '../../styles/variables' as *;
+
+.screen--expense {
+  .expense-panel {
+    gap: $space-4;
+  }
+
+  .expense-header {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  .expense-divider {
+    width: 100%;
+    height: 3px;
+    border-radius: 999px;
+    background: $gradient-brand;
+  }
+
+  .expense-amount-block {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    padding: $space-3;
+    border-radius: $radius-lg;
+    background: rgba(255, 255, 255, 0.76);
+  }
+
+  .expense-amount-block__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $space-2;
+  }
+
+  .expense-amount-block__label {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: $color-text-soft;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .expense-amount-block__value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: $color-text;
+  }
+
+  .expense-amount-block__help,
+  .expense-amount-block__available {
+    font-size: 0.84rem;
+    color: $color-text-soft;
+  }
+
+  .expense-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-2;
+  }
+
+  .expense-section-title {
+    margin: 0;
+    font-size: 1rem;
+    color: $color-text;
+  }
+
+  .expense-pill {
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(75, 63, 143, 0.08);
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: $color-secondary;
+  }
+
+  .expense-category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $space-2;
+  }
+
+  .expense-category {
+    min-height: 2.8rem;
+    border: 1px solid rgba(75, 63, 143, 0.2);
+    border-radius: $radius-sm;
+    background: linear-gradient(
+      135deg,
+      rgba(43, 46, 245, 0.14) 0%,
+      rgba(233, 58, 106, 0.12) 100%
+    );
+    color: $color-text;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      transform 160ms ease,
+      background 160ms ease,
+      border-color 160ms ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      border-color: rgba(75, 63, 143, 0.28);
+      background: linear-gradient(
+        135deg,
+        rgba(43, 46, 245, 0.2) 0%,
+        rgba(233, 58, 106, 0.18) 100%
+      );
+    }
+  }
+
+  .expense-category--active {
+    border-color: rgba(75, 63, 143, 0.34);
+    background: linear-gradient(
+      135deg,
+      rgba(43, 46, 245, 0.26) 0%,
+      rgba(233, 58, 106, 0.22) 100%
+    );
+  }
+
+  .expense-message {
+    padding: $space-3;
+    border: 1px dashed rgba(29, 29, 37, 0.14);
+    border-radius: $radius-lg;
+    background: rgba(255, 255, 255, 0.58);
+  }
+
+  .expense-message__title {
+    margin: 0 0 $space-1;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .expense-error {
+    margin: 0;
+    padding: $space-2 $space-3;
+    border: 1px solid rgba(208, 46, 46, 0.24);
+    border-radius: $radius-sm;
+    background: rgba(255, 255, 255, 0.72);
+    color: $color-danger;
+    font-size: 0.88rem;
+    font-weight: 700;
+  }
+
+  .expense-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $space-2;
+  }
+
+  .expense-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-4;
+    background: rgba(17, 17, 17, 0.34);
+  }
+
+  .expense-modal {
+    width: min(100%, 18rem);
+    padding: $space-4;
+    border-radius: $radius-md;
+    background: $color-white;
+    box-shadow: 0 20px 42px rgba(17, 17, 17, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+
+  .expense-modal__title {
+    margin: 0;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    color: $color-text;
+  }
+
+  .expense-modal__text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: $color-text;
+    line-height: 1.4;
+  }
+
+  .expense-modal__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: $space-2;
+  }
+}
+
+.screen--modal-open {
+  position: relative;
+}

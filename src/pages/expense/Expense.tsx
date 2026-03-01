@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import './Expense.css'
+import './expense.scss'
+import { formatCurrencyCOP } from '../../utils/format'
 import { addGasto, loadState } from '../../utils/storage'
 
 type Props = { onClose: () => void }
@@ -25,16 +26,12 @@ const EXPENSE_CATEGORIES: ExpenseCategory[] = [
   'Otro',
 ]
 
-function formatCOPDigits(digits: string) {
-  const amount = Number(digits || 0)
-  return amount.toLocaleString('es-CO')
-}
-
 export default function Expense({ onClose }: Props) {
   const [amountDigits, setAmountDigits] = useState('')
   const [category, setCategory] = useState<ExpenseCategory>('Comida')
   const [note, setNote] = useState('')
   const [error, setError] = useState('')
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false)
   const [availableMoney] = useState(() => loadState().dineroDisponible)
 
   const motivational = useMemo(() => {
@@ -46,12 +43,14 @@ export default function Expense({ onClose }: Props) {
   }, [amountDigits])
 
   const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits])
+  const formattedAmount = amountDigits ? Number(amountDigits).toLocaleString('es-CO') : ''
 
   const handleResetForm = () => {
     setAmountDigits('')
     setCategory('Comida')
     setNote('')
     setError('')
+    setIsSuccessOpen(false)
   }
 
   const handleSubmit = () => {
@@ -65,7 +64,8 @@ export default function Expense({ onClose }: Props) {
         categoria: category,
         monto: Number(amountDigits),
       })
-      onClose()
+      setError('')
+      setIsSuccessOpen(true)
     } catch (submitError) {
       setError(
         submitError instanceof Error
@@ -76,9 +76,9 @@ export default function Expense({ onClose }: Props) {
   }
 
   return (
-    <div className="wf-page">
-      <section className="wf-shell">
-        <header className="topbar wf-topbar">
+    <main className="app-shell">
+      <section className={`screen screen--expense stack ${isSuccessOpen ? 'screen--modal-open' : ''}`}>
+        <header className="topbar">
           <div className="topbar__content">
             <div className="brand-badge">
               <img
@@ -101,39 +101,55 @@ export default function Expense({ onClose }: Props) {
           </button>
         </header>
 
-        <section className="wf-card">
-          <div className="wf-banner" role="group" aria-label="Monto gasto">
-            <div className="wf-banner-top">
-              <span className="wf-banner-label">Monto gasto</span>
-              <span className="wf-banner-amount">$ {formatCOPDigits(amountDigits)}</span>
+        <article className="panel stack expense-panel">
+          <div className="expense-header">
+            <p className="eyebrow">Controla tus salidas de dinero</p>
+            <div className="expense-divider" aria-hidden="true" />
+          </div>
+
+          <div className="expense-amount-block" role="group" aria-label="Monto gasto">
+            <div className="expense-amount-block__header">
+              <span className="expense-amount-block__label">Monto gasto</span>
+              <strong className="expense-amount-block__value">
+                {formatCurrencyCOP(Number(amountDigits || 0))}
+              </strong>
             </div>
 
-            <input
-              className="wf-banner-input"
-              inputMode="numeric"
-              placeholder="Escribe el monto..."
-              value={amountDigits}
-              onChange={(event) => {
-                const value = event.target.value.replace(/[^\d]/g, '')
-                setAmountDigits(value)
-                setError('')
-              }}
-            />
-            <div className="wf-hint">Solo numeros</div>
-            <div className="wf-available">Disponible: $ {formatCOPDigits(String(availableMoney))}</div>
+            <label className="field" htmlFor="expense-amount">
+              <div className="currency-field currency-field--featured">
+                <span className="currency-field__symbol">$</span>
+                <input
+                  id="expense-amount"
+                  className="field__control field__control--currency"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Escribe el monto..."
+                  value={formattedAmount}
+                  onChange={(event) => {
+                    const value = event.target.value.replace(/[^\d]/g, '')
+                    setAmountDigits(value)
+                    setError('')
+                  }}
+                />
+              </div>
+            </label>
+            <span className="expense-amount-block__help">Solo numeros</span>
+            <span className="expense-amount-block__available">
+              Disponible: {formatCurrencyCOP(availableMoney)}
+            </span>
           </div>
 
-          <div className="wf-section-header">
-            <h2 className="wf-section-title">Tipo de gasto</h2>
-            <span className="wf-pill">{category}</span>
+          <div className="expense-section-header">
+            <h2 className="expense-section-title">Tipo de gasto</h2>
+            <span className="expense-pill">{category}</span>
           </div>
 
-          <div className="wf-grid">
+          <div className="expense-category-grid" aria-label="Categorias de gasto">
             {EXPENSE_CATEGORIES.map((item) => (
               <button
                 key={item}
                 type="button"
-                className={`wf-grid-btn ${category === item ? 'active' : ''}`}
+                className={`expense-category ${category === item ? 'expense-category--active' : ''}`}
                 onClick={() => setCategory(item)}
               >
                 {item}
@@ -141,41 +157,67 @@ export default function Expense({ onClose }: Props) {
             ))}
           </div>
 
-          <div className="wf-field">
-            <label className="wf-label" htmlFor="note-expense">
-              Nota (opcional)
-            </label>
+          <label className="field" htmlFor="note-expense">
+            <span className="field__label">Nota (opcional)</span>
             <input
               id="note-expense"
-              className="wf-input"
+              className="field__control"
               placeholder="Ej: almuerzo"
               value={note}
               onChange={(event) => setNote(event.target.value)}
             />
+          </label>
+
+          <div className="expense-message">
+            <p className="expense-message__title">Mensaje de motivacion</p>
+            <p className="text-muted">{motivational}</p>
           </div>
 
-          <div className="wf-motivation">
-            <span className="wf-motivation-title">Mensaje motivacion</span>
-            <p className="wf-motivation-text">{motivational}</p>
-          </div>
+          {error ? <p className="expense-error">{error}</p> : null}
 
-          {error ? <p className="wf-error">{error}</p> : null}
-
-          <div className="wf-actions">
+          <div className="dashboard-actions expense-actions">
+            <button type="button" className="button button--secondary" onClick={handleResetForm}>
+              Borrar
+            </button>
             <button
               type="button"
-              className="wf-action primary"
+              className="button button--primary"
               disabled={!canSubmit}
               onClick={handleSubmit}
             >
               Confirmar
             </button>
-            <button type="button" className="wf-action secondary" onClick={handleResetForm}>
-              Borrar
-            </button>
           </div>
-        </section>
+        </article>
+
+        {isSuccessOpen ? (
+          <div className="expense-modal-backdrop" role="presentation">
+            <div
+              className="expense-modal"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="expense-success-title"
+            >
+              <p id="expense-success-title" className="expense-modal__title">
+                Gasto registrado
+              </p>
+              <p className="expense-modal__text">
+                Se registro correctamente un gasto de {formatCurrencyCOP(Number(amountDigits || 0))}
+                {' '}en la categoria {category}.
+              </p>
+              <div className="expense-modal__actions">
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={onClose}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </section>
-    </div>
+    </main>
   )
 }
