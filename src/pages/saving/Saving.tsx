@@ -14,11 +14,11 @@ import {
 } from '../../utils/storage'
 
 const savingCategories = [
+  'Estudios',
   'Viaje',
-  'Estudio',
-  'Celular',
-  'Regalo mama',
-  'Gimnasio',
+  'Tecnología',
+  'Emprendimiento',
+  'Emergencia',
   'Otro',
 ]
 
