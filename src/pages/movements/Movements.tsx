@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import './movements.scss'
 import { formatCurrencyCOP, formatDate } from '../../utils/format'
 import {
   SAVY_STATE_EVENT,
@@ -47,7 +48,7 @@ export default function Movements({ onBack }: MovementsProps) {
 
   return (
     <main className="app-shell">
-      <section className="screen stack">
+      <section className="screen screen--movements stack">
         <header className="topbar">
           <div className="topbar__content">
             <div className="brand-badge">S</div>

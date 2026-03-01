@@ -243,7 +243,9 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
 
   return (
     <main className="app-shell">
-      <section className={`screen stack ${feedbackType ? 'screen--modal-open' : ''}`}>
+      <section
+        className={`screen screen--saving stack ${feedbackType ? 'screen--modal-open' : ''}`}
+      >
         <header className="topbar">
           <div className="topbar__content">
             <div className="brand-badge">S</div>
