@@ -19,15 +19,21 @@
 }
 
 .brand-badge {
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 2.9rem;
   height: 2.9rem;
   border-radius: 1rem;
-  background: $gradient-brand;
-  color: $color-text-inverse;
-  font-weight: 700;
-  box-shadow: 0 12px 24px rgba(75, 63, 143, 0.28);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 20px rgba(75, 63, 143, 0.16);
+  overflow: hidden;
+}
+
+.brand-badge__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .eyebrow {

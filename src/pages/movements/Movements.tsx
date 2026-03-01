@@ -51,7 +51,13 @@ export default function Movements({ onBack }: MovementsProps) {
       <section className="screen screen--movements stack">
         <header className="topbar">
           <div className="topbar__content">
-            <div className="brand-badge">S</div>
+            <div className="brand-badge">
+              <img
+                className="brand-badge__image"
+                src="/assets/logo-savy-no-letter.png"
+                alt="Logo de SAVY"
+              />
+            </div>
             <div>
               <p className="eyebrow">SAVY</p>
               <h1 className="title">Movimientos</h1>

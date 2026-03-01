@@ -1,21 +1,9 @@
-
-import { lazy, Suspense, useState } from 'react'
+import { Suspense, useState } from 'react'
+import Expense from './pages/expense/Expense'
 import Home from './pages/home/Home'
 import Income from './pages/income/Income'
 import Movements from './pages/movements/Movements'
 import Saving from './pages/saving/Saving'
-
-const EmptyView = () => null
-
-const loadOptionalView = async (importView: () => Promise<unknown>) => {
-  const module = (await importView()) as { default?: typeof EmptyView }
-
-  return {
-    default: module.default ?? EmptyView,
-  }
-}
-
-const Expense = lazy(() => loadOptionalView(() => import('./pages/expense/Expense')))
 
 function App() {
   const [currentView, setCurrentView] = useState<
@@ -34,7 +22,7 @@ function App() {
   if (currentView === 'expense') {
     return (
       <Suspense fallback={null}>
-        <Expense />
+        <Expense onClose={() => setCurrentView('home')} />
       </Suspense>
     )
   }
