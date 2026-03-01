@@ -62,6 +62,9 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const ahorroDisponible = selectedAhorro
     ? Math.max(0, selectedAhorro.meta - selectedAhorro.acumulado)
     : 0
+  const headerTitle = activeTab === 'list' ? 'Mis ahorros' : 'Nuevo ahorro'
+  const headerEyebrow =
+    activeTab === 'list' ? 'Administra tus metas' : 'Crea una nueva meta'
 
   useEffect(() => {
     setActiveTab(initialTab)
@@ -125,6 +128,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     setFeedbackType('')
 
     if (isSuccess) {
+      handleResetForm()
       setActiveTab('list')
       resetManagePanel()
     }
@@ -161,14 +165,12 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
 
     setFeedback('Tu ahorro fue registrado con exito.')
     setFeedbackType('success')
-    setMonto('')
-    setMetaAhorro('')
-    setNombreAhorro('')
     setSavingState(loadState())
   }
 
   const handleTopBack = () => {
     if (activeTab === 'new') {
+      handleResetForm()
       setActiveTab('list')
       setFeedback('')
       setFeedbackType('')
@@ -188,6 +190,12 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     setManageName(ahorro.nombre)
     setManageMeta(String(ahorro.meta))
     setManageCategory(ahorro.categoria)
+  }
+
+  const handleOpenNewSaving = () => {
+    handleResetForm()
+    resetManagePanel()
+    setActiveTab('new')
   }
 
   const handleManageAction = () => {
@@ -250,8 +258,8 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
           <div className="topbar__content">
             <div className="brand-badge">S</div>
             <div>
-              <p className="eyebrow">SAVY</p>
-              <h1 className="title">Ahorrar</h1>
+              <p className="eyebrow">{headerEyebrow}</p>
+              <h1 className="title">{headerTitle}</h1>
             </div>
           </div>
           <button
@@ -274,7 +282,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
           <button
             className={`saving-tab ${activeTab === 'new' ? 'saving-tab--active' : ''}`}
             type="button"
-            onClick={() => setActiveTab('new')}
+            onClick={handleOpenNewSaving}
           >
             Nuevo ahorro
           </button>
@@ -483,7 +491,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
             <button
               className="button button--primary"
               type="button"
-              onClick={() => setActiveTab('new')}
+              onClick={handleOpenNewSaving}
             >
               Nuevo ahorro
             </button>
