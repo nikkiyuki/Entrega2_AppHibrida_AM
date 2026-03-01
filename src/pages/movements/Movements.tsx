@@ -1,34 +1,49 @@
-import { useEffect, useState } from 'react';
-import { formatCurrencyCOP, formatDate } from '../../utils/format';
-import { loadState, SAVY_STATE_EVENT, type Movimiento } from '../../utils/storage';
+import { useEffect, useState } from 'react'
+import { formatCurrencyCOP, formatDate } from '../../utils/format'
+import {
+  SAVY_STATE_EVENT,
+  getMonthlyTotals,
+  loadState,
+  type MetaAhorro,
+  type Movimiento,
+} from '../../utils/storage'
 
 interface MovementsProps {
-  onBack: () => void;
+  onBack: () => void
 }
 
 export default function Movements({ onBack }: MovementsProps) {
-  const [movements, setMovements] = useState<Movimiento[]>([]);
-  const [totalIncome, setTotalIncome] = useState(0);
-  const [totalExpense, setTotalExpense] = useState(0);
+  const [movements, setMovements] = useState<Movimiento[]>([])
+  const [ahorros, setAhorros] = useState<MetaAhorro[]>([])
+  const [totalIncome, setTotalIncome] = useState(0)
+  const [totalExpense, setTotalExpense] = useState(0)
 
   useEffect(() => {
     const syncState = () => {
-      const state = loadState();
-      setMovements(state.movimientos);
-      setTotalIncome(state.totalIngresos);
-      setTotalExpense(state.totalGastos);
-    };
+      const state = loadState()
+      const monthlyTotals = getMonthlyTotals(state.movimientos)
 
-    syncState();
+      setMovements(
+        [...state.movimientos].sort(
+          (current, next) =>
+            new Date(next.fechaISO).getTime() - new Date(current.fechaISO).getTime(),
+        ),
+      )
+      setAhorros(state.ahorros)
+      setTotalIncome(monthlyTotals.ingresos)
+      setTotalExpense(monthlyTotals.gastos)
+    }
 
-    window.addEventListener('storage', syncState);
-    window.addEventListener(SAVY_STATE_EVENT, syncState);
+    syncState()
+
+    window.addEventListener('storage', syncState)
+    window.addEventListener(SAVY_STATE_EVENT, syncState)
 
     return () => {
-      window.removeEventListener('storage', syncState);
-      window.removeEventListener(SAVY_STATE_EVENT, syncState);
-    };
-  }, []);
+      window.removeEventListener('storage', syncState)
+      window.removeEventListener(SAVY_STATE_EVENT, syncState)
+    }
+  }, [])
 
   return (
     <main className="app-shell">
@@ -44,41 +59,49 @@ export default function Movements({ onBack }: MovementsProps) {
           <button
             className="button button--secondary topbar__action"
             type="button"
-            onClick={() => window.location.href = '/home'}
+            onClick={onBack}
           >
             Volver
           </button>
         </header>
 
-        <article className="panel stack movements-panel">
-          <div className="movements-header">
+        <article className="panel stack">
+          <div className="saving-header">
             <p className="eyebrow">Movimientos recientes</p>
-            <div className="movements-divider" aria-hidden="true" />
+            <div className="saving-divider" aria-hidden="true" />
           </div>
 
           {movements.length > 0 ? (
-            <div className="movements-list">
+            <div className="saving-list">
               {movements.map((movement) => (
-                <div key={movement.id} className="movement-item">
-                  <div className="movement-item__details">
-                    <span className="movement-item__type">{movement.tipo}</span>
-                    <span className="movement-item__date">{formatDate(movement.fecha)}</span>
+                <article key={movement.id} className="saving-item">
+                  <div className="saving-item__header">
+                    <div className="saving-item__identity">
+                      <strong className="saving-item__name">{movement.tipo}</strong>
+                      <span className="saving-item__category">{movement.categoria}</span>
+                    </div>
+                    <span className="saving-item__badge">{formatDate(movement.fechaISO)}</span>
                   </div>
-                  <span className="movement-item__amount">
-                    {formatCurrencyCOP(movement.monto)}
-                  </span>
-                </div>
+                  <div className="saving-item__amounts">
+                    <span>{formatCurrencyCOP(movement.monto)}</span>
+                  </div>
+                </article>
               ))}
             </div>
           ) : (
-            <div className="movements-empty">
+            <div className="saving-empty">
               <p className="text-muted">No hay movimientos registrados.</p>
             </div>
           )}
         </article>
 
-        <section className="dashboard-summary" aria-label="Resumen de movimientos">
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <section className="panel stack" aria-label="Resumen de movimientos">
+          <div className="saving-header">
+            <p className="eyebrow">Resumen</p>
+            <div className="saving-divider" aria-hidden="true" />
+          </div>
+
+          <div className="dashboard-actions">
             <article className="stat-card">
               <span className="stat-card__label">Total de ingresos en el mes</span>
               <strong className="stat-card__value">
@@ -95,11 +118,56 @@ export default function Movements({ onBack }: MovementsProps) {
           </div>
         </section>
 
-        <section className="additional-section" aria-label="Sección adicional">
-          <h2 className="additional-section__title">Ahorros</h2>
-          <p className="additional-section__content">Contenido de la nueva sección basado en el wireframe.</p>
+        <section className="panel stack" aria-label="Ahorros guardados">
+          <div className="saving-header">
+            <p className="eyebrow">Ahorros</p>
+            <div className="saving-divider" aria-hidden="true" />
+          </div>
+
+          {ahorros.length > 0 ? (
+            <div className="saving-list">
+              {ahorros.map((ahorro) => (
+                <article key={ahorro.id} className="saving-item">
+                  <div className="saving-item__header">
+                    <div className="saving-item__identity">
+                      <strong className="saving-item__name">{ahorro.nombre}</strong>
+                      <span className="saving-item__category">{ahorro.categoria}</span>
+                    </div>
+                    <span className="saving-item__badge">
+                      {Math.min(
+                        100,
+                        Math.round(
+                          ahorro.meta ? (ahorro.acumulado / ahorro.meta) * 100 : 0,
+                        ),
+                      )}
+                      %
+                    </span>
+                  </div>
+                  <div className="saving-item__amounts">
+                    <span>{formatCurrencyCOP(ahorro.acumulado)}</span>
+                    <span>/ {formatCurrencyCOP(ahorro.meta)}</span>
+                  </div>
+                  <div className="saving-progress" aria-hidden="true">
+                    <span
+                      className="saving-progress__fill"
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          ahorro.meta ? (ahorro.acumulado / ahorro.meta) * 100 : 0,
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="saving-empty">
+              <p className="text-muted">Todavia no hay metas de ahorro registradas.</p>
+            </div>
+          )}
         </section>
       </section>
     </main>
-  );
+  )
 }
