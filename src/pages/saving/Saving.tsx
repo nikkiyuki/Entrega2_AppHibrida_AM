@@ -62,9 +62,6 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const ahorroDisponible = selectedAhorro
     ? Math.max(0, selectedAhorro.meta - selectedAhorro.acumulado)
     : 0
-  const headerTitle = activeTab === 'list' ? 'Mis ahorros' : 'Nuevo ahorro'
-  const headerEyebrow =
-    activeTab === 'list' ? 'Administra tus metas' : 'Crea una nueva meta'
 
   useEffect(() => {
     setActiveTab(initialTab)
@@ -256,10 +253,16 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
       >
         <header className="topbar">
           <div className="topbar__content">
-            <div className="brand-badge">S</div>
+            <div className="brand-badge">
+              <img
+                className="brand-badge__image"
+                src="/assets/logo-savy-no-letter.png"
+                alt="Logo de SAVY"
+              />
+            </div>
             <div>
-              <p className="eyebrow">{headerEyebrow}</p>
-              <h1 className="title">{headerTitle}</h1>
+              <p className="eyebrow">SAVY</p>
+              <h1 className="title">Ahorrar</h1>
             </div>
           </div>
           <button

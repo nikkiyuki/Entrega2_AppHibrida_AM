@@ -119,6 +119,11 @@ interface AddIngresoInput {
   monto: number
 }
 
+interface AddGastoInput {
+  categoria: string
+  monto: number
+}
+
 interface AgregarDineroAhorroInput {
   ahorroId: string
   monto: number
@@ -155,6 +160,37 @@ export function addIngreso(input: AddIngresoInput) {
       {
         id: `mov-${Date.now()}`,
         tipo: 'Ingreso',
+        monto: input.monto,
+        categoria: input.categoria,
+        fechaISO: nowISO,
+      },
+      ...currentState.movimientos,
+    ],
+  }
+
+  saveState(nextState)
+  return nextState
+}
+
+export function addGasto(input: AddGastoInput) {
+  const currentState = loadState()
+
+  if (!input.monto || input.monto <= 0) {
+    throw new Error('El monto del gasto debe ser mayor a cero.')
+  }
+
+  if (input.monto > currentState.dineroDisponible) {
+    throw new Error('No puedes gastar mas dinero del disponible.')
+  }
+
+  const nowISO = new Date().toISOString()
+  const nextState: SavyState = {
+    ...currentState,
+    dineroDisponible: currentState.dineroDisponible - input.monto,
+    movimientos: [
+      {
+        id: `mov-${Date.now()}`,
+        tipo: 'Gasto',
         monto: input.monto,
         categoria: input.categoria,
         fechaISO: nowISO,
