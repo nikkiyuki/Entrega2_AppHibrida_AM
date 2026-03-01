@@ -1,5 +1,14 @@
 import './saving.scss'
 import { useEffect, useState } from 'react'
+import type { IconType } from 'react-icons'
+import {
+  FaBookOpen,
+  FaBriefcase,
+  FaLaptopCode,
+  FaPlaneDeparture,
+  FaShieldHeart,
+  FaWallet,
+} from 'react-icons/fa6'
 import { formatCurrencyCOP } from '../../utils/format'
 import {
   SAVY_STATE_EVENT,
@@ -21,6 +30,28 @@ const savingCategories = [
   'Emergencia',
   'Otro',
 ]
+
+const categoryIconMap: Record<string, IconType> = {
+  Estudios: FaBookOpen,
+  Viaje: FaPlaneDeparture,
+  Tecnologia: FaLaptopCode,
+  Emprendimiento: FaBriefcase,
+  Emergencia: FaShieldHeart,
+  Otro: FaWallet,
+}
+
+const getCategoryIcon = (category: string) => {
+  if (category.toLowerCase().includes('tecnolog')) {
+    return FaLaptopCode
+  }
+
+  return categoryIconMap[category] ?? FaWallet
+}
+
+const renderCategoryIcon = (category: string, className: string) => {
+  const CategoryIcon = getCategoryIcon(category)
+  return <CategoryIcon className={className} aria-hidden="true" />
+}
 
 const motivationalMessages = [
   'Ahorrar poco a poco tambien cuenta. Cada aporte te acerca a tu meta.',
@@ -312,7 +343,10 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                     <div className="saving-item__header">
                       <div className="saving-item__identity">
                         <strong className="saving-item__name">{ahorro.nombre}</strong>
-                        <span className="saving-item__category">{ahorro.categoria}</span>
+                        <span className="saving-item__category">
+                          {renderCategoryIcon(ahorro.categoria, 'saving-item__category-icon')}
+                          {ahorro.categoria}
+                        </span>
                       </div>
                       <span className="saving-item__badge">
                         {Math.min(
@@ -445,21 +479,21 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                             </label>
 
                             <div className="saving-category-grid" aria-label="Editar categoria">
-                              {savingCategories.map((category) => (
-                                <button
-                                  key={`manage-${category}`}
-                                  className={`saving-category ${
-                                    manageCategory === category ? 'saving-category--active' : ''
-                                  }`}
-                                  type="button"
-                                  onClick={() => setManageCategory(category)}
-                                >
-                                  <span className="saving-category__label">{category}</span>
-                                  <span className="saving-category__icon-placeholder">
-                                    Espacio para icono
-                                  </span>
-                                </button>
-                              ))}
+                              {savingCategories.map((category) => {
+                                return (
+                                  <button
+                                    key={`manage-${category}`}
+                                    className={`saving-category ${
+                                      manageCategory === category ? 'saving-category--active' : ''
+                                    }`}
+                                    type="button"
+                                    onClick={() => setManageCategory(category)}
+                                  >
+                                    <span className="saving-category__label">{category}</span>
+                                    {renderCategoryIcon(category, 'saving-category__icon')}
+                                  </button>
+                                )
+                              })}
                             </div>
                           </>
                         )}
@@ -507,21 +541,21 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
           </div>
 
           <div className="saving-category-grid" aria-label="Categorias de ahorro">
-            {savingCategories.map((category) => (
-              <button
-                key={category}
-                className={`saving-category ${
-                  selectedCategory === category ? 'saving-category--active' : ''
-                }`}
-                type="button"
-                onClick={() => setSelectedCategory(category)}
-              >
-                <span className="saving-category__label">{category}</span>
-                <span className="saving-category__icon-placeholder">
-                  Espacio para icono
-                </span>
-              </button>
-            ))}
+            {savingCategories.map((category) => {
+              return (
+                <button
+                  key={category}
+                  className={`saving-category ${
+                    selectedCategory === category ? 'saving-category--active' : ''
+                  }`}
+                  type="button"
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  <span className="saving-category__label">{category}</span>
+                  {renderCategoryIcon(category, 'saving-category__icon')}
+                </button>
+              )
+            })}
           </div>
 
           <label className="field" htmlFor="saving-name">

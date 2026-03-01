@@ -107,21 +107,17 @@
 
   .saving-category__label {
     text-align: center;
-    font-size: 0.88rem;
+    max-width: 100%;
+    font-size: 0.82rem;
     font-weight: 700;
+    line-height: 1.15;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
   }
 
-  .saving-category__icon-placeholder {
-    display: grid;
-    place-items: center;
-    width: 100%;
-    min-height: 2.35rem;
-    border: 1px dashed rgba(29, 29, 37, 0.14);
-    border-radius: $radius-sm;
-    color: $color-text-soft;
-    font-size: 0.72rem;
-    background: rgba(255, 255, 255, 0.54);
+  .saving-category__icon {
+    font-size: 1.95rem;
+    color: rgba(29, 29, 37, 0.7);
   }
 
   .saving-amount-block {
@@ -195,6 +191,16 @@
   .saving-item__category,
   .saving-item__amounts {
     color: $color-text-soft;
+  }
+
+  .saving-item__category {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+  }
+
+  .saving-item__category-icon {
+    font-size: 1.1rem;
   }
 
   .saving-item__amounts {
