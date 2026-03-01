@@ -1,135 +1,197 @@
 @use './variables' as *;
 
-/* =========================
-   BOTONES
-========================= */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+}
+
+.topbar__content {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.topbar__action {
+  min-height: auto;
+  padding: 0.75rem 1rem;
+}
+
+.brand-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 1rem;
+  background: $gradient-brand;
+  color: $color-text-inverse;
+  font-weight: 700;
+  box-shadow: 0 12px 24px rgba(75, 63, 143, 0.28);
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $color-text-soft;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.85rem;
+  line-height: 1.05;
+  color: $color-text;
+}
 
 .button {
   min-height: 3.25rem;
   padding: 0.9rem 1rem;
+  border: 1px solid transparent;
   border-radius: $radius-lg;
   cursor: pointer;
-  font-weight: 600;
-  border: none;
+  font-weight: 700;
   transition:
     transform 160ms ease,
     box-shadow 160ms ease,
-    background 160ms ease;
+    background 160ms ease,
+    border-color 160ms ease;
 
   &:hover {
     transform: translateY(-2px);
   }
-
-  &--primary {
-    background:#363636;
-    color: $color-white;
-  }
-
-  &--secondary {
-    background: rgba(12, 11, 11, 0.15);
-    backdrop-filter: blur(6px);
-    color: $color-white;
-  }
-
-  &--ghost {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: $color-white;
-  }
 }
 
+.button--primary {
+  background: $gradient-brand;
+  color: $color-text-inverse;
+  box-shadow: 0 14px 24px rgba(75, 63, 143, 0.22);
+}
 
-/* =========================
-   TARJETAS GENERALES
-========================= */
+.button--secondary {
+  background: $color-surface;
+  border-color: $color-border;
+  color: $color-text;
+}
+
+.button--ghost {
+  background: transparent;
+  border-color: rgba(29, 29, 37, 0.16);
+  color: $color-text;
+}
 
 .panel {
   padding: $space-4;
+  border: 1px solid rgba(255, 255, 255, 0.54);
   border-radius: $radius-xl;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  box-shadow: $shadow-soft;
+  background: $color-surface;
+  box-shadow: $shadow-card;
 }
-
-
-/* =========================
-   STAT CARD (REUTILIZABLE)
-========================= */
 
 .stat-card {
   display: flex;
   flex-direction: column;
   gap: $space-1;
   padding: $space-4;
+  border: 1px solid rgba(17, 17, 17, 0.06);
   border-radius: $radius-lg;
-  background: rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(10px);
-  color: $color-white
-;
+  background: rgba(255, 255, 255, 0.84);
+  color: $color-text;
 
   &--highlight {
     background: linear-gradient(
       135deg,
-      $color-primary-purple,
-      $color-primary-pink
+      rgba(43, 46, 245, 0.94) 0%,
+      rgba(75, 63, 143, 0.96) 42%,
+      rgba(233, 58, 106, 0.94) 100%
     );
+    color: $color-text-inverse;
   }
 
   &__label {
     font-size: 0.85rem;
-    opacity: 0.8;
+    color: inherit;
+    opacity: 0.82;
   }
 
   &__value {
-    font-size: 1.6rem;
-    font-weight: 700;
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.05;
   }
 
   &__hint {
-    font-size: 0.75rem;
-    opacity: 0.7;
+    font-size: 0.8rem;
+    color: inherit;
+    opacity: 0.72;
   }
 }
-
-
-/* =========================
-   FORMULARIOS
-========================= */
 
 .field {
   display: flex;
   flex-direction: column;
   gap: $space-2;
+}
 
-  &__label {
-    font-size: 0.9rem;
-    color: $color-white;
-    opacity: 0.8;
-  }
+.field__label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: $color-text-soft;
+}
 
-  &__control {
-    width: 100%;
-    min-height: 3.3rem;
-    padding: 0.9rem 1rem;
-    border-radius: $radius-lg;
-    border: none;
-    background: rgba(255, 255, 255, 0.12);
-    color: $color-white;
-    font-size: 1rem;
+.field__control {
+  width: 100%;
+  min-height: 3.3rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(29, 29, 37, 0.12);
+  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.92);
+  color: $color-text;
+  font-size: 1rem;
 
-    &:focus {
-      outline: 2px solid $color-primary-pink;
-    }
+  &:focus {
+    outline: 2px solid rgba(233, 58, 106, 0.2);
+    border-color: rgba(233, 58, 106, 0.4);
   }
 }
 
+.field__control--currency {
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
 
-/* =========================
-   UTILIDADES
-========================= */
+.currency-field {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  min-height: 3.3rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(29, 29, 37, 0.12);
+  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.currency-field--soft {
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.currency-field--featured {
+  min-height: 4.6rem;
+}
+
+.currency-field__symbol {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: $color-text;
+}
 
 .text-muted {
-  opacity: 0.7;
+  margin: 0;
+  color: $color-text-soft;
 }
 
 .section-heading {
@@ -141,5 +203,5 @@
 .section-title {
   margin: 0;
   font-size: 1.25rem;
-  color: $color-white;
+  color: $color-text;
 }

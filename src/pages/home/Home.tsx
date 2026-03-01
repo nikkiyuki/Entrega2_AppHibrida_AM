@@ -44,7 +44,7 @@ export default function Home({
 
   return (
     <main className="app-shell">
-      <section className="screen stack">
+      <section className="screen screen--dashboard stack">
         <article className="dashboard-hero stack">
           <div className="dashboard-logo-box">
             <img
@@ -82,28 +82,28 @@ export default function Home({
 
         <section className="dashboard-actions" aria-label="Acciones principales">
           <button
-            className="button button--dashboard button--primary"
+            className="button button--dashboard button--dashboard-gradient"
             type="button"
             onClick={onNavigateToIncome}
           >
             Registrar ingreso
           </button>
           <button
-            className="button button--dashboard button--secondary"
+            className="button button--dashboard button--dashboard-gradient"
             type="button"
             onClick={onNavigateToExpense}
           >
             Registrar gasto
           </button>
           <button
-            className="button button--dashboard button--secondary"
+            className="button button--dashboard button--dashboard-gradient"
             type="button"
             onClick={onNavigateToSaving}
           >
             Registrar ahorro
           </button>
           <button
-            className="button button--dashboard button--secondary"
+            className="button button--dashboard button--dashboard-gradient"
             type="button"
             onClick={onNavigateToMovements}
           >
