@@ -149,6 +149,10 @@
     gap: $space-2;
   }
 
+  .expense-actions--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .expense-modal-backdrop {
     position: absolute;
     inset: 0;

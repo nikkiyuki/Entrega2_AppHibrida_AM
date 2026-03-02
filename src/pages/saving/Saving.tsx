@@ -9,6 +9,7 @@ import {
   FaShieldHeart,
   FaWallet,
 } from 'react-icons/fa6'
+import AppNavbar from '../../components/AppNavbar'
 import { formatCurrencyCOP } from '../../utils/format'
 import {
   SAVY_STATE_EVENT,
@@ -91,6 +92,9 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const [savingState, setSavingState] = useState<SavyState>(() => loadState())
   const formattedMonto = monto ? Number(monto).toLocaleString('es-CO') : ''
   const formattedMeta = metaAhorro ? Number(metaAhorro).toLocaleString('es-CO') : ''
+  const isNewSavingFormDirty = Boolean(
+    monto || metaAhorro || nombreAhorro.trim() || selectedCategory !== 'Viaje',
+  )
   const ahorroDisponible = selectedAhorro
     ? Math.max(0, selectedAhorro.meta - selectedAhorro.acumulado)
     : 0
@@ -283,28 +287,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
       <section
         className={`screen screen--saving stack ${feedbackType ? 'screen--modal-open' : ''}`}
       >
-        <header className="topbar">
-          <div className="topbar__content">
-            <div className="brand-badge">
-              <img
-                className="brand-badge__image"
-                src="/assets/logo-savy-no-letter.png"
-                alt="Logo de SAVY"
-              />
-            </div>
-            <div>
-              <p className="eyebrow">SAVY</p>
-              <h1 className="title">Ahorrar</h1>
-            </div>
-          </div>
-          <button
-            className="button button--secondary topbar__action"
-            type="button"
-            onClick={handleTopBack}
-          >
-            Volver
-          </button>
-        </header>
+        <AppNavbar title="Ahorrar" onBack={handleTopBack} />
 
         <div className="saving-tabs" role="tablist" aria-label="Pestanas de ahorro">
           <button
@@ -613,10 +596,17 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
             <p className="text-muted">{motivationalMessage}</p>
           </div>
 
-          <div className="dashboard-actions saving-actions" aria-label="Acciones de ahorro">
-            <button className="button button--secondary" type="button" onClick={handleResetForm}>
-              Borrar
-            </button>
+          <div
+            className={`dashboard-actions saving-actions ${
+              !isNewSavingFormDirty ? 'saving-actions--single' : ''
+            }`}
+            aria-label="Acciones de ahorro"
+          >
+            {isNewSavingFormDirty ? (
+              <button className="button button--secondary" type="button" onClick={handleResetForm}>
+                Borrar
+              </button>
+            ) : null}
             <button className="button button--primary" type="button" onClick={handleConfirmSaving}>
               Confirmar
             </button>

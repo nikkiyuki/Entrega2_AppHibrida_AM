@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import './expense.scss'
+import AppNavbar from '../../components/AppNavbar'
 import { formatCurrencyCOP } from '../../utils/format'
 import { addGasto, loadState } from '../../utils/storage'
 
@@ -44,6 +45,7 @@ export default function Expense({ onClose }: Props) {
   }, [amountDigits])
 
   const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits])
+  const isFormDirty = Boolean(amountDigits || note.trim() || category !== 'Comida')
   const formattedAmount = amountDigits ? Number(amountDigits).toLocaleString('es-CO') : ''
 
   const handleResetForm = () => {
@@ -87,28 +89,7 @@ export default function Expense({ onClose }: Props) {
           isSuccessOpen || isErrorOpen ? 'screen--modal-open' : ''
         }`}
       >
-        <header className="topbar">
-          <div className="topbar__content">
-            <div className="brand-badge">
-              <img
-                className="brand-badge__image"
-                src="/assets/logo-savy-no-letter.png"
-                alt="Logo de SAVY"
-              />
-            </div>
-            <div>
-              <p className="eyebrow">SAVY</p>
-              <h1 className="title">Registrar gasto</h1>
-            </div>
-          </div>
-          <button
-            className="button button--secondary topbar__action"
-            type="button"
-            onClick={onClose}
-          >
-            Volver
-          </button>
-        </header>
+        <AppNavbar title="Registrar gasto" onBack={onClose} />
 
         <article className="panel stack expense-panel">
           <div className="expense-header">
@@ -182,10 +163,12 @@ export default function Expense({ onClose }: Props) {
             <p className="text-muted">{motivational}</p>
           </div>
 
-          <div className="dashboard-actions expense-actions">
-            <button type="button" className="button button--secondary" onClick={handleResetForm}>
-              Borrar
-            </button>
+          <div className={`dashboard-actions expense-actions ${!isFormDirty ? 'expense-actions--single' : ''}`}>
+            {isFormDirty ? (
+              <button type="button" className="button button--secondary" onClick={handleResetForm}>
+                Borrar
+              </button>
+            ) : null}
             <button
               type="button"
               className="button button--primary"

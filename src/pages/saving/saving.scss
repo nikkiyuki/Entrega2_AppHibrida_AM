@@ -304,6 +304,10 @@
     gap: $space-2;
   }
 
+  .saving-actions--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .feedback-modal-backdrop {
     position: absolute;
     inset: 0;

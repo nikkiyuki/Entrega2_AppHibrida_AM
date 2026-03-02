@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import './income.scss'
+import AppNavbar from '../../components/AppNavbar'
 import { formatCurrencyCOP } from '../../utils/format'
 import { addIngreso, loadState } from '../../utils/storage'
 
@@ -42,6 +43,7 @@ export default function Income({ onClose }: Props) {
   }, [amountDigits])
 
   const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits])
+  const isFormDirty = Boolean(amountDigits || category !== 'Mesada')
   const formattedAmount = amountDigits ? Number(amountDigits).toLocaleString('es-CO') : ''
 
   const handleResetForm = () => {
@@ -84,28 +86,7 @@ export default function Income({ onClose }: Props) {
           isSuccessOpen || isErrorOpen ? 'screen--modal-open' : ''
         }`}
       >
-        <header className="topbar">
-          <div className="topbar__content">
-            <div className="brand-badge">
-              <img
-                className="brand-badge__image"
-                src="/assets/logo-savy-no-letter.png"
-                alt="Logo de SAVY"
-              />
-            </div>
-            <div>
-              <p className="eyebrow">SAVY</p>
-              <h1 className="title">Registrar ingreso</h1>
-            </div>
-          </div>
-          <button
-            className="button button--secondary topbar__action"
-            type="button"
-            onClick={onClose}
-          >
-            Volver
-          </button>
-        </header>
+        <AppNavbar title="Registrar ingreso" onBack={onClose} />
 
         <article className="panel stack income-panel">
           <div className="income-header">
@@ -169,10 +150,12 @@ export default function Income({ onClose }: Props) {
             <p className="text-muted">{motivational}</p>
           </div>
 
-          <div className="dashboard-actions income-actions">
-            <button type="button" className="button button--secondary" onClick={handleResetForm}>
-              Borrar
-            </button>
+          <div className={`dashboard-actions income-actions ${!isFormDirty ? 'income-actions--single' : ''}`}>
+            {isFormDirty ? (
+              <button type="button" className="button button--secondary" onClick={handleResetForm}>
+                Borrar
+              </button>
+            ) : null}
             <button
               type="button"
               className="button button--primary"

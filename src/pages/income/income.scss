@@ -149,6 +149,10 @@
     gap: $space-2;
   }
 
+  .income-actions--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .income-modal-backdrop {
     position: absolute;
     inset: 0;
