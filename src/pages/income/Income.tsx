@@ -168,7 +168,6 @@ export default function Income({ onClose }: Props) {
             <button
               type="button"
               className="button button--primary"
-              disabled={!canSubmit}
               onClick={handleSubmit}
             >
               Confirmar
