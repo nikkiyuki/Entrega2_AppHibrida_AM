@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
-import './Income.css'
-import { addIngreso } from '../../utils/storage'
+import './income.scss'
+import { formatCurrencyCOP } from '../../utils/format'
+import { addIngreso, loadState } from '../../utils/storage'
 
 type Props = { onClose: () => void }
 
@@ -23,15 +24,12 @@ const INCOME_CATEGORIES: IncomeCategory[] = [
   'Otros',
 ]
 
-function formatCOPDigits(digits: string) {
-  const n = Number(digits || 0)
-  return n.toLocaleString('es-CO')
-}
-
 export default function Income({ onClose }: Props) {
   const [amountDigits, setAmountDigits] = useState('')
   const [category, setCategory] = useState<IncomeCategory>('Mesada')
   const [error, setError] = useState('')
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false)
+  const [availableMoney] = useState(() => loadState().dineroDisponible)
 
   const motivational = useMemo(() => {
     const amount = Number(amountDigits || 0)
@@ -43,11 +41,13 @@ export default function Income({ onClose }: Props) {
   }, [amountDigits])
 
   const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits])
+  const formattedAmount = amountDigits ? Number(amountDigits).toLocaleString('es-CO') : ''
 
   const handleResetForm = () => {
     setAmountDigits('')
     setCategory('Mesada')
     setError('')
+    setIsSuccessOpen(false)
   }
 
   const handleSubmit = () => {
@@ -61,7 +61,8 @@ export default function Income({ onClose }: Props) {
         categoria: category,
         monto: Number(amountDigits),
       })
-      onClose()
+      setError('')
+      setIsSuccessOpen(true)
     } catch (submitError) {
       setError(
         submitError instanceof Error
@@ -72,9 +73,9 @@ export default function Income({ onClose }: Props) {
   }
 
   return (
-    <div className="wf-page">
-      <section className="wf-shell">
-        <header className="topbar wf-topbar">
+    <main className="app-shell">
+      <section className={`screen screen--income stack ${isSuccessOpen ? 'screen--modal-open' : ''}`}>
+        <header className="topbar">
           <div className="topbar__content">
             <div className="brand-badge">
               <img
@@ -97,38 +98,55 @@ export default function Income({ onClose }: Props) {
           </button>
         </header>
 
-        <section className="wf-card">
-          <div className="wf-banner" role="group" aria-label="Monto a registrar">
-            <div className="wf-banner-top">
-              <span className="wf-banner-label">Monto a registrar</span>
-              <span className="wf-banner-amount">$ {formatCOPDigits(amountDigits)}</span>
+        <article className="panel stack income-panel">
+          <div className="income-header">
+            <p className="eyebrow">Registra el dinero que entra</p>
+            <div className="income-divider" aria-hidden="true" />
+          </div>
+
+          <div className="income-amount-block" role="group" aria-label="Monto ingreso">
+            <div className="income-amount-block__header">
+              <span className="income-amount-block__label">Monto ingreso</span>
+              <strong className="income-amount-block__value">
+                {formatCurrencyCOP(Number(amountDigits || 0))}
+              </strong>
             </div>
 
-            <input
-              className="wf-banner-input"
-              inputMode="numeric"
-              placeholder="Escribe el monto..."
-              value={amountDigits}
-              onChange={(event) => {
-                const value = event.target.value.replace(/[^\d]/g, '')
-                setAmountDigits(value)
-                setError('')
-              }}
-            />
-            <div className="wf-hint">Solo numeros</div>
+            <label className="field" htmlFor="income-amount">
+              <div className="currency-field currency-field--featured">
+                <span className="currency-field__symbol">$</span>
+                <input
+                  id="income-amount"
+                  className="field__control field__control--currency"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Escribe el monto..."
+                  value={formattedAmount}
+                  onChange={(event) => {
+                    const value = event.target.value.replace(/[^\d]/g, '')
+                    setAmountDigits(value)
+                    setError('')
+                  }}
+                />
+              </div>
+            </label>
+            <span className="income-amount-block__help">Solo numeros</span>
+            <span className="income-amount-block__available">
+              Disponible actual: {formatCurrencyCOP(availableMoney)}
+            </span>
           </div>
 
-          <div className="wf-section-header">
-            <h2 className="wf-section-title">Categorias</h2>
-            <span className="wf-pill">{category}</span>
+          <div className="income-section-header">
+            <h2 className="income-section-title">Tipo de ingreso</h2>
+            <span className="income-pill">{category}</span>
           </div>
 
-          <div className="wf-grid">
+          <div className="income-category-grid" aria-label="Categorias de ingreso">
             {INCOME_CATEGORIES.map((item) => (
               <button
                 key={item}
                 type="button"
-                className={`wf-grid-btn ${category === item ? 'active' : ''}`}
+                className={`income-category ${category === item ? 'income-category--active' : ''}`}
                 onClick={() => setCategory(item)}
               >
                 {item}
@@ -136,28 +154,56 @@ export default function Income({ onClose }: Props) {
             ))}
           </div>
 
-          <div className="wf-motivation">
-            <span className="wf-motivation-title">Mensaje motivacion</span>
-            <p className="wf-motivation-text">{motivational}</p>
+          <div className="income-message">
+            <p className="income-message__title">Mensaje de motivacion</p>
+            <p className="text-muted">{motivational}</p>
           </div>
 
-          {error ? <p className="wf-error">{error}</p> : null}
+          {error ? <p className="income-error">{error}</p> : null}
 
-          <div className="wf-actions">
+          <div className="dashboard-actions income-actions">
+            <button type="button" className="button button--secondary" onClick={handleResetForm}>
+              Borrar
+            </button>
             <button
               type="button"
-              className="wf-action primary"
+              className="button button--primary"
               disabled={!canSubmit}
               onClick={handleSubmit}
             >
-              Guardar ingreso
-            </button>
-            <button type="button" className="wf-action secondary" onClick={handleResetForm}>
-              Borrar
+              Confirmar
             </button>
           </div>
-        </section>
+        </article>
+
+        {isSuccessOpen ? (
+          <div className="income-modal-backdrop" role="presentation">
+            <div
+              className="income-modal"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="income-success-title"
+            >
+              <p id="income-success-title" className="income-modal__title">
+                Ingreso registrado
+              </p>
+              <p className="income-modal__text">
+                Se registro correctamente un ingreso de {formatCurrencyCOP(Number(amountDigits || 0))}
+                {' '}en la categoria {category}.
+              </p>
+              <div className="income-modal__actions">
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={onClose}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </section>
-    </div>
+    </main>
   )
 }
