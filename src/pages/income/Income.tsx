@@ -28,6 +28,7 @@ export default function Income({ onClose }: Props) {
   const [amountDigits, setAmountDigits] = useState('')
   const [category, setCategory] = useState<IncomeCategory>('Mesada')
   const [error, setError] = useState('')
+  const [isErrorOpen, setIsErrorOpen] = useState(false)
   const [isSuccessOpen, setIsSuccessOpen] = useState(false)
   const [availableMoney] = useState(() => loadState().dineroDisponible)
 
@@ -47,12 +48,14 @@ export default function Income({ onClose }: Props) {
     setAmountDigits('')
     setCategory('Mesada')
     setError('')
+    setIsErrorOpen(false)
     setIsSuccessOpen(false)
   }
 
   const handleSubmit = () => {
     if (!canSubmit) {
       setError('Ingresa un monto valido.')
+      setIsErrorOpen(true)
       return
     }
 
@@ -62,6 +65,7 @@ export default function Income({ onClose }: Props) {
         monto: Number(amountDigits),
       })
       setError('')
+      setIsErrorOpen(false)
       setIsSuccessOpen(true)
     } catch (submitError) {
       setError(
@@ -69,12 +73,17 @@ export default function Income({ onClose }: Props) {
           ? submitError.message
           : 'No se pudo registrar el ingreso.',
       )
+      setIsErrorOpen(true)
     }
   }
 
   return (
     <main className="app-shell">
-      <section className={`screen screen--income stack ${isSuccessOpen ? 'screen--modal-open' : ''}`}>
+      <section
+        className={`screen screen--income stack ${
+          isSuccessOpen || isErrorOpen ? 'screen--modal-open' : ''
+        }`}
+      >
         <header className="topbar">
           <div className="topbar__content">
             <div className="brand-badge">
@@ -126,6 +135,7 @@ export default function Income({ onClose }: Props) {
                     const value = event.target.value.replace(/[^\d]/g, '')
                     setAmountDigits(value)
                     setError('')
+                    setIsErrorOpen(false)
                   }}
                 />
               </div>
@@ -159,8 +169,6 @@ export default function Income({ onClose }: Props) {
             <p className="text-muted">{motivational}</p>
           </div>
 
-          {error ? <p className="income-error">{error}</p> : null}
-
           <div className="dashboard-actions income-actions">
             <button type="button" className="button button--secondary" onClick={handleResetForm}>
               Borrar
@@ -174,6 +182,31 @@ export default function Income({ onClose }: Props) {
             </button>
           </div>
         </article>
+
+        {isErrorOpen ? (
+          <div className="income-modal-backdrop" role="presentation">
+            <div
+              className="income-modal income-modal--error"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="income-error-title"
+            >
+              <p id="income-error-title" className="income-modal__title">
+                Revisa tu informacion
+              </p>
+              <p className="income-modal__text">{error}</p>
+              <div className="income-modal__actions">
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={() => setIsErrorOpen(false)}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
 
         {isSuccessOpen ? (
           <div className="income-modal-backdrop" role="presentation">

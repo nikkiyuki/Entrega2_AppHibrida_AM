@@ -31,6 +31,7 @@ export default function Expense({ onClose }: Props) {
   const [category, setCategory] = useState<ExpenseCategory>('Comida')
   const [note, setNote] = useState('')
   const [error, setError] = useState('')
+  const [isErrorOpen, setIsErrorOpen] = useState(false)
   const [isSuccessOpen, setIsSuccessOpen] = useState(false)
   const [availableMoney] = useState(() => loadState().dineroDisponible)
 
@@ -50,12 +51,14 @@ export default function Expense({ onClose }: Props) {
     setCategory('Comida')
     setNote('')
     setError('')
+    setIsErrorOpen(false)
     setIsSuccessOpen(false)
   }
 
   const handleSubmit = () => {
     if (!canSubmit) {
       setError('Ingresa un monto valido.')
+      setIsErrorOpen(true)
       return
     }
 
@@ -65,6 +68,7 @@ export default function Expense({ onClose }: Props) {
         monto: Number(amountDigits),
       })
       setError('')
+      setIsErrorOpen(false)
       setIsSuccessOpen(true)
     } catch (submitError) {
       setError(
@@ -72,12 +76,17 @@ export default function Expense({ onClose }: Props) {
           ? submitError.message
           : 'No se pudo registrar el gasto.',
       )
+      setIsErrorOpen(true)
     }
   }
 
   return (
     <main className="app-shell">
-      <section className={`screen screen--expense stack ${isSuccessOpen ? 'screen--modal-open' : ''}`}>
+      <section
+        className={`screen screen--expense stack ${
+          isSuccessOpen || isErrorOpen ? 'screen--modal-open' : ''
+        }`}
+      >
         <header className="topbar">
           <div className="topbar__content">
             <div className="brand-badge">
@@ -173,8 +182,6 @@ export default function Expense({ onClose }: Props) {
             <p className="text-muted">{motivational}</p>
           </div>
 
-          {error ? <p className="expense-error">{error}</p> : null}
-
           <div className="dashboard-actions expense-actions">
             <button type="button" className="button button--secondary" onClick={handleResetForm}>
               Borrar
@@ -182,13 +189,37 @@ export default function Expense({ onClose }: Props) {
             <button
               type="button"
               className="button button--primary"
-              disabled={!canSubmit}
               onClick={handleSubmit}
             >
               Confirmar
             </button>
           </div>
         </article>
+
+        {isErrorOpen ? (
+          <div className="expense-modal-backdrop" role="presentation">
+            <div
+              className="expense-modal expense-modal--error"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="expense-error-title"
+            >
+              <p id="expense-error-title" className="expense-modal__title">
+                Revisa tu informacion
+              </p>
+              <p className="expense-modal__text">{error}</p>
+              <div className="expense-modal__actions">
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={() => setIsErrorOpen(false)}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
 
         {isSuccessOpen ? (
           <div className="expense-modal-backdrop" role="presentation">

@@ -633,17 +633,13 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
             >
               <p id="saving-feedback-title" className="feedback-modal__title">
                 {feedbackType === 'success'
-                  ? 'VAMOS POR ESA META'
-                  : 'REVISA TU INFORMACION'}
+                  ? 'Ahorro registrado'
+                  : 'Revisa tu informacion'}
               </p>
-              <p className="feedback-modal__text">
-                {feedbackType === 'success'
-                  ? 'TU AHORRO HA SIDO REGISTRADO CON EXITO'
-                  : feedback}
-              </p>
+              <p className="feedback-modal__text">{feedback}</p>
               <div className="feedback-modal__actions">
                 <button
-                  className="feedback-modal__button"
+                  className="button button--primary"
                   type="button"
                   onClick={handleCloseFeedback}
                 >
