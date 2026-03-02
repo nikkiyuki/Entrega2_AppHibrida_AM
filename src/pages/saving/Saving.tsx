@@ -26,7 +26,7 @@ const savingCategories = [
   'Estudios',
   'Viaje',
   'Tecnología',
-  'Emprendimiento',
+  'Negocio',
   'Emergencia',
   'Otro',
 ]
@@ -35,6 +35,7 @@ const categoryIconMap: Record<string, IconType> = {
   Estudios: FaBookOpen,
   Viaje: FaPlaneDeparture,
   Tecnologia: FaLaptopCode,
+  Negocio: FaBriefcase,
   Emprendimiento: FaBriefcase,
   Emergencia: FaShieldHeart,
   Otro: FaWallet,

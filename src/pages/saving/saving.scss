@@ -108,11 +108,12 @@
   .saving-category__label {
     text-align: center;
     max-width: 100%;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 700;
     line-height: 1.15;
     text-transform: uppercase;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
   .saving-category__icon {
@@ -346,4 +347,12 @@
 
 .screen--modal-open {
   position: relative;
+}
+
+@media (max-width: 430px) {
+  .screen--saving {
+    .saving-category-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
 }
