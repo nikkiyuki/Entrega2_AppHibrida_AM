@@ -304,6 +304,12 @@
     gap: $space-2;
   }
 
+  .saving-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $space-2;
+  }
+
   .saving-actions--single {
     grid-template-columns: minmax(0, 1fr);
   }
