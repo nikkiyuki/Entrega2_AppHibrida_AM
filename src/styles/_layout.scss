@@ -48,8 +48,7 @@ img {
 }
 
 .screen {
-  width: 100%;
-  max-width: 420px;
+  width: min(100%, 362px);
   min-height: 90vh;
   padding: $space-4;
   border: 1px solid rgba(255, 255, 255, 0.42);
@@ -68,4 +67,19 @@ img {
 .screen,
 .screen * {
   font-weight: 400;
+}
+
+@media (max-width: 430px) {
+  .app-shell {
+    padding: 0;
+  }
+
+  .screen {
+    width: 100%;
+    max-width: none;
+    min-height: 100dvh;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
 }
