@@ -68,12 +68,14 @@
   }
 
   .stat-card--highlight {
+    border-color: transparent;
     background: linear-gradient(
       135deg,
       rgba(43, 46, 245, 0.94) 0%,
       rgba(75, 63, 143, 0.96) 42%,
       rgba(233, 58, 106, 0.9) 100%
     );
+    box-shadow: 0 10px 20px rgba(75, 63, 143, 0.16);
   }
 
   .dashboard-actions {
