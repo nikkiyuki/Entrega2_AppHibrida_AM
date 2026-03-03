@@ -11,7 +11,7 @@ type IncomeCategory =
   | 'Regalo'
   | 'Trabajo'
   | 'Apoyo familiar'
-  | 'Emprendimiento'
+  | 'Entretenimiento'
   | 'Premio'
   | 'Otros'
 
@@ -20,7 +20,7 @@ const INCOME_CATEGORIES: IncomeCategory[] = [
   'Regalo',
   'Trabajo',
   'Apoyo familiar',
-  'Emprendimiento',
+  'Entretenimiento',
   'Premio',
   'Otros',
 ]
