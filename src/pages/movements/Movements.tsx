@@ -50,7 +50,7 @@ export default function Movements({ onBack }: MovementsProps) {
   return (
     <main className="app-shell">
       <section className="screen screen--movements stack">
-        <AppNavbar title="Movimientos" onBack={onBack} />
+        <AppNavbar title="Resumen" onBack={onBack} />
 
         <article className="panel stack">
           <div className="saving-header">

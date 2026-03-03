@@ -92,7 +92,12 @@
       rgba(233, 58, 106, 0.12) 100%
     );
     color: $color-text;
+    font-size: 0.82rem;
     font-weight: 700;
+    line-height: 1.15;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
     cursor: pointer;
     transition:
       transform 160ms ease,

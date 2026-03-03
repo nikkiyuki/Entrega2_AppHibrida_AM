@@ -5,8 +5,8 @@ interface AppNavbarProps {
 
 export default function AppNavbar({ title, onBack }: AppNavbarProps) {
   return (
-    <header className="topbar">
-      <div className="topbar__content">
+    <header className="topbar topbar--app">
+      <div className="topbar__content topbar__content--app">
         <div className="brand-badge">
           <img
             className="brand-badge__image"
@@ -14,14 +14,14 @@ export default function AppNavbar({ title, onBack }: AppNavbarProps) {
             alt="Logo de SAVY"
           />
         </div>
-        <div>
+        <div className="topbar__meta">
           <p className="eyebrow">SAVY</p>
-          <h1 className="title">{title}</h1>
+          <h1 className="title topbar__title">{title}</h1>
         </div>
       </div>
       {onBack ? (
         <button
-          className="button button--secondary topbar__action"
+          className="button button--secondary topbar__action topbar__action--app"
           type="button"
           onClick={onBack}
         >
