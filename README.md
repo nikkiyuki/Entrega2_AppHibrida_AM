@@ -1,8 +1,8 @@
-# 💸 SAVY - Gestor de Finanzas Personales
+# SAVY - Gestor de Finanzas Personales
 
-SAVY es una aplicación web desarrollada con React + TypeScript que permite registrar ingresos, gastos y ahorros de forma organizada, manteniendo un resumen financiero actualizado en tiempo real.
+SAVY es una aplicación web desarrollada con Vite + React + TypeScript que permite registrar ingresos, gastos y ahorros de forma organizada, manteniendo un resumen financiero actualizado en tiempo real.
 
-El objetivo del proyecto es fomentar una gestión financiera consciente y clara mediante una interfaz simple y funcional.
+El objetivo del proyecto es fomentar a los adolescentes que desarrollen hábitos financieros responsables, aprendiendo a gestionar su dinero de una manera consciente y clara mediante una interfaz simple y funcional.
 
 ---
 
@@ -17,7 +17,7 @@ El objetivo del proyecto es fomentar una gestión financiera consciente y clara 
 
 ---
 
-## Descripción de carpetas
+## Estructura del Proyecto
 
 - **public/** → Recursos estáticos (logos e imágenes).
 - **src/pages/** → Vistas principales de la aplicación (Home, Income, Expense, Saving, Movements).
@@ -30,22 +30,30 @@ El objetivo del proyecto es fomentar una gestión financiera consciente y clara 
 ---
 
 ## ⚙️ Instalación
-# 1️⃣ Clonar el repositorio
-git clone https://github.com/tu-usuario/Entrega2_AppHibrida_AM.git
 
-# 2️⃣ Entrar a la carpeta del proyecto
-cd Entrega2_AppHibrida_AM
-
-# 3️⃣ Instalar dependencias
-npm install
-
-# 4️⃣ Instalar SASS (si no está instalado o si se requiere reinstalar)
-npm install -D sass
-
-# 5️⃣ Ejecutar entorno de desarrollo
-npm run dev
-
-
-
+Clonar el repositorio
 ```bash
+git clone https://github.com/tu-usuario/Entrega2_AppHibrida_AM.git
+```
+
+Entrar a la carpeta del proyecto
+```bash
+cd Entrega2_AppHibrida_AM
+```
+
+Instalar dependencias
+```bash
+npm install
+```
+
+Instalar SASS (si no está instalado o si se requiere reinstalar)
+```bash
+npm install -D sass
+```
+
+Ejecutar entorno de desarrollo
+```bash
+npm run dev
+```
+
 
