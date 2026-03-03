@@ -38,13 +38,19 @@ git clone https://github.com/nikkiyuki/Entrega2_AppHibrida_AM.git
 cd Entrega2_AppHibrida_AM
 ``` bash
 2. Instala dependencias:
+```bash
 npm install
+```bash
 
 3. Ejecuta el proyecto:
+```bash
 npm run dev      # Ejecuta entorno de desarrollo
 npm run build    # Genera versión de producción
 npm run preview  # Previsualiza build
+```bash
 
 4. si necesitas reinstalar el Sass(SCSS)
+```bash
 npm install -D sass
+```bash
 
