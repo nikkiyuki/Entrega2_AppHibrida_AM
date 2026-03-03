@@ -80,7 +80,7 @@
     justify-content: space-between;
     align-items: center;
     min-height: 7rem;
-    padding: $space-2;
+    padding: $space-2 0.2rem;
     border: 1px solid rgba(29, 29, 37, 0.08);
     border-radius: $radius-lg;
     background: rgba(255, 255, 255, 0.8);
@@ -107,11 +107,15 @@
 
   .saving-category__label {
     text-align: center;
+    width: 100%;
     max-width: 100%;
-    font-size: 0.82rem;
-    font-weight: 700;
-    line-height: 1.15;
+    font-size: 0.64rem;
+    font-weight: 600;
+    line-height: 1.1;
     text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
     overflow-wrap: normal;
     word-break: normal;
   }
