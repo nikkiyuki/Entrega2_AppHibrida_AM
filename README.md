@@ -55,5 +55,7 @@ Ejecutar entorno de desarrollo
 ```bash
 npm run dev
 ```
+---
 
-
+### Licencia
+Proyecto académico desarrollado con fines educativos.
