@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './movements.scss'
+import AppNavbar from '../../components/AppNavbar'
 import { formatCurrencyCOP, formatDate } from '../../utils/format'
 import {
   SAVY_STATE_EVENT,
@@ -49,28 +50,7 @@ export default function Movements({ onBack }: MovementsProps) {
   return (
     <main className="app-shell">
       <section className="screen screen--movements stack">
-        <header className="topbar">
-          <div className="topbar__content">
-            <div className="brand-badge">
-              <img
-                className="brand-badge__image"
-                src="/assets/logo-savy-no-letter.png"
-                alt="Logo de SAVY"
-              />
-            </div>
-            <div>
-              <p className="eyebrow">SAVY</p>
-              <h1 className="title">Movimientos</h1>
-            </div>
-          </div>
-          <button
-            className="button button--secondary topbar__action"
-            type="button"
-            onClick={onBack}
-          >
-            Volver
-          </button>
-        </header>
+        <AppNavbar title="Resumen" onBack={onBack} />
 
         <article className="panel stack">
           <div className="saving-header">

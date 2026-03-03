@@ -98,4 +98,16 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: $space-3;
   }
+
+  .stat-card {
+    min-width: 0;
+  }
+
+  .stat-card__value {
+    font-size: clamp(1.05rem, 4.2vw, 1.35rem);
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
 }

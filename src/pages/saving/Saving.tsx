@@ -1,5 +1,15 @@
 import './saving.scss'
 import { useEffect, useState } from 'react'
+import type { IconType } from 'react-icons'
+import {
+  FaBookOpen,
+  FaBriefcase,
+  FaLaptopCode,
+  FaPlaneDeparture,
+  FaShieldHeart,
+  FaWallet,
+} from 'react-icons/fa6'
+import AppNavbar from '../../components/AppNavbar'
 import { formatCurrencyCOP } from '../../utils/format'
 import {
   SAVY_STATE_EVENT,
@@ -17,10 +27,33 @@ const savingCategories = [
   'Estudios',
   'Viaje',
   'Tecnología',
-  'Emprendimiento',
+  'Negocio',
   'Emergencia',
   'Otro',
 ]
+
+const categoryIconMap: Record<string, IconType> = {
+  Estudios: FaBookOpen,
+  Viaje: FaPlaneDeparture,
+  Tecnologia: FaLaptopCode,
+  Negocio: FaBriefcase,
+  Emprendimiento: FaBriefcase,
+  Emergencia: FaShieldHeart,
+  Otro: FaWallet,
+}
+
+const getCategoryIcon = (category: string) => {
+  if (category.toLowerCase().includes('tecnolog')) {
+    return FaLaptopCode
+  }
+
+  return categoryIconMap[category] ?? FaWallet
+}
+
+const renderCategoryIcon = (category: string, className: string) => {
+  const CategoryIcon = getCategoryIcon(category)
+  return <CategoryIcon className={className} aria-hidden="true" />
+}
 
 const motivationalMessages = [
   'Ahorrar poco a poco tambien cuenta. Cada aporte te acerca a tu meta.',
@@ -59,6 +92,9 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const [savingState, setSavingState] = useState<SavyState>(() => loadState())
   const formattedMonto = monto ? Number(monto).toLocaleString('es-CO') : ''
   const formattedMeta = metaAhorro ? Number(metaAhorro).toLocaleString('es-CO') : ''
+  const isNewSavingFormDirty = Boolean(
+    monto || metaAhorro || nombreAhorro.trim() || selectedCategory !== 'Viaje',
+  )
   const ahorroDisponible = selectedAhorro
     ? Math.max(0, selectedAhorro.meta - selectedAhorro.acumulado)
     : 0
@@ -251,28 +287,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
       <section
         className={`screen screen--saving stack ${feedbackType ? 'screen--modal-open' : ''}`}
       >
-        <header className="topbar">
-          <div className="topbar__content">
-            <div className="brand-badge">
-              <img
-                className="brand-badge__image"
-                src="/assets/logo-savy-no-letter.png"
-                alt="Logo de SAVY"
-              />
-            </div>
-            <div>
-              <p className="eyebrow">SAVY</p>
-              <h1 className="title">Ahorrar</h1>
-            </div>
-          </div>
-          <button
-            className="button button--secondary topbar__action"
-            type="button"
-            onClick={handleTopBack}
-          >
-            Volver
-          </button>
-        </header>
+        <AppNavbar title="Ahorrar" onBack={handleTopBack} />
 
         <div className="saving-tabs" role="tablist" aria-label="Pestanas de ahorro">
           <button
@@ -312,7 +327,10 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                     <div className="saving-item__header">
                       <div className="saving-item__identity">
                         <strong className="saving-item__name">{ahorro.nombre}</strong>
-                        <span className="saving-item__category">{ahorro.categoria}</span>
+                        <span className="saving-item__category">
+                          {renderCategoryIcon(ahorro.categoria, 'saving-item__category-icon')}
+                          {ahorro.categoria}
+                        </span>
                       </div>
                       <span className="saving-item__badge">
                         {Math.min(
@@ -445,21 +463,21 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                             </label>
 
                             <div className="saving-category-grid" aria-label="Editar categoria">
-                              {savingCategories.map((category) => (
-                                <button
-                                  key={`manage-${category}`}
-                                  className={`saving-category ${
-                                    manageCategory === category ? 'saving-category--active' : ''
-                                  }`}
-                                  type="button"
-                                  onClick={() => setManageCategory(category)}
-                                >
-                                  <span className="saving-category__label">{category}</span>
-                                  <span className="saving-category__icon-placeholder">
-                                    Espacio para icono
-                                  </span>
-                                </button>
-                              ))}
+                              {savingCategories.map((category) => {
+                                return (
+                                  <button
+                                    key={`manage-${category}`}
+                                    className={`saving-category ${
+                                      manageCategory === category ? 'saving-category--active' : ''
+                                    }`}
+                                    type="button"
+                                    onClick={() => setManageCategory(category)}
+                                  >
+                                    <span className="saving-category__label">{category}</span>
+                                    {renderCategoryIcon(category, 'saving-category__icon')}
+                                  </button>
+                                )
+                              })}
                             </div>
                           </>
                         )}
@@ -507,21 +525,21 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
           </div>
 
           <div className="saving-category-grid" aria-label="Categorias de ahorro">
-            {savingCategories.map((category) => (
-              <button
-                key={category}
-                className={`saving-category ${
-                  selectedCategory === category ? 'saving-category--active' : ''
-                }`}
-                type="button"
-                onClick={() => setSelectedCategory(category)}
-              >
-                <span className="saving-category__label">{category}</span>
-                <span className="saving-category__icon-placeholder">
-                  Espacio para icono
-                </span>
-              </button>
-            ))}
+            {savingCategories.map((category) => {
+              return (
+                <button
+                  key={category}
+                  className={`saving-category ${
+                    selectedCategory === category ? 'saving-category--active' : ''
+                  }`}
+                  type="button"
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  <span className="saving-category__label">{category}</span>
+                  {renderCategoryIcon(category, 'saving-category__icon')}
+                </button>
+              )
+            })}
           </div>
 
           <label className="field" htmlFor="saving-name">
@@ -578,10 +596,17 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
             <p className="text-muted">{motivationalMessage}</p>
           </div>
 
-          <div className="dashboard-actions saving-actions" aria-label="Acciones de ahorro">
-            <button className="button button--secondary" type="button" onClick={handleResetForm}>
-              Borrar
-            </button>
+          <div
+            className={`dashboard-actions saving-actions ${
+              !isNewSavingFormDirty ? 'saving-actions--single' : ''
+            }`}
+            aria-label="Acciones de ahorro"
+          >
+            {isNewSavingFormDirty ? (
+              <button className="button button--secondary" type="button" onClick={handleResetForm}>
+                Borrar
+              </button>
+            ) : null}
             <button className="button button--primary" type="button" onClick={handleConfirmSaving}>
               Confirmar
             </button>
@@ -599,17 +624,13 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
             >
               <p id="saving-feedback-title" className="feedback-modal__title">
                 {feedbackType === 'success'
-                  ? 'VAMOS POR ESA META'
-                  : 'REVISA TU INFORMACION'}
+                  ? 'Ahorro registrado'
+                  : 'Revisa tu informacion'}
               </p>
-              <p className="feedback-modal__text">
-                {feedbackType === 'success'
-                  ? 'TU AHORRO HA SIDO REGISTRADO CON EXITO'
-                  : feedback}
-              </p>
+              <p className="feedback-modal__text">{feedback}</p>
               <div className="feedback-modal__actions">
                 <button
-                  className="feedback-modal__button"
+                  className="button button--primary"
                   type="button"
                   onClick={handleCloseFeedback}
                 >

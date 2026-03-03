@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
-import './Income.css'
-import { addIngreso } from '../../utils/storage'
+import './income.scss'
+import AppNavbar from '../../components/AppNavbar'
+import { formatCurrencyCOP } from '../../utils/format'
+import { addIngreso, loadState } from '../../utils/storage'
 
 type Props = { onClose: () => void }
 
@@ -9,7 +11,7 @@ type IncomeCategory =
   | 'Regalo'
   | 'Trabajo'
   | 'Apoyo familiar'
-  | 'Emprendimiento'
+  | 'Entretenimiento'
   | 'Premio'
   | 'Otros'
 
@@ -18,20 +20,18 @@ const INCOME_CATEGORIES: IncomeCategory[] = [
   'Regalo',
   'Trabajo',
   'Apoyo familiar',
-  'Emprendimiento',
+  'Entretenimiento',
   'Premio',
   'Otros',
 ]
-
-function formatCOPDigits(digits: string) {
-  const n = Number(digits || 0)
-  return n.toLocaleString('es-CO')
-}
 
 export default function Income({ onClose }: Props) {
   const [amountDigits, setAmountDigits] = useState('')
   const [category, setCategory] = useState<IncomeCategory>('Mesada')
   const [error, setError] = useState('')
+  const [isErrorOpen, setIsErrorOpen] = useState(false)
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false)
+  const [availableMoney] = useState(() => loadState().dineroDisponible)
 
   const motivational = useMemo(() => {
     const amount = Number(amountDigits || 0)
@@ -43,16 +43,21 @@ export default function Income({ onClose }: Props) {
   }, [amountDigits])
 
   const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits])
+  const isFormDirty = Boolean(amountDigits || category !== 'Mesada')
+  const formattedAmount = amountDigits ? Number(amountDigits).toLocaleString('es-CO') : ''
 
   const handleResetForm = () => {
     setAmountDigits('')
     setCategory('Mesada')
     setError('')
+    setIsErrorOpen(false)
+    setIsSuccessOpen(false)
   }
 
   const handleSubmit = () => {
     if (!canSubmit) {
       setError('Ingresa un monto valido.')
+      setIsErrorOpen(true)
       return
     }
 
@@ -61,74 +66,78 @@ export default function Income({ onClose }: Props) {
         categoria: category,
         monto: Number(amountDigits),
       })
-      onClose()
+      setError('')
+      setIsErrorOpen(false)
+      setIsSuccessOpen(true)
     } catch (submitError) {
       setError(
         submitError instanceof Error
           ? submitError.message
           : 'No se pudo registrar el ingreso.',
       )
+      setIsErrorOpen(true)
     }
   }
 
   return (
-    <div className="wf-page">
-      <section className="wf-shell">
-        <header className="topbar wf-topbar">
-          <div className="topbar__content">
-            <div className="brand-badge">
-              <img
-                className="brand-badge__image"
-                src="/assets/logo-savy-no-letter.png"
-                alt="Logo de SAVY"
-              />
-            </div>
-            <div>
-              <p className="eyebrow">SAVY</p>
-              <h1 className="title">Registrar ingreso</h1>
-            </div>
-          </div>
-          <button
-            className="button button--secondary topbar__action"
-            type="button"
-            onClick={onClose}
-          >
-            Volver
-          </button>
-        </header>
+    <main className="app-shell">
+      <section
+        className={`screen screen--income stack ${
+          isSuccessOpen || isErrorOpen ? 'screen--modal-open' : ''
+        }`}
+      >
+        <AppNavbar title="Registrar ingreso" onBack={onClose} />
 
-        <section className="wf-card">
-          <div className="wf-banner" role="group" aria-label="Monto a registrar">
-            <div className="wf-banner-top">
-              <span className="wf-banner-label">Monto a registrar</span>
-              <span className="wf-banner-amount">$ {formatCOPDigits(amountDigits)}</span>
-            </div>
-
-            <input
-              className="wf-banner-input"
-              inputMode="numeric"
-              placeholder="Escribe el monto..."
-              value={amountDigits}
-              onChange={(event) => {
-                const value = event.target.value.replace(/[^\d]/g, '')
-                setAmountDigits(value)
-                setError('')
-              }}
-            />
-            <div className="wf-hint">Solo numeros</div>
+        <article className="panel stack income-panel">
+          <div className="income-header">
+            <p className="eyebrow">Registra el dinero que entra</p>
+            <div className="income-divider" aria-hidden="true" />
           </div>
 
-          <div className="wf-section-header">
-            <h2 className="wf-section-title">Categorias</h2>
-            <span className="wf-pill">{category}</span>
+          <div className="income-amount-block" role="group" aria-label="Monto ingreso">
+            <div className="income-amount-block__header">
+              <span className="income-amount-block__label">Monto ingreso</span>
+              <strong className="income-amount-block__value">
+                {formatCurrencyCOP(Number(amountDigits || 0))}
+              </strong>
+            </div>
+
+            <label className="field" htmlFor="income-amount">
+              <div className="currency-field currency-field--featured">
+                <span className="currency-field__symbol">$</span>
+                <input
+                  id="income-amount"
+                  className="field__control field__control--currency"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Escribe el monto..."
+                  value={formattedAmount}
+                  onChange={(event) => {
+                    const value = event.target.value.replace(/[^\d]/g, '')
+                    setAmountDigits(value)
+                    setError('')
+                    setIsErrorOpen(false)
+                  }}
+                />
+              </div>
+            </label>
+            <span className="income-amount-block__help">Solo numeros</span>
+            <span className="income-amount-block__available">
+              Disponible actual: {formatCurrencyCOP(availableMoney)}
+            </span>
           </div>
 
-          <div className="wf-grid">
+          <div className="income-section-header">
+            <h2 className="income-section-title">Tipo de ingreso</h2>
+            <span className="income-pill">{category}</span>
+          </div>
+
+          <div className="income-category-grid" aria-label="Categorias de ingreso">
             {INCOME_CATEGORIES.map((item) => (
               <button
                 key={item}
                 type="button"
-                className={`wf-grid-btn ${category === item ? 'active' : ''}`}
+                className={`income-category ${category === item ? 'income-category--active' : ''}`}
                 onClick={() => setCategory(item)}
               >
                 {item}
@@ -136,28 +145,80 @@ export default function Income({ onClose }: Props) {
             ))}
           </div>
 
-          <div className="wf-motivation">
-            <span className="wf-motivation-title">Mensaje motivacion</span>
-            <p className="wf-motivation-text">{motivational}</p>
+          <div className="income-message">
+            <p className="income-message__title">Mensaje de motivacion</p>
+            <p className="text-muted">{motivational}</p>
           </div>
 
-          {error ? <p className="wf-error">{error}</p> : null}
-
-          <div className="wf-actions">
+          <div className={`dashboard-actions income-actions ${!isFormDirty ? 'income-actions--single' : ''}`}>
+            {isFormDirty ? (
+              <button type="button" className="button button--secondary" onClick={handleResetForm}>
+                Borrar
+              </button>
+            ) : null}
             <button
               type="button"
-              className="wf-action primary"
-              disabled={!canSubmit}
+              className="button button--primary"
               onClick={handleSubmit}
             >
-              Guardar ingreso
-            </button>
-            <button type="button" className="wf-action secondary" onClick={handleResetForm}>
-              Borrar
+              Confirmar
             </button>
           </div>
-        </section>
+        </article>
+
+        {isErrorOpen ? (
+          <div className="income-modal-backdrop" role="presentation">
+            <div
+              className="income-modal income-modal--error"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="income-error-title"
+            >
+              <p id="income-error-title" className="income-modal__title">
+                Revisa tu informacion
+              </p>
+              <p className="income-modal__text">{error}</p>
+              <div className="income-modal__actions">
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={() => setIsErrorOpen(false)}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {isSuccessOpen ? (
+          <div className="income-modal-backdrop" role="presentation">
+            <div
+              className="income-modal"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="income-success-title"
+            >
+              <p id="income-success-title" className="income-modal__title">
+                Ingreso registrado
+              </p>
+              <p className="income-modal__text">
+                Se registro correctamente un ingreso de {formatCurrencyCOP(Number(amountDigits || 0))}
+                {' '}en la categoria {category}.
+              </p>
+              <div className="income-modal__actions">
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={onClose}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </section>
-    </div>
+    </main>
   )
 }

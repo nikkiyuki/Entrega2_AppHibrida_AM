@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
-import './Expense.css'
+import './expense.scss'
+import AppNavbar from '../../components/AppNavbar'
+import { formatCurrencyCOP } from '../../utils/format'
 import { addGasto, loadState } from '../../utils/storage'
 
 type Props = { onClose: () => void }
@@ -25,16 +27,13 @@ const EXPENSE_CATEGORIES: ExpenseCategory[] = [
   'Otro',
 ]
 
-function formatCOPDigits(digits: string) {
-  const amount = Number(digits || 0)
-  return amount.toLocaleString('es-CO')
-}
-
 export default function Expense({ onClose }: Props) {
   const [amountDigits, setAmountDigits] = useState('')
   const [category, setCategory] = useState<ExpenseCategory>('Comida')
   const [note, setNote] = useState('')
   const [error, setError] = useState('')
+  const [isErrorOpen, setIsErrorOpen] = useState(false)
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false)
   const [availableMoney] = useState(() => loadState().dineroDisponible)
 
   const motivational = useMemo(() => {
@@ -46,17 +45,22 @@ export default function Expense({ onClose }: Props) {
   }, [amountDigits])
 
   const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits])
+  const isFormDirty = Boolean(amountDigits || note.trim() || category !== 'Comida')
+  const formattedAmount = amountDigits ? Number(amountDigits).toLocaleString('es-CO') : ''
 
   const handleResetForm = () => {
     setAmountDigits('')
     setCategory('Comida')
     setNote('')
     setError('')
+    setIsErrorOpen(false)
+    setIsSuccessOpen(false)
   }
 
   const handleSubmit = () => {
     if (!canSubmit) {
       setError('Ingresa un monto valido.')
+      setIsErrorOpen(true)
       return
     }
 
@@ -65,75 +69,77 @@ export default function Expense({ onClose }: Props) {
         categoria: category,
         monto: Number(amountDigits),
       })
-      onClose()
+      setError('')
+      setIsErrorOpen(false)
+      setIsSuccessOpen(true)
     } catch (submitError) {
       setError(
         submitError instanceof Error
           ? submitError.message
           : 'No se pudo registrar el gasto.',
       )
+      setIsErrorOpen(true)
     }
   }
 
   return (
-    <div className="wf-page">
-      <section className="wf-shell">
-        <header className="topbar wf-topbar">
-          <div className="topbar__content">
-            <div className="brand-badge">
-              <img
-                className="brand-badge__image"
-                src="/assets/logo-savy-no-letter.png"
-                alt="Logo de SAVY"
-              />
-            </div>
-            <div>
-              <p className="eyebrow">SAVY</p>
-              <h1 className="title">Registrar gasto</h1>
-            </div>
-          </div>
-          <button
-            className="button button--secondary topbar__action"
-            type="button"
-            onClick={onClose}
-          >
-            Volver
-          </button>
-        </header>
+    <main className="app-shell">
+      <section
+        className={`screen screen--expense stack ${
+          isSuccessOpen || isErrorOpen ? 'screen--modal-open' : ''
+        }`}
+      >
+        <AppNavbar title="Registrar gasto" onBack={onClose} />
 
-        <section className="wf-card">
-          <div className="wf-banner" role="group" aria-label="Monto gasto">
-            <div className="wf-banner-top">
-              <span className="wf-banner-label">Monto gasto</span>
-              <span className="wf-banner-amount">$ {formatCOPDigits(amountDigits)}</span>
-            </div>
-
-            <input
-              className="wf-banner-input"
-              inputMode="numeric"
-              placeholder="Escribe el monto..."
-              value={amountDigits}
-              onChange={(event) => {
-                const value = event.target.value.replace(/[^\d]/g, '')
-                setAmountDigits(value)
-                setError('')
-              }}
-            />
-            <div className="wf-hint">Solo numeros</div>
-            <div className="wf-available">Disponible: $ {formatCOPDigits(String(availableMoney))}</div>
+        <article className="panel stack expense-panel">
+          <div className="expense-header">
+            <p className="eyebrow">Controla tus salidas de dinero</p>
+            <div className="expense-divider" aria-hidden="true" />
           </div>
 
-          <div className="wf-section-header">
-            <h2 className="wf-section-title">Tipo de gasto</h2>
-            <span className="wf-pill">{category}</span>
+          <div className="expense-amount-block" role="group" aria-label="Monto gasto">
+            <div className="expense-amount-block__header">
+              <span className="expense-amount-block__label">Monto gasto</span>
+              <strong className="expense-amount-block__value">
+                {formatCurrencyCOP(Number(amountDigits || 0))}
+              </strong>
+            </div>
+
+            <label className="field" htmlFor="expense-amount">
+              <div className="currency-field currency-field--featured">
+                <span className="currency-field__symbol">$</span>
+                <input
+                  id="expense-amount"
+                  className="field__control field__control--currency"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Escribe el monto..."
+                  value={formattedAmount}
+                  onChange={(event) => {
+                    const value = event.target.value.replace(/[^\d]/g, '')
+                    setAmountDigits(value)
+                    setError('')
+                  }}
+                />
+              </div>
+            </label>
+            <span className="expense-amount-block__help">Solo numeros</span>
+            <span className="expense-amount-block__available">
+              Disponible: {formatCurrencyCOP(availableMoney)}
+            </span>
           </div>
 
-          <div className="wf-grid">
+          <div className="expense-section-header">
+            <h2 className="expense-section-title">Tipo de gasto</h2>
+            <span className="expense-pill">{category}</span>
+          </div>
+
+          <div className="expense-category-grid" aria-label="Categorias de gasto">
             {EXPENSE_CATEGORIES.map((item) => (
               <button
                 key={item}
                 type="button"
-                className={`wf-grid-btn ${category === item ? 'active' : ''}`}
+                className={`expense-category ${category === item ? 'expense-category--active' : ''}`}
                 onClick={() => setCategory(item)}
               >
                 {item}
@@ -141,41 +147,91 @@ export default function Expense({ onClose }: Props) {
             ))}
           </div>
 
-          <div className="wf-field">
-            <label className="wf-label" htmlFor="note-expense">
-              Nota (opcional)
-            </label>
+          <label className="field" htmlFor="note-expense">
+            <span className="field__label">Nota (opcional)</span>
             <input
               id="note-expense"
-              className="wf-input"
+              className="field__control"
               placeholder="Ej: almuerzo"
               value={note}
               onChange={(event) => setNote(event.target.value)}
             />
+          </label>
+
+          <div className="expense-message">
+            <p className="expense-message__title">Mensaje de motivacion</p>
+            <p className="text-muted">{motivational}</p>
           </div>
 
-          <div className="wf-motivation">
-            <span className="wf-motivation-title">Mensaje motivacion</span>
-            <p className="wf-motivation-text">{motivational}</p>
-          </div>
-
-          {error ? <p className="wf-error">{error}</p> : null}
-
-          <div className="wf-actions">
+          <div className={`dashboard-actions expense-actions ${!isFormDirty ? 'expense-actions--single' : ''}`}>
+            {isFormDirty ? (
+              <button type="button" className="button button--secondary" onClick={handleResetForm}>
+                Borrar
+              </button>
+            ) : null}
             <button
               type="button"
-              className="wf-action primary"
-              disabled={!canSubmit}
+              className="button button--primary"
               onClick={handleSubmit}
             >
               Confirmar
             </button>
-            <button type="button" className="wf-action secondary" onClick={handleResetForm}>
-              Borrar
-            </button>
           </div>
-        </section>
+        </article>
+
+        {isErrorOpen ? (
+          <div className="expense-modal-backdrop" role="presentation">
+            <div
+              className="expense-modal expense-modal--error"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="expense-error-title"
+            >
+              <p id="expense-error-title" className="expense-modal__title">
+                Revisa tu informacion
+              </p>
+              <p className="expense-modal__text">{error}</p>
+              <div className="expense-modal__actions">
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={() => setIsErrorOpen(false)}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {isSuccessOpen ? (
+          <div className="expense-modal-backdrop" role="presentation">
+            <div
+              className="expense-modal"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="expense-success-title"
+            >
+              <p id="expense-success-title" className="expense-modal__title">
+                Gasto registrado
+              </p>
+              <p className="expense-modal__text">
+                Se registro correctamente un gasto de {formatCurrencyCOP(Number(amountDigits || 0))}
+                {' '}en la categoria {category}.
+              </p>
+              <div className="expense-modal__actions">
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={onClose}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </section>
-    </div>
+    </main>
   )
 }
