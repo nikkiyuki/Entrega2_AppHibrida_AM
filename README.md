@@ -33,7 +33,7 @@ El objetivo del proyecto es fomentar a los adolescentes que desarrollen hábitos
 
 Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/Entrega2_AppHibrida_AM.git
+git clone https://github.com/nikkiyuki/Entrega2_AppHibrida_AM.git
 ```
 
 Entrar a la carpeta del proyecto
