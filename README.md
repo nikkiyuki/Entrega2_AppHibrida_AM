@@ -36,7 +36,7 @@ El objetivo del proyecto es fomentar una gestión financiera consciente y clara 
 ```bash
 git clone https://github.com/nikkiyuki/Entrega2_AppHibrida_AM.git
 cd Entrega2_AppHibrida_AM
-```
+``` bash
 2. Instala dependencias:
 npm install
 
