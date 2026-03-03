@@ -17,12 +17,34 @@ El objetivo del proyecto es fomentar una gestión financiera consciente y clara 
 
 ---
 
-## 📁 Estructura del Proyecto
+## Descripción de carpetas
 
-- **public/** → Recursos estáticos accesibles públicamente.
-- **src/pages/** → Vistas principales de la aplicación.
-- **src/utils/** → Funciones auxiliares (formato, almacenamiento, lógica de negocio).
-- **src/styles/** → Estilos globales y configuración SASS.
-- **App.tsx** → Control principal de navegación.
+- **public/** → Recursos estáticos (logos e imágenes).
+- **src/pages/** → Vistas principales de la aplicación (Home, Income, Expense, Saving, Movements).
+- **src/utils/** → Lógica de negocio y manejo de estado global (`storage.ts`, `format.ts`).
+- **src/styles/** → Configuración de estilos con SASS (variables, layout y componentes).
+- **App.tsx** → Controlador principal de navegación.
 - **main.tsx** → Punto de entrada de la aplicación.
-- **storage.ts** → Manejo del estado global (`SavyState`).
+- **vite.config.ts** → Configuración del entorno Vite.
+
+---
+
+## ⚙️ Instalación
+
+1. Clona el repositorio:
+
+```bash
+git clone https://github.com/tu-usuario/savy.git
+cd savy
+
+2. Instala dependencias:
+npm install
+
+3. Ejecuta el proyecto:
+npm run dev      # Ejecuta entorno de desarrollo
+npm run build    # Genera versión de producción
+npm run preview  # Previsualiza build
+
+4. si necesitas reinstalar el Sass(SCSS)
+npm install -D sass
+
