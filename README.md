@@ -30,27 +30,22 @@ El objetivo del proyecto es fomentar una gestión financiera consciente y clara 
 ---
 
 ## ⚙️ Instalación
+# 1️⃣ Clonar el repositorio
+git clone https://github.com/tu-usuario/Entrega2_AppHibrida_AM.git
 
-1. Clona el repositorio:
-
-```bash
-git clone https://github.com/nikkiyuki/Entrega2_AppHibrida_AM.git
+# 2️⃣ Entrar a la carpeta del proyecto
 cd Entrega2_AppHibrida_AM
-``` bash
-2. Instala dependencias:
-```bash
+
+# 3️⃣ Instalar dependencias
 npm install
-```bash
 
-3. Ejecuta el proyecto:
-```bash
-npm run dev      # Ejecuta entorno de desarrollo
-npm run build    # Genera versión de producción
-npm run preview  # Previsualiza build
-```bash
-
-4. si necesitas reinstalar el Sass(SCSS)
-```bash
+# 4️⃣ Instalar SASS (si no está instalado o si se requiere reinstalar)
 npm install -D sass
+
+# 5️⃣ Ejecutar entorno de desarrollo
+npm run dev
+
+
+
 ```bash
 
