@@ -34,9 +34,9 @@ El objetivo del proyecto es fomentar una gestión financiera consciente y clara 
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/tu-usuario/savy.git
-cd savy
-
+git clone https://github.com/nikkiyuki/Entrega2_AppHibrida_AM.git
+cd Entrega2_AppHibrida_AM
+```
 2. Instala dependencias:
 npm install
 
