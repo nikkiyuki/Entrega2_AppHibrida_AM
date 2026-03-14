@@ -41,7 +41,7 @@ export default function Home({
   const lastMovementDate = getLastMovementDate(dashboardState.movimientos)
   const lastUpdateText = lastMovementDate
     ? `Actualizado ${formatDate(lastMovementDate)}`
-    : 'Sin movimientos aun'
+    : 'Sin movimientos aún'
 
   return (
     <main className="app-shell">

@@ -35,7 +35,7 @@ const savingCategories = [
 const categoryIconMap: Record<string, IconType> = {
   Estudios: FaBookOpen,
   Viaje: FaPlaneDeparture,
-  Tecnologia: FaLaptopCode,
+  Tecnología: FaLaptopCode,
   Negocio: FaBriefcase,
   Emprendimiento: FaBriefcase,
   Emergencia: FaShieldHeart,
@@ -56,11 +56,11 @@ const renderCategoryIcon = (category: string, className: string) => {
 }
 
 const motivationalMessages = [
-  'Ahorrar poco a poco tambien cuenta. Cada aporte te acerca a tu meta.',
-  'Cada peso que guardas hoy te da mas tranquilidad manana.',
+  'Ahorrar poco a poco también cuenta. Cada aporte te acerca a tu meta.',
+  'Cada peso que guardas hoy te da más tranquilidad mañana.',
   'Tus metas crecen cuando eres constante con tus ahorros.',
   'No necesitas ahorrar mucho de una vez, lo importante es empezar.',
-  'Cada ahorro es una decision inteligente para tu futuro.',
+  'Cada ahorro es una decisión inteligente para tu futuro.',
 ]
 
 interface SavingProps {
@@ -172,7 +172,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     const metaNumber = Number(metaAhorro)
 
     if (!montoNumber || montoNumber <= 0) {
-      setFeedback('Ingresa un monto valido para ahorrar.')
+      setFeedback('Ingresa un monto válido para ahorrar.')
       setFeedbackType('error')
       return
     }
@@ -184,7 +184,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     }
 
     if (!metaNumber || metaNumber <= 0) {
-      setFeedback('Ingresa una meta de ahorro valida.')
+      setFeedback('Ingresa una meta de ahorro válida.')
       setFeedbackType('error')
       return
     }
@@ -196,7 +196,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
       monto: montoNumber,
     })
 
-    setFeedback('Tu ahorro fue registrado con exito.')
+    setFeedback('Tu ahorro fue registrado con éxito.')
     setFeedbackType('success')
     setSavingState(loadState())
   }
@@ -242,7 +242,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
           ahorroId: selectedAhorro.id,
           monto: Number(manageAmount),
         })
-        setFeedback('Se agrego dinero al ahorro correctamente.')
+        setFeedback('Se agregó dinero al ahorro correctamente.')
       }
 
       if (manageMode === 'withdraw') {
@@ -250,12 +250,12 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
           ahorroId: selectedAhorro.id,
           monto: Number(manageAmount),
         })
-        setFeedback('El retiro del ahorro se registro correctamente.')
+        setFeedback('El retiro del ahorro se registró correctamente.')
       }
 
       if (manageMode === 'edit') {
         if (!Number(manageMeta) || Number(manageMeta) <= 0) {
-          throw new Error('Ingresa una meta valida para actualizar el ahorro.')
+          throw new Error('Ingresa una meta válida para actualizar el ahorro.')
         }
 
         actualizarAhorro({
@@ -277,7 +277,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
       setFeedbackType('success')
       setSavingState(loadState())
     } catch (error) {
-      setFeedback(error instanceof Error ? error.message : 'Ocurrio un error inesperado.')
+      setFeedback(error instanceof Error ? error.message : 'Ocurrió un error inesperado.')
       setFeedbackType('error')
     }
   }
@@ -289,7 +289,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
       >
         <AppNavbar title="Ahorrar" onBack={handleTopBack} />
 
-        <div className="saving-tabs" role="tablist" aria-label="Pestanas de ahorro">
+        <div className="saving-tabs" role="tablist" aria-label="Pestañas de ahorro">
           <button
             className={`saving-tab ${activeTab === 'list' ? 'saving-tab--active' : ''}`}
             type="button"
@@ -462,7 +462,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                               </div>
                             </label>
 
-                            <div className="saving-category-grid" aria-label="Editar categoria">
+                            <div className="saving-category-grid" aria-label="Editar categoría">
                               {savingCategories.map((category) => {
                                 return (
                                   <button
@@ -489,7 +489,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
 
                         {manageMode === 'delete' && (
                           <p className="text-muted">
-                            Se devolvera al disponible el dinero acumulado de este ahorro.
+                            Se devolverá al disponible el dinero acumulado de este ahorro.
                           </p>
                         )}
 
@@ -509,7 +509,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
             ) : (
               <div className="saving-empty">
                 <p className="text-muted">
-                  Todavia no tienes metas guardadas. Crea tu primer ahorro.
+                  Todavía no tienes metas guardadas. Crea tu primer ahorro.
                 </p>
               </div>
             )}
@@ -525,11 +525,11 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
         ) : (
           <article className="panel stack saving-panel">
           <div className="saving-header">
-            <p className="eyebrow">Selecciona tu categoria de ahorro</p>
+            <p className="eyebrow">Selecciona tu categoría de ahorro</p>
             <div className="saving-divider" aria-hidden="true" />
           </div>
 
-          <div className="saving-category-grid" aria-label="Categorias de ahorro">
+          <div className="saving-category-grid" aria-label="Categorías de ahorro">
             {savingCategories.map((category) => {
               return (
                 <button
@@ -558,7 +558,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
               id="saving-name"
               className="field__control"
               type="text"
-              placeholder="Ejemplo: Viaje de fin de ano"
+              placeholder="Ejemplo: Viaje de fin de año"
               value={nombreAhorro}
               onChange={(event) => setNombreAhorro(event.target.value)}
             />
@@ -634,7 +634,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
               <p id="saving-feedback-title" className="feedback-modal__title">
                 {feedbackType === 'success'
                   ? 'Ahorro registrado'
-                  : 'Revisa tu informacion'}
+                  : 'Revisa tu información'}
               </p>
               <p className="feedback-modal__text">{feedback}</p>
               <div className="feedback-modal__actions">

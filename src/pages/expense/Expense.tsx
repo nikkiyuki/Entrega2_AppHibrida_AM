@@ -13,7 +13,7 @@ type ExpenseCategory =
   | 'Estudio'
   | 'Salud'
   | 'Ropa'
-  | 'Suscripcion'
+  | 'Suscripción'
   | 'Otro'
 
 const EXPENSE_CATEGORIES: ExpenseCategory[] = [
@@ -23,7 +23,7 @@ const EXPENSE_CATEGORIES: ExpenseCategory[] = [
   'Estudio',
   'Salud',
   'Ropa',
-  'Suscripcion',
+  'Suscripción',
   'Otro',
 ]
 
@@ -39,8 +39,8 @@ export default function Expense({ onClose }: Props) {
   const motivational = useMemo(() => {
     const amount = Number(amountDigits || 0)
     if (!amount) return 'Tip: piensa si lo necesitas antes de gastar.'
-    if (amount < 10000) return 'Bien por registrarlo. Los pequenos suman.'
-    if (amount < 50000) return 'Ojo con los gastos repetidos. Pon un limite.'
+    if (amount < 10000) return 'Bien por registrarlo. Los pequeños suman.'
+    if (amount < 50000) return 'Ojo con los gastos repetidos. Pon un límite.'
     return 'Gasto alto: mejor con presupuesto y plan.'
   }, [amountDigits])
 
@@ -59,7 +59,7 @@ export default function Expense({ onClose }: Props) {
 
   const handleSubmit = () => {
     if (!canSubmit) {
-      setError('Ingresa un monto valido.')
+      setError('Ingresa un monto válido.')
       setIsErrorOpen(true)
       return
     }
@@ -123,7 +123,7 @@ export default function Expense({ onClose }: Props) {
                 />
               </div>
             </label>
-            <span className="expense-amount-block__help">Solo numeros</span>
+            <span className="expense-amount-block__help">Solo números</span>
             <span className="expense-amount-block__available">
               Disponible: {formatCurrencyCOP(availableMoney)}
             </span>
@@ -134,7 +134,7 @@ export default function Expense({ onClose }: Props) {
             <span className="expense-pill">{category}</span>
           </div>
 
-          <div className="expense-category-grid" aria-label="Categorias de gasto">
+          <div className="expense-category-grid" aria-label="Categorías de gasto">
             {EXPENSE_CATEGORIES.map((item) => (
               <button
                 key={item}
@@ -190,7 +190,7 @@ export default function Expense({ onClose }: Props) {
               aria-labelledby="expense-error-title"
             >
               <p id="expense-error-title" className="expense-modal__title">
-                Revisa tu informacion
+                Revisa tu información
               </p>
               <p className="expense-modal__text">{error}</p>
               <div className="expense-modal__actions">
@@ -218,8 +218,8 @@ export default function Expense({ onClose }: Props) {
                 Gasto registrado
               </p>
               <p className="expense-modal__text">
-                Se registro correctamente un gasto de {formatCurrencyCOP(Number(amountDigits || 0))}
-                {' '}en la categoria {category}.
+                Se registró correctamente un gasto de {formatCurrencyCOP(Number(amountDigits || 0))}
+                {' '}en la categoría {category}.
               </p>
               <div className="expense-modal__actions">
                 <button

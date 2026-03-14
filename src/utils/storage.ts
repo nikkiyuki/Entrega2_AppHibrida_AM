@@ -180,7 +180,7 @@ export function addGasto(input: AddGastoInput) {
   }
 
   if (input.monto > currentState.dineroDisponible) {
-    throw new Error('No puedes gastar mas dinero del disponible.')
+    throw new Error('No puedes gastar más dinero del disponible.')
   }
 
   const nowISO = new Date().toISOString()
@@ -262,7 +262,7 @@ export function agregarDineroAhorro(input: AgregarDineroAhorroInput) {
   const ahorro = currentState.ahorros.find((item) => item.id === input.ahorroId)
 
   if (!ahorro) {
-    throw new Error('No se encontro el ahorro seleccionado.')
+    throw new Error('No se encontró el ahorro seleccionado.')
   }
 
   if (!input.monto || input.monto <= 0) {
@@ -276,7 +276,7 @@ export function agregarDineroAhorro(input: AgregarDineroAhorroInput) {
   const restanteMeta = Math.max(0, ahorro.meta - ahorro.acumulado)
 
   if (input.monto > restanteMeta) {
-    throw new Error('No puedes agregar mas dinero del necesario para completar esta meta.')
+    throw new Error('No puedes agregar más dinero del necesario para completar esta meta.')
   }
 
   const nowISO = new Date().toISOString()
@@ -314,7 +314,7 @@ export function retirarDeAhorro(input: RetirarDeAhorroInput) {
   const ahorro = currentState.ahorros.find((item) => item.id === input.ahorroId)
 
   if (!ahorro) {
-    throw new Error('No se encontro el ahorro seleccionado.')
+    throw new Error('No se encontró el ahorro seleccionado.')
   }
 
   if (!input.monto || input.monto <= 0) {
@@ -322,7 +322,7 @@ export function retirarDeAhorro(input: RetirarDeAhorroInput) {
   }
 
   if (input.monto > ahorro.acumulado) {
-    throw new Error('No puedes retirar mas dinero del que tienes ahorrado.')
+    throw new Error('No puedes retirar más dinero del que tienes ahorrado.')
   }
 
   const nowISO = new Date().toISOString()
@@ -364,7 +364,7 @@ export function eliminarAhorro(input: EliminarAhorroInput) {
   const ahorro = currentState.ahorros.find((item) => item.id === input.ahorroId)
 
   if (!ahorro) {
-    throw new Error('No se encontro el ahorro que deseas eliminar.')
+    throw new Error('No se encontró el ahorro que deseas eliminar.')
   }
 
   const nowISO = new Date().toISOString()
@@ -396,7 +396,7 @@ export function actualizarAhorro(input: ActualizarAhorroInput) {
   const ahorro = currentState.ahorros.find((item) => item.id === input.ahorroId)
 
   if (!ahorro) {
-    throw new Error('No se encontro el ahorro que deseas editar.')
+    throw new Error('No se encontró el ahorro que deseas editar.')
   }
 
   const nextState: SavyState = {

@@ -36,7 +36,7 @@ export default function Income({ onClose }: Props) {
   const motivational = useMemo(() => {
     const amount = Number(amountDigits || 0)
 
-    if (!amount) return 'Tip: registra cada ingreso, incluso si es pequeno.'
+    if (!amount) return 'Tip: registra cada ingreso, incluso si es pequeño.'
     if (amount < 10000) return 'Cada peso cuenta. Mantener el registro ya es un avance.'
     if (amount < 50000) return 'Buen ingreso. Puedes apartar una parte para una meta.'
     return 'Muy bien. Este ingreso puede ayudarte a crecer tu ahorro.'
@@ -56,7 +56,7 @@ export default function Income({ onClose }: Props) {
 
   const handleSubmit = () => {
     if (!canSubmit) {
-      setError('Ingresa un monto valido.')
+      setError('Ingresa un monto válido.')
       setIsErrorOpen(true)
       return
     }
@@ -121,7 +121,7 @@ export default function Income({ onClose }: Props) {
                 />
               </div>
             </label>
-            <span className="income-amount-block__help">Solo numeros</span>
+            <span className="income-amount-block__help">Solo números</span>
             <span className="income-amount-block__available">
               Disponible actual: {formatCurrencyCOP(availableMoney)}
             </span>
@@ -132,7 +132,7 @@ export default function Income({ onClose }: Props) {
             <span className="income-pill">{category}</span>
           </div>
 
-          <div className="income-category-grid" aria-label="Categorias de ingreso">
+          <div className="income-category-grid" aria-label="Categorías de ingreso">
             {INCOME_CATEGORIES.map((item) => (
               <button
                 key={item}
@@ -177,7 +177,7 @@ export default function Income({ onClose }: Props) {
               aria-labelledby="income-error-title"
             >
               <p id="income-error-title" className="income-modal__title">
-                Revisa tu informacion
+                Revisa tu información
               </p>
               <p className="income-modal__text">{error}</p>
               <div className="income-modal__actions">
@@ -205,8 +205,8 @@ export default function Income({ onClose }: Props) {
                 Ingreso registrado
               </p>
               <p className="income-modal__text">
-                Se registro correctamente un ingreso de {formatCurrencyCOP(Number(amountDigits || 0))}
-                {' '}en la categoria {category}.
+                Se registró correctamente un ingreso de {formatCurrencyCOP(Number(amountDigits || 0))}
+                {' '}en la categoría {category}.
               </p>
               <div className="income-modal__actions">
                 <button

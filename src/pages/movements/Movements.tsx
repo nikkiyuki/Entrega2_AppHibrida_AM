@@ -150,7 +150,7 @@ export default function Movements({ onBack }: MovementsProps) {
             </div>
           ) : (
             <div className="saving-empty">
-              <p className="text-muted">Todavia no hay metas de ahorro registradas.</p>
+              <p className="text-muted">Todavía no hay metas de ahorro registradas.</p>
             </div>
           )}
         </section>
