@@ -1,4 +1,4 @@
-import { logoSavyNoLetter } from '../assets'
+import logoSavyNoLetter from '../assets/logo-savy-no-letter.png'
 
 interface AppNavbarProps {
   title: string

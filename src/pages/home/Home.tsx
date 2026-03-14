@@ -1,6 +1,6 @@
 import './home.scss'
 import { useEffect, useState } from 'react'
-import { logoSavy } from '../../assets'
+import logoSavy from '../../assets/logo-savy.png'
 import { formatCurrencyCOP, formatDate } from '../../utils/format'
 import {
   SAVY_STATE_EVENT,
