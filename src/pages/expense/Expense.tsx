@@ -159,8 +159,7 @@ export default function Expense({ onClose }: Props) {
           </label>
 
           <div className="expense-message">
-            <p className="expense-message__title">Mensaje de motivacion</p>
-            <p className="text-muted">{motivational}</p>
+            <p className="expense-message__text">{motivational}</p>
           </div>
 
           <div className={`dashboard-actions expense-actions ${!isFormDirty ? 'expense-actions--single' : ''}`}>

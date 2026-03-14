@@ -146,8 +146,7 @@ export default function Income({ onClose }: Props) {
           </div>
 
           <div className="income-message">
-            <p className="income-message__title">Mensaje de motivacion</p>
-            <p className="text-muted">{motivational}</p>
+            <p className="income-message__text">{motivational}</p>
           </div>
 
           <div className={`dashboard-actions income-actions ${!isFormDirty ? 'income-actions--single' : ''}`}>

@@ -592,8 +592,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
           </div>
 
           <div className="saving-message">
-            <p className="saving-message__title">Mensaje de motivacion</p>
-            <p className="text-muted">{motivationalMessage}</p>
+            <p className="saving-message__text">{motivationalMessage}</p>
           </div>
 
           <div
