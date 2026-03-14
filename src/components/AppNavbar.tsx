@@ -1,3 +1,5 @@
+import { logoSavyNoLetter } from '../assets'
+
 interface AppNavbarProps {
   title: string
   onBack?: () => void
@@ -10,7 +12,7 @@ export default function AppNavbar({ title, onBack }: AppNavbarProps) {
         <div className="brand-badge">
           <img
             className="brand-badge__image"
-            src="/assets/logo-savy-no-letter.png"
+            src={logoSavyNoLetter}
             alt="Logo de SAVY"
           />
         </div>

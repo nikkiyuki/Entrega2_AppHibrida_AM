@@ -1,5 +1,6 @@
 import './home.scss'
 import { useEffect, useState } from 'react'
+import { logoSavy } from '../../assets'
 import { formatCurrencyCOP, formatDate } from '../../utils/format'
 import {
   SAVY_STATE_EVENT,
@@ -49,7 +50,7 @@ export default function Home({
           <div className="dashboard-logo-box">
             <img
               className="dashboard-logo-image"
-              src="/assets/logo-savy.png"
+              src={logoSavy}
               alt="Logo de SAVY"
             />
           </div>
