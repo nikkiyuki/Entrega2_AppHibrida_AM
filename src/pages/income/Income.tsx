@@ -140,7 +140,10 @@ export default function Income({ onClose }: Props) {
                 className={`income-category ${category === item ? 'income-category--active' : ''}`}
                 onClick={() => setCategory(item)}
               >
-                {item}
+                <span className="income-category__content">
+                  <span>{item}</span>
+                  {category === item ? <span className="selection-check" aria-hidden="true" /> : null}
+                </span>
               </button>
             ))}
           </div>

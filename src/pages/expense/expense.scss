@@ -84,6 +84,9 @@
 
   .expense-category {
     min-height: 2.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid rgba(75, 63, 143, 0.2);
     border-radius: $radius-sm;
     background: linear-gradient(
@@ -113,6 +116,13 @@
         rgba(233, 58, 106, 0.18) 100%
       );
     }
+  }
+
+  .expense-category__content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
   }
 
   .expense-category--active {

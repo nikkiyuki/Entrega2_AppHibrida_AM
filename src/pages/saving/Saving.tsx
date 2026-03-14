@@ -473,7 +473,12 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                                     type="button"
                                     onClick={() => setManageCategory(category)}
                                   >
-                                    <span className="saving-category__label">{category}</span>
+                                    <span className="saving-category__top">
+                                      <span className="saving-category__label">{category}</span>
+                                      {manageCategory === category ? (
+                                        <span className="selection-check" aria-hidden="true" />
+                                      ) : null}
+                                    </span>
                                     {renderCategoryIcon(category, 'saving-category__icon')}
                                   </button>
                                 )
@@ -535,7 +540,12 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                   type="button"
                   onClick={() => setSelectedCategory(category)}
                 >
-                  <span className="saving-category__label">{category}</span>
+                  <span className="saving-category__top">
+                    <span className="saving-category__label">{category}</span>
+                    {selectedCategory === category ? (
+                      <span className="selection-check" aria-hidden="true" />
+                    ) : null}
+                  </span>
                   {renderCategoryIcon(category, 'saving-category__icon')}
                 </button>
               )

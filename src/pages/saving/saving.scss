@@ -96,6 +96,14 @@
     }
   }
 
+  .saving-category__top {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+  }
+
   .saving-category--active {
     border-color: rgba(75, 63, 143, 0.24);
     background: linear-gradient(

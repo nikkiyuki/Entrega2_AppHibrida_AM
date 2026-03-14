@@ -237,6 +237,27 @@
   color: $color-text;
 }
 
+.selection-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: rgba(75, 63, 143, 0.14);
+  color: $color-secondary;
+}
+
+.selection-check::after {
+  content: '';
+  width: 0.28rem;
+  height: 0.52rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-0.02rem, -0.03rem);
+}
+
 @media (max-width: 430px) {
   .topbar--app {
     flex-wrap: nowrap;

@@ -142,7 +142,10 @@ export default function Expense({ onClose }: Props) {
                 className={`expense-category ${category === item ? 'expense-category--active' : ''}`}
                 onClick={() => setCategory(item)}
               >
-                {item}
+                <span className="expense-category__content">
+                  <span>{item}</span>
+                  {category === item ? <span className="selection-check" aria-hidden="true" /> : null}
+                </span>
               </button>
             ))}
           </div>
