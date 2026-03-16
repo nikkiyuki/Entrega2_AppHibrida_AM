@@ -210,6 +210,12 @@
     grid-template-columns: minmax(0, 1fr);
     gap: $space-2;
   }
+
+  .field-error {
+    margin: 0;
+    font-size: 0.85rem;
+    color: $color-danger;
+  }
 }
 
 .screen--modal-open {

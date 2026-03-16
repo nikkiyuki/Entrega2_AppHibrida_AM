@@ -34,6 +34,7 @@ export default function Expense({ onClose }: Props) {
   const [error, setError] = useState('')
   const [isErrorOpen, setIsErrorOpen] = useState(false)
   const [isSuccessOpen, setIsSuccessOpen] = useState(false)
+  const [inputError, setInputError] = useState('')
   const [availableMoney] = useState(() => loadState().dineroDisponible)
 
   const motivational = useMemo(() => {
@@ -55,6 +56,7 @@ export default function Expense({ onClose }: Props) {
     setError('')
     setIsErrorOpen(false)
     setIsSuccessOpen(false)
+    setInputError('')
   }
 
   const handleSubmit = () => {
@@ -118,10 +120,17 @@ export default function Expense({ onClose }: Props) {
                   onChange={(event) => {
                     const value = event.target.value.replace(/[^\d]/g, '')
                     setAmountDigits(value)
+                    const numValue = Number(value)
+                    if (numValue > availableMoney) {
+                      setInputError('El monto no puede ser mayor que tu dinero disponible.')
+                    } else {
+                      setInputError('')
+                    }
                     setError('')
                   }}
                 />
               </div>
+              {inputError && <p className="field-error">{inputError}</p>}
             </label>
             <span className="expense-amount-block__help">Solo números</span>
             <span className="expense-amount-block__available">
