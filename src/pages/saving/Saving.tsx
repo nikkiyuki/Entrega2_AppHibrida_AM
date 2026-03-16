@@ -444,7 +444,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                                   className="field__control field__control--currency"
                                   type="text"
                                   inputMode="numeric"
-                                  placeholder="20.000"
+                                  placeholder="Ingresa un monto"
                                   value={manageAmount ? Number(manageAmount).toLocaleString('es-CO') : ''}
                                   onChange={(event) => handleManageAmountChange(event.target.value)}
                                 />
