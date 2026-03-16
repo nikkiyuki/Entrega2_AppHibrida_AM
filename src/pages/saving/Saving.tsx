@@ -573,7 +573,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                 className="field__control field__control--currency"
                 type="text"
                 inputMode="numeric"
-                placeholder="50.000"
+                placeholder="Ingresa tu meta de ahorro"
                 value={formattedMeta}
                 onChange={(event) => handleMetaChange(event.target.value)}
               />
@@ -593,7 +593,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                   className="field__control field__control--currency"
                   type="text"
                   inputMode="numeric"
-                  placeholder="2.000"
+                  placeholder="Ingresa un monto"
                   value={formattedMonto}
                   onChange={(event) => handleMontoChange(event.target.value)}
                 />

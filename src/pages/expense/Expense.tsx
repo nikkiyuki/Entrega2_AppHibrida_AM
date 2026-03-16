@@ -155,7 +155,7 @@ export default function Expense({ onClose }: Props) {
             <input
               id="note-expense"
               className="field__control"
-              placeholder="Ej: almuerzo"
+              placeholder="Ejemplo: almuerzo"
               value={note}
               onChange={(event) => setNote(event.target.value)}
             />
