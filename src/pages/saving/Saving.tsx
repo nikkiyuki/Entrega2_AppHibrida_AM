@@ -82,6 +82,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const [manageCategory, setManageCategory] = useState('Viaje')
   const [feedback, setFeedback] = useState('')
   const [feedbackType, setFeedbackType] = useState<'error' | 'success' | ''>('')
+  const [inputError, setInputError] = useState('')
   const [motivationalMessage] = useState(
     () =>
       motivationalMessages[
@@ -120,6 +121,12 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const handleMontoChange = (value: string) => {
     const numericValue = value.replace(/\D/g, '')
     setMonto(numericValue)
+    const numValue = Number(numericValue)
+    if (numValue > savingState.dineroDisponible) {
+      setInputError('No tienes suficiente dinero disponible.')
+    } else {
+      setInputError('')
+    }
   }
 
   const handleMetaChange = (value: string) => {
@@ -130,6 +137,16 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const handleManageAmountChange = (value: string) => {
     const numericValue = value.replace(/\D/g, '')
     setManageAmount(numericValue)
+    if (manageMode === 'add') {
+      const numValue = Number(numericValue)
+      if (numValue > savingState.dineroDisponible) {
+        setInputError('No tienes suficiente dinero disponible.')
+      } else {
+        setInputError('')
+      }
+    } else {
+      setInputError('')
+    }
   }
 
   const handleManageMetaChange = (value: string) => {
@@ -144,6 +161,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     setManageName('')
     setManageMeta('')
     setManageCategory('Viaje')
+    setInputError('')
   }
 
   const handleResetForm = () => {
@@ -153,6 +171,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     setSelectedCategory('Viaje')
     setFeedback('')
     setFeedbackType('')
+    setInputError('')
   }
 
   const handleCloseFeedback = () => {
@@ -430,6 +449,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                                   onChange={(event) => handleManageAmountChange(event.target.value)}
                                 />
                               </div>
+                              {manageMode === 'add' && inputError && <p className="field-error">{inputError}</p>}
                             </label>
                           </>
                         )}
@@ -598,6 +618,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                   onChange={(event) => handleMontoChange(event.target.value)}
                 />
               </div>
+              {inputError && <p className="field-error">{inputError}</p>}
             </label>
           </div>
 
