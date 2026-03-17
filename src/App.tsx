@@ -10,9 +10,20 @@ function App() {
     'home' | 'income' | 'expense' | 'saving' | 'movements'
   >('home')
   const [savingInitialTab, setSavingInitialTab] = useState<'list' | 'new'>('list')
+  let currentScreen = (
+    <Home
+      onNavigateToIncome={() => setCurrentView('income')}
+      onNavigateToExpense={() => setCurrentView('expense')}
+      onNavigateToSaving={() => {
+        setSavingInitialTab('list')
+        setCurrentView('saving')
+      }}
+      onNavigateToMovements={() => setCurrentView('movements')}
+    />
+  )
 
   if (currentView === 'income') {
-    return (
+    currentScreen = (
       <Suspense fallback={null}>
         <Income onClose={() => setCurrentView('home')} />
       </Suspense>
@@ -20,7 +31,7 @@ function App() {
   }
 
   if (currentView === 'expense') {
-    return (
+    currentScreen = (
       <Suspense fallback={null}>
         <Expense onClose={() => setCurrentView('home')} />
       </Suspense>
@@ -28,7 +39,7 @@ function App() {
   }
 
   if (currentView === 'saving') {
-    return (
+    currentScreen = (
       <Suspense fallback={null}>
         <Saving
           initialTab={savingInitialTab}
@@ -39,7 +50,7 @@ function App() {
   }
 
   if (currentView === 'movements') {
-    return (
+    currentScreen = (
       <Suspense fallback={null}>
         <Movements onBack={() => setCurrentView('home')} />
       </Suspense>
@@ -47,15 +58,21 @@ function App() {
   }
 
   return (
-    <Home
-      onNavigateToIncome={() => setCurrentView('income')}
-      onNavigateToExpense={() => setCurrentView('expense')}
-      onNavigateToSaving={() => {
-        setSavingInitialTab('list')
-        setCurrentView('saving')
-      }}
-      onNavigateToMovements={() => setCurrentView('movements')}
-    />
+    <div className="app-orientation-lock">
+      <div className="app-orientation-lock__content">{currentScreen}</div>
+      <div
+        className="app-orientation-lock__overlay"
+        role="alert"
+        aria-live="assertive"
+      >
+        <div className="app-orientation-lock__card">
+          <h2 className="app-orientation-lock__title">Usa tu celular en vertical</h2>
+          <p className="app-orientation-lock__text">
+            Para el correcto funcionamiento de la app, gira el dispositivo a modo vertical.
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }
 

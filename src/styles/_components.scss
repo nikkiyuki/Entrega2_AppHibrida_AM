@@ -20,6 +20,7 @@
 
 .topbar--app {
   align-items: center;
+  margin-top: 0.35rem;
 }
 
 .topbar__content--app {
@@ -265,6 +266,7 @@
     flex-wrap: wrap;
     align-items: flex-start;
     gap: $space-2;
+    margin-top: 0.2rem;
   }
 
   .topbar__content--app {
