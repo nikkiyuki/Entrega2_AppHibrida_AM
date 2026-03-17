@@ -22,32 +22,32 @@ import {
   type MetaAhorro,
   type SavyState,
 } from '../../utils/storage'
+import {
+  DEFAULT_SAVING_CATEGORY,
+  SAVING_CATEGORIES,
+  getSavingCategoryLabel,
+  isSavingCategory,
+  normalizeSavingCategory,
+  type SavingCategory,
+} from '../../utils/savingCategories'
 
-const savingCategories = [
-  'Estudios',
-  'Viaje',
-  'Tecnología',
-  'Negocio',
-  'Emergencia',
-  'Otro',
-]
-
-const categoryIconMap: Record<string, IconType> = {
+const categoryIconMap: Record<SavingCategory, IconType> = {
   Estudios: FaBookOpen,
   Viaje: FaPlaneDeparture,
-  Tecnología: FaLaptopCode,
-  Negocio: FaBriefcase,
+  Tecnologia: FaLaptopCode,
   Emprendimiento: FaBriefcase,
   Emergencia: FaShieldHeart,
   Otro: FaWallet,
 }
 
 const getCategoryIcon = (category: string) => {
-  if (category.toLowerCase().includes('tecnolog')) {
-    return FaLaptopCode
+  const normalizedCategory = normalizeSavingCategory(category)
+
+  if (isSavingCategory(normalizedCategory)) {
+    return categoryIconMap[normalizedCategory]
   }
 
-  return categoryIconMap[category] ?? FaWallet
+  return FaWallet
 }
 
 const renderCategoryIcon = (category: string, className: string) => {
@@ -75,11 +75,11 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const [monto, setMonto] = useState('')
   const [nombreAhorro, setNombreAhorro] = useState('')
   const [metaAhorro, setMetaAhorro] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('Viaje')
+  const [selectedCategory, setSelectedCategory] = useState<SavingCategory>(DEFAULT_SAVING_CATEGORY)
   const [manageAmount, setManageAmount] = useState('')
   const [manageName, setManageName] = useState('')
   const [manageMeta, setManageMeta] = useState('')
-  const [manageCategory, setManageCategory] = useState('Viaje')
+  const [manageCategory, setManageCategory] = useState<SavingCategory>(DEFAULT_SAVING_CATEGORY)
   const [feedback, setFeedback] = useState('')
   const [feedbackType, setFeedbackType] = useState<'error' | 'success' | ''>('')
   const [inputError, setInputError] = useState('')
@@ -94,7 +94,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
   const formattedMonto = monto ? Number(monto).toLocaleString('es-CO') : ''
   const formattedMeta = metaAhorro ? Number(metaAhorro).toLocaleString('es-CO') : ''
   const isNewSavingFormDirty = Boolean(
-    monto || metaAhorro || nombreAhorro.trim() || selectedCategory !== 'Viaje',
+    monto || metaAhorro || nombreAhorro.trim() || selectedCategory !== DEFAULT_SAVING_CATEGORY,
   )
   const ahorroDisponible = selectedAhorro
     ? Math.max(0, selectedAhorro.meta - selectedAhorro.acumulado)
@@ -160,7 +160,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     setManageAmount('')
     setManageName('')
     setManageMeta('')
-    setManageCategory('Viaje')
+    setManageCategory(DEFAULT_SAVING_CATEGORY)
     setInputError('')
   }
 
@@ -168,7 +168,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     setMonto('')
     setNombreAhorro('')
     setMetaAhorro('')
-    setSelectedCategory('Viaje')
+    setSelectedCategory(DEFAULT_SAVING_CATEGORY)
     setFeedback('')
     setFeedbackType('')
     setInputError('')
@@ -241,7 +241,12 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
     setManageAmount('')
     setManageName(ahorro.nombre)
     setManageMeta(String(ahorro.meta))
-    setManageCategory(ahorro.categoria)
+    const normalizedCategory = normalizeSavingCategory(ahorro.categoria)
+    setManageCategory(
+      isSavingCategory(normalizedCategory)
+        ? normalizedCategory
+        : DEFAULT_SAVING_CATEGORY,
+    )
   }
 
   const handleOpenNewSaving = () => {
@@ -348,7 +353,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                         <strong className="saving-item__name">{ahorro.nombre}</strong>
                         <span className="saving-item__category">
                           {renderCategoryIcon(ahorro.categoria, 'saving-item__category-icon')}
-                          {ahorro.categoria}
+                          {getSavingCategoryLabel(ahorro.categoria)}
                         </span>
                       </div>
                       <span className="saving-item__badge">
@@ -483,23 +488,23 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                             </label>
 
                             <div className="saving-category-grid" aria-label="Editar categoría">
-                              {savingCategories.map((category) => {
+                              {SAVING_CATEGORIES.map(({ value, label }) => {
                                 return (
                                   <button
-                                    key={`manage-${category}`}
+                                    key={`manage-${value}`}
                                     className={`saving-category ${
-                                      manageCategory === category ? 'saving-category--active' : ''
+                                      manageCategory === value ? 'saving-category--active' : ''
                                     }`}
                                     type="button"
-                                    onClick={() => setManageCategory(category)}
+                                    onClick={() => setManageCategory(value)}
                                   >
                                     <span className="saving-category__top">
-                                      <span className="saving-category__label">{category}</span>
-                                      {manageCategory === category ? (
+                                      <span className="saving-category__label">{label}</span>
+                                      {manageCategory === value ? (
                                         <span className="selection-check" aria-hidden="true" />
                                       ) : null}
                                     </span>
-                                    {renderCategoryIcon(category, 'saving-category__icon')}
+                                    {renderCategoryIcon(value, 'saving-category__icon')}
                                   </button>
                                 )
                               })}
@@ -550,23 +555,23 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
           </div>
 
           <div className="saving-category-grid" aria-label="Categorías de ahorro">
-            {savingCategories.map((category) => {
+            {SAVING_CATEGORIES.map(({ value, label }) => {
               return (
                 <button
-                  key={category}
+                  key={value}
                   className={`saving-category ${
-                    selectedCategory === category ? 'saving-category--active' : ''
+                    selectedCategory === value ? 'saving-category--active' : ''
                   }`}
                   type="button"
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => setSelectedCategory(value)}
                 >
                   <span className="saving-category__top">
-                    <span className="saving-category__label">{category}</span>
-                    {selectedCategory === category ? (
+                    <span className="saving-category__label">{label}</span>
+                    {selectedCategory === value ? (
                       <span className="selection-check" aria-hidden="true" />
                     ) : null}
                   </span>
-                  {renderCategoryIcon(category, 'saving-category__icon')}
+                  {renderCategoryIcon(value, 'saving-category__icon')}
                 </button>
               )
             })}
@@ -578,7 +583,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
               id="saving-name"
               className="field__control"
               type="text"
-              placeholder="Ejemplo: Viaje de fin de año"
+              placeholder="Ejemplo: Viaje"
               value={nombreAhorro}
               onChange={(event) => setNombreAhorro(event.target.value)}
             />
@@ -593,7 +598,7 @@ export default function Saving({ initialTab, onBack }: SavingProps) {
                 className="field__control field__control--currency"
                 type="text"
                 inputMode="numeric"
-                placeholder="Ingresa tu meta de ahorro"
+                placeholder="Ingresa tu meta"
                 value={formattedMeta}
                 onChange={(event) => handleMetaChange(event.target.value)}
               />

@@ -2,32 +2,19 @@ import { useMemo, useState } from 'react'
 import './income.scss'
 import AppNavbar from '../../components/AppNavbar'
 import { formatCurrencyCOP } from '../../utils/format'
+import {
+  DEFAULT_INCOME_CATEGORY,
+  INCOME_CATEGORIES,
+  getIncomeCategoryLabel,
+  type IncomeCategory,
+} from '../../utils/incomeCategories'
 import { addIngreso, loadState } from '../../utils/storage'
 
 type Props = { onClose: () => void }
 
-type IncomeCategory =
-  | 'Mesada'
-  | 'Regalo'
-  | 'Trabajo'
-  | 'Apoyo familiar'
-  | 'Entretenimiento'
-  | 'Premio'
-  | 'Otros'
-
-const INCOME_CATEGORIES: IncomeCategory[] = [
-  'Mesada',
-  'Regalo',
-  'Trabajo',
-  'Apoyo familiar',
-  'Entretenimiento',
-  'Premio',
-  'Otros',
-]
-
 export default function Income({ onClose }: Props) {
   const [amountDigits, setAmountDigits] = useState('')
-  const [category, setCategory] = useState<IncomeCategory>('Mesada')
+  const [category, setCategory] = useState<IncomeCategory>(DEFAULT_INCOME_CATEGORY)
   const [error, setError] = useState('')
   const [isErrorOpen, setIsErrorOpen] = useState(false)
   const [isSuccessOpen, setIsSuccessOpen] = useState(false)
@@ -43,12 +30,13 @@ export default function Income({ onClose }: Props) {
   }, [amountDigits])
 
   const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits])
-  const isFormDirty = Boolean(amountDigits || category !== 'Mesada')
+  const isFormDirty = Boolean(amountDigits || category !== DEFAULT_INCOME_CATEGORY)
   const formattedAmount = amountDigits ? Number(amountDigits).toLocaleString('es-CO') : ''
+  const categoryLabel = getIncomeCategoryLabel(category)
 
   const handleResetForm = () => {
     setAmountDigits('')
-    setCategory('Mesada')
+    setCategory(DEFAULT_INCOME_CATEGORY)
     setError('')
     setIsErrorOpen(false)
     setIsSuccessOpen(false)
@@ -129,20 +117,20 @@ export default function Income({ onClose }: Props) {
 
           <div className="income-section-header">
             <h2 className="income-section-title">Tipo de ingreso</h2>
-            <span className="income-pill">{category}</span>
+            <span className="income-pill">{categoryLabel}</span>
           </div>
 
           <div className="income-category-grid" aria-label="Categorías de ingreso">
-            {INCOME_CATEGORIES.map((item) => (
+            {INCOME_CATEGORIES.map(({ value, label }) => (
               <button
-                key={item}
+                key={value}
                 type="button"
-                className={`income-category ${category === item ? 'income-category--active' : ''}`}
-                onClick={() => setCategory(item)}
+                className={`income-category ${category === value ? 'income-category--active' : ''}`}
+                onClick={() => setCategory(value)}
               >
                 <span className="income-category__content">
-                  <span>{item}</span>
-                  {category === item ? <span className="selection-check" aria-hidden="true" /> : null}
+                  <span>{label}</span>
+                  {category === value ? <span className="selection-check" aria-hidden="true" /> : null}
                 </span>
               </button>
             ))}
@@ -206,7 +194,7 @@ export default function Income({ onClose }: Props) {
               </p>
               <p className="income-modal__text">
                 Se registró correctamente un ingreso de {formatCurrencyCOP(Number(amountDigits || 0))}
-                {' '}en la categoría {category}.
+                {' '}en la categoría {categoryLabel}.
               </p>
               <div className="income-modal__actions">
                 <button

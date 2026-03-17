@@ -1,35 +1,20 @@
 import { useMemo, useState } from 'react'
 import './expense.scss'
 import AppNavbar from '../../components/AppNavbar'
+import {
+  DEFAULT_EXPENSE_CATEGORY,
+  EXPENSE_CATEGORIES,
+  getExpenseCategoryLabel,
+  type ExpenseCategory,
+} from '../../utils/expenseCategories'
 import { formatCurrencyCOP } from '../../utils/format'
 import { addGasto, loadState } from '../../utils/storage'
 
 type Props = { onClose: () => void }
 
-type ExpenseCategory =
-  | 'Comida'
-  | 'Transporte'
-  | 'Entretenimiento'
-  | 'Estudio'
-  | 'Salud'
-  | 'Ropa'
-  | 'Suscripción'
-  | 'Otro'
-
-const EXPENSE_CATEGORIES: ExpenseCategory[] = [
-  'Comida',
-  'Transporte',
-  'Entretenimiento',
-  'Estudio',
-  'Salud',
-  'Ropa',
-  'Suscripción',
-  'Otro',
-]
-
 export default function Expense({ onClose }: Props) {
   const [amountDigits, setAmountDigits] = useState('')
-  const [category, setCategory] = useState<ExpenseCategory>('Comida')
+  const [category, setCategory] = useState<ExpenseCategory>(DEFAULT_EXPENSE_CATEGORY)
   const [note, setNote] = useState('')
   const [error, setError] = useState('')
   const [isErrorOpen, setIsErrorOpen] = useState(false)
@@ -46,12 +31,13 @@ export default function Expense({ onClose }: Props) {
   }, [amountDigits])
 
   const canSubmit = useMemo(() => Number(amountDigits) > 0, [amountDigits])
-  const isFormDirty = Boolean(amountDigits || note.trim() || category !== 'Comida')
+  const isFormDirty = Boolean(amountDigits || note.trim() || category !== DEFAULT_EXPENSE_CATEGORY)
   const formattedAmount = amountDigits ? Number(amountDigits).toLocaleString('es-CO') : ''
+  const categoryLabel = getExpenseCategoryLabel(category)
 
   const handleResetForm = () => {
     setAmountDigits('')
-    setCategory('Comida')
+    setCategory(DEFAULT_EXPENSE_CATEGORY)
     setNote('')
     setError('')
     setIsErrorOpen(false)
@@ -140,20 +126,20 @@ export default function Expense({ onClose }: Props) {
 
           <div className="expense-section-header">
             <h2 className="expense-section-title">Tipo de gasto</h2>
-            <span className="expense-pill">{category}</span>
+            <span className="expense-pill">{categoryLabel}</span>
           </div>
 
           <div className="expense-category-grid" aria-label="Categorías de gasto">
-            {EXPENSE_CATEGORIES.map((item) => (
+            {EXPENSE_CATEGORIES.map(({ value, label }) => (
               <button
-                key={item}
+                key={value}
                 type="button"
-                className={`expense-category ${category === item ? 'expense-category--active' : ''}`}
-                onClick={() => setCategory(item)}
+                className={`expense-category ${category === value ? 'expense-category--active' : ''}`}
+                onClick={() => setCategory(value)}
               >
                 <span className="expense-category__content">
-                  <span>{item}</span>
-                  {category === item ? <span className="selection-check" aria-hidden="true" /> : null}
+                  <span>{label}</span>
+                  {category === value ? <span className="selection-check" aria-hidden="true" /> : null}
                 </span>
               </button>
             ))}
@@ -228,7 +214,7 @@ export default function Expense({ onClose }: Props) {
               </p>
               <p className="expense-modal__text">
                 Se registró correctamente un gasto de {formatCurrencyCOP(Number(amountDigits || 0))}
-                {' '}en la categoría {category}.
+                {' '}en la categoría {categoryLabel}.
               </p>
               <div className="expense-modal__actions">
                 <button

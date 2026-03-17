@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import './movements.scss'
 import AppNavbar from '../../components/AppNavbar'
+import { getExpenseCategoryLabel } from '../../utils/expenseCategories'
 import { formatCurrencyCOP, formatDate } from '../../utils/format'
+import { getIncomeCategoryLabel } from '../../utils/incomeCategories'
+import { getSavingCategoryLabel } from '../../utils/savingCategories'
 import {
   SAVY_STATE_EVENT,
   getMonthlyTotals,
@@ -12,6 +15,18 @@ import {
 
 interface MovementsProps {
   onBack: () => void
+}
+
+function getMovementCategoryLabel(movement: Movimiento) {
+  if (movement.tipo === 'Ingreso') {
+    return getIncomeCategoryLabel(movement.categoria)
+  }
+
+  if (movement.tipo === 'Gasto') {
+    return getExpenseCategoryLabel(movement.categoria)
+  }
+
+  return movement.categoria
 }
 
 export default function Movements({ onBack }: MovementsProps) {
@@ -65,7 +80,9 @@ export default function Movements({ onBack }: MovementsProps) {
                   <div className="saving-item__header">
                     <div className="saving-item__identity">
                       <strong className="saving-item__name">{movement.tipo}</strong>
-                      <span className="saving-item__category">{movement.categoria}</span>
+                      <span className="saving-item__category">
+                        {getMovementCategoryLabel(movement)}
+                      </span>
                     </div>
                     <span className="saving-item__badge">{formatDate(movement.fechaISO)}</span>
                   </div>
@@ -118,7 +135,9 @@ export default function Movements({ onBack }: MovementsProps) {
                   <div className="saving-item__header">
                     <div className="saving-item__identity">
                       <strong className="saving-item__name">{ahorro.nombre}</strong>
-                      <span className="saving-item__category">{ahorro.categoria}</span>
+                      <span className="saving-item__category">
+                        {getSavingCategoryLabel(ahorro.categoria)}
+                      </span>
                     </div>
                     <span className="saving-item__badge">
                       {Math.min(

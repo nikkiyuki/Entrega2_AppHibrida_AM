@@ -1,3 +1,16 @@
+import {
+  getExpenseCategoryLabel,
+  normalizeExpenseCategory,
+} from './expenseCategories'
+import {
+  getIncomeCategoryLabel,
+  normalizeIncomeCategory,
+} from './incomeCategories'
+import {
+  getSavingCategoryLabel,
+  normalizeSavingCategory,
+} from './savingCategories'
+
 export type TipoMovimiento = 'Ingreso' | 'Gasto' | 'Ahorro' | 'RetiroAhorro'
 
 export interface Movimiento {
@@ -147,6 +160,8 @@ interface ActualizarAhorroInput {
 
 export function addIngreso(input: AddIngresoInput) {
   const currentState = loadState()
+  const normalizedCategory = normalizeIncomeCategory(input.categoria)
+  const categoryLabel = getIncomeCategoryLabel(normalizedCategory)
 
   if (!input.monto || input.monto <= 0) {
     throw new Error('El monto del ingreso debe ser mayor a cero.')
@@ -161,7 +176,7 @@ export function addIngreso(input: AddIngresoInput) {
         id: `mov-${Date.now()}`,
         tipo: 'Ingreso',
         monto: input.monto,
-        categoria: input.categoria,
+        categoria: categoryLabel,
         fechaISO: nowISO,
       },
       ...currentState.movimientos,
@@ -174,6 +189,8 @@ export function addIngreso(input: AddIngresoInput) {
 
 export function addGasto(input: AddGastoInput) {
   const currentState = loadState()
+  const normalizedCategory = normalizeExpenseCategory(input.categoria)
+  const categoryLabel = getExpenseCategoryLabel(normalizedCategory)
 
   if (!input.monto || input.monto <= 0) {
     throw new Error('El monto del gasto debe ser mayor a cero.')
@@ -192,7 +209,7 @@ export function addGasto(input: AddGastoInput) {
         id: `mov-${Date.now()}`,
         tipo: 'Gasto',
         monto: input.monto,
-        categoria: input.categoria,
+        categoria: categoryLabel,
         fechaISO: nowISO,
       },
       ...currentState.movimientos,
@@ -206,11 +223,13 @@ export function addGasto(input: AddGastoInput) {
 export function addAhorro(input: AddAhorroInput) {
   const currentState = loadState()
   const nowISO = new Date().toISOString()
-  const ahorroName = input.nombre.trim() || input.categoria
+  const normalizedCategory = normalizeSavingCategory(input.categoria)
+  const categoryLabel = getSavingCategoryLabel(normalizedCategory)
+  const ahorroName = input.nombre.trim() || categoryLabel
   const existingAhorro = currentState.ahorros.find(
     (ahorro) =>
       ahorro.nombre.toLowerCase() === ahorroName.toLowerCase() &&
-      ahorro.categoria.toLowerCase() === input.categoria.toLowerCase(),
+      normalizeSavingCategory(ahorro.categoria).toLowerCase() === normalizedCategory.toLowerCase(),
   )
 
   const nextAhorros = existingAhorro
@@ -228,7 +247,7 @@ export function addAhorro(input: AddAhorroInput) {
         ...currentState.ahorros,
         {
           id: `ahorro-${Date.now()}`,
-          categoria: input.categoria,
+          categoria: categoryLabel,
           nombre: ahorroName,
           meta: input.meta,
           acumulado: input.monto,
@@ -394,6 +413,8 @@ export function eliminarAhorro(input: EliminarAhorroInput) {
 export function actualizarAhorro(input: ActualizarAhorroInput) {
   const currentState = loadState()
   const ahorro = currentState.ahorros.find((item) => item.id === input.ahorroId)
+  const normalizedCategory = normalizeSavingCategory(input.categoria)
+  const categoryLabel = getSavingCategoryLabel(normalizedCategory)
 
   if (!ahorro) {
     throw new Error('No se encontró el ahorro que deseas editar.')
@@ -405,8 +426,8 @@ export function actualizarAhorro(input: ActualizarAhorroInput) {
       item.id === ahorro.id
         ? {
             ...item,
-            categoria: input.categoria,
-            nombre: input.nombre.trim() || input.categoria,
+            categoria: categoryLabel,
+            nombre: input.nombre.trim() || categoryLabel,
             meta: input.meta,
           }
         : item,
