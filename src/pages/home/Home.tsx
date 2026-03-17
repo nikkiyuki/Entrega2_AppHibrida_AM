@@ -46,7 +46,7 @@ export default function Home({
   return (
     <main className="app-shell">
       <section className="screen screen--dashboard stack">
-        <article className="dashboard-hero stack">
+        <article className="dashboard-hero">
           <div className="dashboard-logo-box">
             <img
               className="dashboard-logo-image"
