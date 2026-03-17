@@ -57,7 +57,7 @@ export default function Home({
 
           <div className="dashboard-welcome">
             <p className="dashboard-welcome__text">
-              Cada paso cuenta: registra tus ingresos, controla tus gastos y haz crecer tus ahorros.
+              Cada paso cuenta
             </p>
             <div className="dashboard-welcome__divider" aria-hidden="true" />
           </div>
