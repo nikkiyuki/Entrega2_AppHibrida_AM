@@ -33,7 +33,7 @@
 }
 
 .topbar__title {
-  font-size: 1.4rem;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
   line-height: 1.1;
   white-space: normal;
 }
@@ -63,7 +63,7 @@
 
 .eyebrow {
   margin: 0 0 0.25rem;
-  font-size: 0.75rem;
+  font-size: clamp(0.68rem, 1.8vw, 0.75rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -72,18 +72,20 @@
 
 .title {
   margin: 0;
-  font-size: 1.85rem;
+  font-size: clamp(1.45rem, 4vw, 1.85rem);
   line-height: 1.05;
   color: $color-text;
 }
 
 .button {
-  min-height: 3.25rem;
-  padding: 0.9rem 1rem;
+  min-height: 3.05rem;
+  padding: 0.82rem 0.95rem;
   border: 1px solid transparent;
   border-radius: $radius-lg;
   cursor: pointer;
   font-weight: 700;
+  font-size: 0.96rem;
+  line-height: 1.15;
   transition:
     transform 160ms ease,
     box-shadow 160ms ease,
@@ -114,7 +116,7 @@
 }
 
 .panel {
-  padding: $space-4;
+  padding: clamp(0.95rem, 2.8vw, $space-4);
   border: 1px solid rgba(255, 255, 255, 0.54);
   border-radius: $radius-xl;
   background: $color-surface;
@@ -125,7 +127,7 @@
   display: flex;
   flex-direction: column;
   gap: $space-1;
-  padding: $space-4;
+  padding: clamp(0.95rem, 2.8vw, $space-4);
   border: 1px solid rgba(17, 17, 17, 0.06);
   border-radius: $radius-lg;
   background: rgba(255, 255, 255, 0.84);
@@ -142,19 +144,19 @@
   }
 
   &__label {
-    font-size: 0.85rem;
+    font-size: clamp(0.76rem, 2vw, 0.85rem);
     color: inherit;
     opacity: 0.82;
   }
 
   &__value {
-    font-size: 1.75rem;
+    font-size: clamp(1.2rem, 5vw, 1.75rem);
     font-weight: 800;
     line-height: 1.05;
   }
 
   &__hint {
-    font-size: 0.8rem;
+    font-size: clamp(0.72rem, 2vw, 0.8rem);
     color: inherit;
     opacity: 0.72;
   }
@@ -167,20 +169,20 @@
 }
 
 .field__label {
-  font-size: 0.92rem;
+  font-size: clamp(0.84rem, 2vw, 0.92rem);
   font-weight: 600;
   color: $color-text-soft;
 }
 
 .field__control {
   width: 100%;
-  min-height: 3.3rem;
-  padding: 0.9rem 1rem;
+  min-height: 3.05rem;
+  padding: 0.82rem 0.95rem;
   border: 1px solid rgba(29, 29, 37, 0.12);
   border-radius: $radius-lg;
   background: rgba(255, 255, 255, 0.92);
   color: $color-text;
-  font-size: 1rem;
+  font-size: 0.95rem;
 
   &:focus {
     outline: 2px solid rgba(233, 58, 106, 0.2);
@@ -199,8 +201,8 @@
   display: flex;
   align-items: center;
   gap: $space-2;
-  min-height: 3.3rem;
-  padding: 0.9rem 1rem;
+  min-height: 3.05rem;
+  padding: 0.82rem 0.95rem;
   border: 1px solid rgba(29, 29, 37, 0.12);
   border-radius: $radius-lg;
   background: rgba(255, 255, 255, 0.92);
@@ -211,7 +213,7 @@
 }
 
 .currency-field--featured {
-  min-height: 4.6rem;
+  min-height: 4rem;
 }
 
 .currency-field__symbol {
@@ -233,7 +235,7 @@
 
 .section-title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: clamp(1.02rem, 2.6vw, 1.25rem);
   color: $color-text;
 }
 
@@ -258,15 +260,15 @@
   transform: rotate(45deg) translate(-0.02rem, -0.03rem);
 }
 
-@media (max-width: 430px) {
+@include respond-max($bp-phone) {
   .topbar--app {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: flex-start;
     gap: $space-2;
   }
 
   .topbar__content--app {
-    flex: 1 1 auto;
+    flex: 1 1 100%;
     gap: $space-2;
     overflow: visible;
   }
@@ -277,15 +279,55 @@
   }
 
   .topbar__title {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     line-height: 1.1;
   }
 
   .topbar__action--app {
-    margin-left: 0;
-    margin-top: 0.15rem;
-    padding: 0.55rem 0.8rem;
+    margin-left: auto;
+    margin-top: 0;
+    min-height: 2.7rem;
+    padding: 0.55rem 0.85rem;
     border-radius: $radius-md;
+    font-size: 0.84rem;
+  }
+
+  .title {
+    font-size: 1.22rem;
+  }
+
+  .button {
+    min-height: 2.9rem;
+    padding: 0.78rem 0.9rem;
+    border-radius: 1rem;
+    font-size: 0.88rem;
+  }
+
+  .panel {
+    border-radius: 1.25rem;
+  }
+
+  .stat-card {
+    border-radius: 1.1rem;
+  }
+
+  .field__control,
+  .currency-field {
+    min-height: 2.85rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 1rem;
     font-size: 0.9rem;
+  }
+
+  .currency-field--featured {
+    min-height: 3.45rem;
+  }
+
+  .currency-field__symbol {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 0.98rem;
   }
 }

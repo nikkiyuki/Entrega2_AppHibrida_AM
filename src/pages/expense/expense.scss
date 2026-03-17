@@ -1,6 +1,8 @@
 @use '../../styles/variables' as *;
 
 .screen--expense {
+  max-width: 30rem;
+
   .expense-panel {
     gap: $space-4;
   }
@@ -32,6 +34,7 @@
     align-items: baseline;
     justify-content: space-between;
     gap: $space-2;
+    flex-wrap: wrap;
   }
 
   .expense-amount-block__label {
@@ -43,7 +46,7 @@
   }
 
   .expense-amount-block__value {
-    font-size: 1.3rem;
+    font-size: clamp(1.05rem, 3vw, 1.3rem);
     font-weight: 800;
     color: $color-text;
   }
@@ -63,7 +66,7 @@
 
   .expense-section-title {
     margin: 0;
-    font-size: 1rem;
+    font-size: clamp(0.92rem, 2.3vw, 1rem);
     color: $color-text;
   }
 
@@ -78,12 +81,12 @@
 
   .expense-category-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(8.3rem, 1fr));
     gap: $space-2;
   }
 
   .expense-category {
-    min-height: 2.8rem;
+    min-height: 2.65rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -95,7 +98,7 @@
       rgba(233, 58, 106, 0.12) 100%
     );
     color: $color-text;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 700;
     line-height: 1.15;
     text-align: center;
@@ -143,9 +146,9 @@
 
   .expense-message__text {
     margin: 0;
-    font-size: 0.98rem;
+    font-size: clamp(0.84rem, 2.4vw, 0.96rem);
     font-weight: 700;
-    line-height: 1.55;
+    line-height: 1.4;
     color: $color-text-soft;
   }
 
@@ -220,4 +223,79 @@
 
 .screen--modal-open {
   position: relative;
+}
+
+@include respond-between(431px, $bp-tablet) {
+  .screen--expense {
+    max-width: 33rem;
+  }
+}
+
+@include respond-max($bp-phone) {
+  .screen--expense {
+    .expense-panel {
+      gap: 0.95rem;
+    }
+
+    .expense-amount-block,
+    .expense-message {
+      padding: 0.85rem;
+      border-radius: 1.1rem;
+    }
+
+    .expense-amount-block__header,
+    .expense-section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+    }
+
+    .expense-pill {
+      font-size: 0.72rem;
+    }
+
+    .expense-category-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .expense-category {
+      min-height: 2.5rem;
+      padding: 0.5rem;
+      font-size: 0.74rem;
+      border-radius: 0.95rem;
+    }
+
+    .expense-category__content {
+      gap: 0.3rem;
+    }
+
+    .expense-actions {
+      grid-template-columns: 1fr;
+      gap: 0.55rem;
+    }
+
+    .expense-modal-backdrop {
+      padding: 1rem;
+    }
+
+    .expense-modal {
+      width: min(100%, 19rem);
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+
+    .expense-modal__text,
+    .field-error {
+      font-size: 0.84rem;
+    }
+  }
+}
+
+@include respond-max($bp-phone-sm) {
+  .screen--expense {
+    .expense-category-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 }

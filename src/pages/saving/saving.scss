@@ -1,6 +1,8 @@
 @use '../../styles/variables' as *;
 
 .screen--saving {
+  max-width: 42rem;
+
   .saving-panel {
     gap: $space-4;
   }
@@ -63,14 +65,14 @@
   }
 
   .saving-available__value {
-    font-size: 1.6rem;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
     font-weight: 800;
     color: $color-text;
   }
 
   .saving-category-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
     gap: $space-2;
   }
 
@@ -79,7 +81,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    min-height: 7rem;
+    min-height: 6.3rem;
     padding: $space-2 0.2rem;
     border: 1px solid rgba(29, 29, 37, 0.08);
     border-radius: $radius-lg;
@@ -117,19 +119,17 @@
     text-align: center;
     width: 100%;
     max-width: 100%;
-    font-size: 0.64rem;
+    font-size: 0.72rem;
     font-weight: 600;
     line-height: 1.1;
     text-transform: uppercase;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: clip;
-    overflow-wrap: normal;
-    word-break: normal;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .saving-category__icon {
-    font-size: 1.95rem;
+    font-size: 1.7rem;
     color: rgba(29, 29, 37, 0.7);
   }
 
@@ -162,9 +162,9 @@
 
   .saving-message__text {
     margin: 0;
-    font-size: 0.98rem;
+    font-size: clamp(0.84rem, 2.2vw, 0.96rem);
     font-weight: 700;
-    line-height: 1.55;
+    line-height: 1.4;
     color: $color-text-soft;
   }
 
@@ -190,6 +190,7 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: $space-2;
+    flex-wrap: wrap;
   }
 
   .saving-item__identity {
@@ -199,7 +200,7 @@
   }
 
   .saving-item__name {
-    font-size: 1rem;
+    font-size: clamp(0.92rem, 2vw, 1rem);
     font-weight: 800;
   }
 
@@ -241,7 +242,7 @@
   }
 
   .saving-item__action-button {
-    min-height: 2.7rem;
+    min-height: 2.55rem;
     border: 1px solid rgba(29, 29, 37, 0.08);
     border-radius: $radius-sm;
     background: rgba(255, 255, 255, 0.86);
@@ -263,7 +264,7 @@
 
   .saving-progress {
     width: 100%;
-    height: 0.8rem;
+    height: 0.72rem;
     overflow: hidden;
     border-radius: 999px;
     background: rgba(29, 29, 37, 0.08);
@@ -379,10 +380,124 @@
   position: relative;
 }
 
-@media (max-width: 430px) {
+@include respond-between(431px, $bp-tablet) {
   .screen--saving {
+    max-width: 37rem;
+  }
+}
+
+@include respond-max($bp-phone) {
+  .screen--saving {
+    max-width: none;
+
+    .saving-panel {
+      gap: 0.95rem;
+    }
+
+    .saving-tabs {
+      gap: 0.55rem;
+    }
+
+    .saving-tab {
+      min-height: 2.8rem;
+      border-radius: 1rem;
+      font-size: 0.82rem;
+      padding: 0.65rem 0.5rem;
+    }
+
+    .saving-available,
+    .saving-amount-block,
+    .saving-message,
+    .saving-empty,
+    .saving-manage {
+      padding: 0.85rem;
+      border-radius: 1.1rem;
+    }
+
     .saving-category-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.6rem;
+    }
+
+    .saving-category {
+      min-height: 5.25rem;
+      border-radius: 1rem;
+      padding: 0.65rem 0.4rem;
+    }
+
+    .saving-category__label {
+      font-size: 0.68rem;
+    }
+
+    .saving-category__icon {
+      font-size: 1.38rem;
+    }
+
+    .saving-item {
+      padding: 0.85rem;
+      border-radius: 1.1rem;
+    }
+
+    .saving-item__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+    }
+
+    .saving-item__badge {
+      align-self: flex-start;
+      font-size: 0.7rem;
+    }
+
+    .saving-item__amounts {
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+    }
+
+    .saving-item__actions,
+    .saving-manage__actions,
+    .saving-actions {
+      grid-template-columns: 1fr;
+      gap: 0.55rem;
+    }
+
+    .saving-item__action-button {
+      min-height: 2.7rem;
+      border-radius: 0.95rem;
+      font-size: 0.82rem;
+    }
+
+    .saving-manage {
+      gap: 0.8rem;
+    }
+
+    .saving-manage__summary {
+      padding: 0.75rem 0.85rem;
+      font-size: 0.8rem;
+    }
+
+    .feedback-modal-backdrop {
+      padding: 1rem;
+    }
+
+    .feedback-modal {
+      width: min(100%, 19rem);
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+
+    .feedback-modal__text,
+    .field-error {
+      font-size: 0.84rem;
+    }
+  }
+}
+
+@include respond-max($bp-phone-sm) {
+  .screen--saving {
+    .saving-tabs,
+    .saving-category-grid {
+      grid-template-columns: 1fr;
     }
   }
 }

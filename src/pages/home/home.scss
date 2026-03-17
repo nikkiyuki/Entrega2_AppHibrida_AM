@@ -4,7 +4,7 @@
   .dashboard-hero {
     display: flex;
     flex-direction: column;
-    gap: $space-2;
+    gap: clamp(0.6rem, 2vw, $space-2);
     text-align: center;
   }
 
@@ -12,11 +12,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 6.9rem;
-    padding: 0.12rem 0.2rem;
+    min-height: clamp(6rem, 18vw, 8.2rem);
+    padding: clamp(0.22rem, 1vw, 0.34rem) clamp(0.55rem, 1.8vw, 0.75rem);
     overflow: hidden;
     border: 1px solid rgba(29, 29, 37, 0.08);
-    border-radius: $radius-lg;
+    border-radius: 1.8rem;
     background: rgba(255, 255, 255, 0.96);
     box-shadow:
       0 14px 28px rgba(17, 17, 17, 0.08),
@@ -29,7 +29,7 @@
     max-height: 100%;
     height: 100%;
     object-fit: contain;
-    transform: scale(1.82);
+    transform: scale(1.44);
     transform-origin: center;
   }
 
@@ -42,9 +42,9 @@
 
   .dashboard-welcome__text {
     margin: 0;
-    max-width: 18rem;
-    font-size: 0.96rem;
-    line-height: 1.55;
+    max-width: 19rem;
+    font-size: clamp(0.84rem, 2.5vw, 0.96rem);
+    line-height: 1.38;
     font-weight: 700;
     color: $color-text-soft;
   }
@@ -59,7 +59,7 @@
   .dashboard-stack {
     display: flex;
     flex-direction: column;
-    gap: $space-3;
+    gap: clamp(0.75rem, 2vw, $space-3);
   }
 
   .stat-card {
@@ -84,16 +84,17 @@
   .dashboard-actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: $space-3;
+    gap: clamp(0.7rem, 2vw, $space-3);
   }
 
   .button--dashboard {
-    min-height: 5.3rem;
+    min-height: 4.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding-inline: 0.9rem;
+    padding-inline: 0.85rem;
+    font-size: 0.92rem;
   }
 
   .button--dashboard-gradient {
@@ -106,5 +107,103 @@
     );
     color: $color-text-inverse;
     box-shadow: 0 14px 24px rgba(75, 63, 143, 0.14);
+  }
+}
+
+@include respond-between(431px, $bp-tablet) {
+  .screen--dashboard {
+    max-width: 32rem;
+
+    .dashboard-welcome__text {
+      max-width: 22rem;
+    }
+  }
+}
+
+@include respond-max($bp-phone) {
+  .screen--dashboard {
+    .dashboard-hero {
+      gap: 0.5rem;
+    }
+
+    .dashboard-logo-box {
+      min-height: 5.25rem;
+      padding: 0.24rem 0.9rem;
+      border-radius: 1.45rem;
+    }
+
+    .dashboard-logo-image {
+      transform: scale(1.32);
+    }
+
+    .dashboard-welcome {
+      gap: 0.35rem;
+    }
+
+    .dashboard-welcome__text {
+      max-width: 16.5rem;
+      font-size: 0.76rem;
+      line-height: 1.24;
+    }
+
+    .dashboard-welcome__divider {
+      width: 34%;
+      height: 2px;
+    }
+
+    .dashboard-stack {
+      gap: 0.7rem;
+    }
+
+    .stat-card {
+      padding: 0.85rem 0.9rem;
+      border-radius: 1.1rem;
+    }
+
+    .stat-card__label {
+      font-size: 0.74rem;
+    }
+
+    .stat-card__value {
+      font-size: 1.28rem;
+    }
+
+    .stat-card__hint {
+      font-size: 0.7rem;
+    }
+
+    .dashboard-actions {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+
+    .button--dashboard {
+      min-height: 3.25rem;
+      padding-inline: 0.85rem;
+      border-radius: 1.05rem;
+      font-size: 0.84rem;
+      line-height: 1.15;
+    }
+  }
+}
+
+@include respond-max($bp-phone-sm) {
+  .screen--dashboard {
+    .dashboard-logo-box {
+      min-height: 4.8rem;
+      border-radius: 1.2rem;
+    }
+
+    .dashboard-logo-image {
+      transform: scale(1.24);
+    }
+
+    .dashboard-welcome__text {
+      font-size: 0.72rem;
+    }
+
+    .button--dashboard {
+      font-size: 0.8rem;
+    }
   }
 }

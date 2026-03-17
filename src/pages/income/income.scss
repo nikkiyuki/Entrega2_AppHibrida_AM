@@ -1,6 +1,8 @@
 @use '../../styles/variables' as *;
 
 .screen--income {
+  max-width: 30rem;
+
   .income-panel {
     gap: $space-4;
   }
@@ -32,6 +34,7 @@
     align-items: baseline;
     justify-content: space-between;
     gap: $space-2;
+    flex-wrap: wrap;
   }
 
   .income-amount-block__label {
@@ -43,7 +46,7 @@
   }
 
   .income-amount-block__value {
-    font-size: 1.3rem;
+    font-size: clamp(1.05rem, 3vw, 1.3rem);
     font-weight: 800;
     color: $color-text;
   }
@@ -63,7 +66,7 @@
 
   .income-section-title {
     margin: 0;
-    font-size: 1rem;
+    font-size: clamp(0.92rem, 2.3vw, 1rem);
     color: $color-text;
   }
 
@@ -78,12 +81,12 @@
 
   .income-category-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(8.3rem, 1fr));
     gap: $space-2;
   }
 
   .income-category {
-    min-height: 2.8rem;
+    min-height: 2.65rem;
     padding: 0.45rem 0.55rem;
     display: flex;
     align-items: center;
@@ -96,7 +99,7 @@
       rgba(233, 58, 106, 0.12) 100%
     );
     color: $color-text;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 700;
     line-height: 1.15;
     text-align: center;
@@ -144,9 +147,9 @@
 
   .income-message__text {
     margin: 0;
-    font-size: 0.98rem;
+    font-size: clamp(0.84rem, 2.4vw, 0.96rem);
     font-weight: 700;
-    line-height: 1.55;
+    line-height: 1.4;
     color: $color-text-soft;
   }
 
@@ -210,5 +213,79 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: $space-2;
+  }
+}
+
+@include respond-between(431px, $bp-tablet) {
+  .screen--income {
+    max-width: 33rem;
+  }
+}
+
+@include respond-max($bp-phone) {
+  .screen--income {
+    .income-panel {
+      gap: 0.95rem;
+    }
+
+    .income-amount-block,
+    .income-message {
+      padding: 0.85rem;
+      border-radius: 1.1rem;
+    }
+
+    .income-amount-block__header,
+    .income-section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+    }
+
+    .income-pill {
+      font-size: 0.72rem;
+    }
+
+    .income-category-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .income-category {
+      min-height: 2.5rem;
+      padding: 0.5rem;
+      font-size: 0.74rem;
+      border-radius: 0.95rem;
+    }
+
+    .income-category__content {
+      gap: 0.3rem;
+    }
+
+    .income-actions {
+      grid-template-columns: 1fr;
+      gap: 0.55rem;
+    }
+
+    .income-modal-backdrop {
+      padding: 1rem;
+    }
+
+    .income-modal {
+      width: min(100%, 19rem);
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+
+    .income-modal__text {
+      font-size: 0.84rem;
+    }
+  }
+}
+
+@include respond-max($bp-phone-sm) {
+  .screen--income {
+    .income-category-grid {
+      grid-template-columns: 1fr;
+    }
   }
 }

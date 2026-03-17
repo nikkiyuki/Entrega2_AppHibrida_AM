@@ -14,6 +14,13 @@ node_modules
 dist
 dist-ssr
 coverage
+android/.gradle/
+android/.gradle-user/
+android/build/
+android/app/build/
+android/capacitor-cordova-android-plugins/build/
+android/local.properties
+android_backup_20260316/
 
 # Environment and local config
 *.local

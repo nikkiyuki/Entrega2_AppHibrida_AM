@@ -49,3 +49,26 @@ $space-5: 1.5rem;
 $space-6: 2rem;
 
 $content-width: 22.5rem;
+
+$bp-phone-sm: 360px;
+$bp-phone: 430px;
+$bp-tablet: 768px;
+$bp-laptop: 1024px;
+
+@mixin respond-max($width) {
+  @media (max-width: $width) {
+    @content;
+  }
+}
+
+@mixin respond-min($width) {
+  @media (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin respond-between($min, $max) {
+  @media (min-width: $min) and (max-width: $max) {
+    @content;
+  }
+}
